@@ -23,11 +23,13 @@ class Star:
 
 
 class Constellation:
-	def __init__(self, text):
+	def __init__(self, text, name):
+		self.name = name
 		lines = text.splitlines()
 		self.stars = []
 		for l in lines:
 			star = Star(l, self)
+			# if star.label:
 			self.stars.append(star)
 
 

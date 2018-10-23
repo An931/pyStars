@@ -13,15 +13,23 @@ import os
 
 class QtStar(QLabel):
     def __init__(self, star, parent=None):
-        # star = Star(line)
-        self.pixmap = QPixmap('small_pic/5_white.png')
+        color = Drawer.get_color(star)
+        radius = Drawer.get_radius(star)
+        # color = 'white'
+        # radius = 5
+        self.pixmap = QPixmap('small_pic/{}_{}.png'.format(radius, color))
+        # self.grey_pixmap = QPixmap('small_pic/{}_{}.png'.format(radius, 'grey'))
         # pixmap = QPixmap('small_pic/10_green.png'.format(color[0]+'_'+name))
         self.star = star
         super(QLabel, self).__init__(parent)
         self.setPixmap(self.pixmap)
+        # self.setPixmap(self.grey_pixmap)
         self.coords = Geom.get_image_coords(star, 1000)
         self.move(*self.coords)
         self.show()
+
+
+
 
 class PhotoViewer(QtWidgets.QGraphicsView):
     photoClicked = QtCore.pyqtSignal(QtCore.QPoint)
@@ -164,7 +172,6 @@ class PhotoViewer(QtWidgets.QGraphicsView):
 class StarsViewer(QFrame):
     def __init__(self, parent):
         super(StarsViewer, self).__init__(parent)
-
         self.setStyleSheet('background-color:black;')
         self.setMinimumSize(500, 700)
         # self.move(0, 0)
@@ -177,17 +184,15 @@ class StarsViewer(QFrame):
         logic_stars = StarsGetter.get_stars()
         # print([s for s in logic_stars])
         qtstars = [ QtStar(s, self) for s in logic_stars ]
-        # qts = QtStar(logic_stars.__next__(), self)
-        return qtstars
+        return tstars
 
-    def dragEnterEvent(self, event):
+    def dragEnterEvent00(self, event):
         if event.source() == self:
             event.accept()
         else:
             event.acceptProposedAction()
 
-    def dropEvent(self, event):
-
+    def dropEvent00(self, event):
         # перемещение иконки
         event.setDropAction(Qt.MoveAction)
         event.accept()
@@ -200,12 +205,14 @@ class StarsViewer(QFrame):
         if not child:
             return
 
-        print(child.coords)
-        print(child.star.ra, child.star.dec)
+        # print(child.coords)
+        # print(child.star.ra, child.star.dec)
+        # print(child.star.constellation.name)
         constellation = child.star.constellation
         for s in self.stars:
             if s.star.constellation == constellation:
                 s.setPixmap(QPixmap('small_pic/10_green.png'))
+                # s.setPixmap(s.pixmap)
                 s.resize(10, 10)
 
     def mouseReleaseEvent(self,event):
@@ -213,47 +220,19 @@ class StarsViewer(QFrame):
         # нажатие именно на фигуру
         child = self.childAt(event.pos())
         if not child:
-            return
-
-        # print(child.coords)
-        # print(child.star.ra, child.star.dec)
-        constellation = child.star.constellation
-        for s in self.stars:
-            if s.star.constellation == constellation:
-                s.setPixmap(QPixmap('small_pic/5_white.png'))
+            for s in self.stars:
+                s.setPixmap(s.pixmap)
+        else:
+            constellation = child.star.constellation
+            for s in self.stars:
+                if s.star.constellation == constellation:
+                    s.setPixmap(s.pixmap)
+                s.setPixmap(s.pixmap)
                 s.resize(5, 5)
 
         # child.resize(500, 500)
         # child.setPixmap(child.pixmap.scaled(child.size()))
 
-        pixmap = QPixmap(child.pixmap)
-
-        itemData = QByteArray()
-        dataStream = QDataStream(itemData, QIODevice.WriteOnly)
-        dataStream << pixmap << QPoint(event.pos() - child.pos())
-
-        mimeData = QMimeData()
-        mimeData.setData('application/x-dnditemdata', itemData)
-
-        drag = QDrag(self)
-        drag.setMimeData(mimeData)
-        drag.setPixmap(pixmap)
-        drag.setHotSpot(event.pos() - child.pos())
-
-        # затемняет лейбл
-        tempPixmap = QPixmap(pixmap)
-        painter = QPainter()
-        painter.begin(tempPixmap)
-        painter.fillRect(pixmap.rect(), QColor(127, 127, 127, 127))
-        painter.end()
-
-        child.setPixmap(tempPixmap)
-
-        if drag.exec_(Qt.CopyAction | Qt.MoveAction, Qt.CopyAction) == Qt.MoveAction:
-            # если перемещение в доступное место
-            child.close()
-        else:
-            child.setPixmap(pixmap)
 
 
 
