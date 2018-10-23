@@ -14,31 +14,33 @@ import os
 class QtStar(QLabel):
     def __init__(self, star, constellation, parent=None):
         color = Drawer.get_color(star)
-        radius = Drawer.get_radius(star)
+        self.radius = Drawer.get_radius(star)
         # color = 'white'
         # radius = 5
-        self.pixmap = QPixmap('small_pic/{}_{}.png'.format(radius, color))
-        self.grey_pixmap = QPixmap('small_pic/{}_{}.png'.format(radius, 'grey'))
+        self.pixmap = QPixmap('small_pic/{}_{}.png'.format(5, color))
+        # self.dark_pixmap = QPixmap('small_pic/{}_{}_dark.png'.format(radius, 'white'))
+        self.dark_pixmap = QPixmap('small_pic/{}_{}.png'.format(10, 'grey'))
         # pixmap = QPixmap('small_pic/10_green.png'.format(color[0]+'_'+name))
         self.star = star
         self.constellation = constellation
         super(QLabel, self).__init__(parent)
-        self.setPixmap(self.pixmap)
+        self.setPixmap(self.dark_pixmap)
         # self.setPixmap(self.grey_pixmap)
         self.coords = Geom.get_image_coords(star, 1000)
         self.move(*self.coords)
         # self.show()
+        self.resize(self.radius, self.radius)
 
     def enterEvent(self, event):
         print('mouseEnterEvent')
         # нажатие именно на фигуру
         # self.parent().mousePressEvent(event)
         for s in self.constellation.stars:
-            s.setPixmap(s.grey_pixmap)
+            s.setPixmap(s.pixmap)
 
     def leaveEvent(self, event):
         for s in self.constellation.stars:
-            s.setPixmap(s.pixmap)
+            s.setPixmap(s.dark_pixmap)
 
 class QtConstellation:
     def __init__(self, text, name, qtstars_parent):
@@ -105,9 +107,9 @@ class StarsViewer(QFrame):
         self.changed_stars = []
         self.changed_constellation = child.constellation
         for s in self.changed_constellation.stars:
-            s.setPixmap(QPixmap('small_pic/10_green.png'))
+            s.setPixmap(QPixmap('small_pic/6_white_round.png'))
             # s.setPixmap(s.pixmap)
-            s.resize(10, 10)
+            s.resize(6, 6)
 
 
     def mouseReleaseEvent(self, event):
@@ -117,8 +119,8 @@ class StarsViewer(QFrame):
         #     s.resize(2, 2)
         if self.changed_constellation:
             for s in self.changed_constellation.stars:
-                s.setPixmap(s.pixmap)
-                s.resize(5, 5)
+                s.setPixmap(s.dark_pixmap)
+                s.resize(s.radius, s.radius)
 
 
         # child = self.childAt(event.pos())

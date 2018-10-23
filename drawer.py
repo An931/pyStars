@@ -46,8 +46,8 @@ class Drawer:
 			C = 'red',  # '#ff8f8f'
 			)
 		clas = re.search(r'[MKGFABOSC]', star.sp_class).group(0)
-		# return main_colors[clas]
-		return 'white'
+		return main_colors[clas]
+
 
 	def get_radius(star, im_size=1000):
 		# c = im_size / 10000
