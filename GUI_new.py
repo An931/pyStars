@@ -14,65 +14,14 @@ import os
 class QtStar(QLabel):
     def __init__(self, star, parent=None):
         # star = Star(line)
-        pixmap = QPixmap('small_pic/1_white.png')
+        self.pixmap = QPixmap('small_pic/5_white.png')
         # pixmap = QPixmap('small_pic/10_green.png'.format(color[0]+'_'+name))
+        self.star = star
         super(QLabel, self).__init__(parent)
-        self.setPixmap(pixmap)
+        self.setPixmap(self.pixmap)
         self.coords = Geom.get_image_coords(star, 1000)
         self.move(*self.coords)
         self.show()
-
-        self.setAcceptDrops(True)
-
-
-    # def dragEnterEvent(self, event):
-    #     if event.source() == self:
-    #         event.accept()
-    #     else:
-    #         event.acceptProposedAction()
-
-    # def dropEvent(self, event):
-
-    #     # перемещение иконки
-    #     event.setDropAction(Qt.MoveAction)
-    #     event.accept()
-
-
-    # def mousePressEvent(self, event):
-    #     # нажатие именно на фигуру
-    #     child = self.childAt(event.pos())
-    #     if not child:
-    #         return
-
-
-    #     pixmap = QPixmap(child.pixmap())
-
-    #     itemData = QByteArray()
-    #     dataStream = QDataStream(itemData, QIODevice.WriteOnly)
-    #     dataStream << pixmap << QPoint(event.pos() - child.pos())
-
-    #     mimeData = QMimeData()
-    #     mimeData.setData('application/x-dnditemdata', itemData)
-
-    #     drag = QDrag(self)
-    #     drag.setMimeData(mimeData)
-    #     drag.setPixmap(pixmap)
-    #     drag.setHotSpot(event.pos() - child.pos())
-
-    #     # затемняет лейбл
-    #     tempPixmap = QPixmap(pixmap)
-    #     painter = QPainter()
-    #     painter.begin(tempPixmap)
-    #     painter.fillRect(pixmap.rect(), QColor(127, 127, 127, 127))
-    #     painter.end()
-
-    #     child.setPixmap(tempPixmap)
-
-    #     if drag.exec_(Qt.CopyAction | Qt.MoveAction, Qt.CopyAction) == Qt.MoveAction:
-    #         # если перемещение в доступное место
-    #         child.close()
-    #     else:
-    #         child.setPixmap(pixmap)
 
 class PhotoViewer(QtWidgets.QGraphicsView):
     photoClicked = QtCore.pyqtSignal(QtCore.QPoint)
@@ -91,7 +40,6 @@ class PhotoViewer(QtWidgets.QGraphicsView):
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setBackgroundBrush(QtGui.QBrush(QtGui.QColor(0, 0, 0)))
         # self.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.draw_stars()
 
 
     def draw_stars(self):
@@ -223,13 +171,14 @@ class StarsViewer(QFrame):
         self.setLineWidth(10)
         self.setAcceptDrops(True)
 
-        self.draw_stars()
+        self.stars = self.draw_stars()
 
     def draw_stars(self):
         logic_stars = StarsGetter.get_stars()
         # print([s for s in logic_stars])
         qtstars = [ QtStar(s, self) for s in logic_stars ]
         # qts = QtStar(logic_stars.__next__(), self)
+        return qtstars
 
     def dragEnterEvent(self, event):
         if event.source() == self:
@@ -251,8 +200,33 @@ class StarsViewer(QFrame):
         if not child:
             return
 
+        print(child.coords)
+        print(child.star.ra, child.star.dec)
+        constellation = child.star.constellation
+        for s in self.stars:
+            if s.star.constellation == constellation:
+                s.setPixmap(QPixmap('small_pic/10_green.png'))
+                s.resize(10, 10)
 
-        pixmap = QPixmap(child.pixmap())
+    def mouseReleaseEvent(self,event):
+        print('mouseReleaseEvent')
+        # нажатие именно на фигуру
+        child = self.childAt(event.pos())
+        if not child:
+            return
+
+        # print(child.coords)
+        # print(child.star.ra, child.star.dec)
+        constellation = child.star.constellation
+        for s in self.stars:
+            if s.star.constellation == constellation:
+                s.setPixmap(QPixmap('small_pic/5_white.png'))
+                s.resize(5, 5)
+
+        # child.resize(500, 500)
+        # child.setPixmap(child.pixmap.scaled(child.size()))
+
+        pixmap = QPixmap(child.pixmap)
 
         itemData = QByteArray()
         dataStream = QDataStream(itemData, QIODevice.WriteOnly)
@@ -406,6 +380,7 @@ class Window(QtWidgets.QWidget):
         self.btn_getview.clicked.connect(self.change_view)
 
         # self.pic = PhotoViewer(self)
+        # self.stars_test = StarsViewer(self)
         self.pic = StarsViewer(self)
 
     def get_layout(self):
