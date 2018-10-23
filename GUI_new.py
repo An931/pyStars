@@ -18,7 +18,7 @@ class QtStar(QLabel):
         # color = 'white'
         # radius = 5
         self.pixmap = QPixmap('small_pic/{}_{}.png'.format(radius, color))
-        # self.grey_pixmap = QPixmap('small_pic/{}_{}.png'.format(radius, 'grey'))
+        self.grey_pixmap = QPixmap('small_pic/{}_{}.png'.format(radius, 'grey'))
         # pixmap = QPixmap('small_pic/10_green.png'.format(color[0]+'_'+name))
         self.star = star
         self.constellation = constellation
@@ -29,6 +29,16 @@ class QtStar(QLabel):
         self.move(*self.coords)
         # self.show()
 
+    def enterEvent(self, event):
+        print('mouseEnterEvent')
+        # нажатие именно на фигуру
+        # self.parent().mousePressEvent(event)
+        for s in self.constellation.stars:
+            s.setPixmap(s.grey_pixmap)
+
+    def leaveEvent(self, event):
+        for s in self.constellation.stars:
+            s.setPixmap(s.pixmap)
 
 class QtConstellation:
     def __init__(self, text, name, qtstars_parent):
@@ -61,7 +71,8 @@ class StarsViewer(QFrame):
         self.setMinimumSize(500, 700)
         # self.move(0, 0)
         self.setLineWidth(10)
-        self.setAcceptDrops(True)
+        # self.setAcceptDrops(True)
+        self.setMouseTracking(True)
 
         # self.stars = self.draw_stars()
         self.stars = []
@@ -98,7 +109,8 @@ class StarsViewer(QFrame):
             # s.setPixmap(s.pixmap)
             s.resize(10, 10)
 
-    def mouseReleaseEvent(self,event):
+
+    def mouseReleaseEvent(self, event):
         print('mouseReleaseEvent')
         # for s in self.changed_stars:
         #     s.setPixmap(s.pixmap)
