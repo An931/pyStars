@@ -12,7 +12,7 @@ import re
 import os
 
 class QtStar(QLabel):
-    def __init__(self, star, parent=None):
+    def __init__(self, star, constellation, parent=None):
         color = Drawer.get_color(star)
         radius = Drawer.get_radius(star)
         # color = 'white'
@@ -21,152 +21,37 @@ class QtStar(QLabel):
         # self.grey_pixmap = QPixmap('small_pic/{}_{}.png'.format(radius, 'grey'))
         # pixmap = QPixmap('small_pic/10_green.png'.format(color[0]+'_'+name))
         self.star = star
+        self.constellation = constellation
         super(QLabel, self).__init__(parent)
         self.setPixmap(self.pixmap)
         # self.setPixmap(self.grey_pixmap)
         self.coords = Geom.get_image_coords(star, 1000)
         self.move(*self.coords)
-        self.show()
+        # self.show()
 
 
+class QtConstellation:
+    def __init__(self, text, name, qtstars_parent):
+        self.name = name
+        lines = text.splitlines()
+        self.stars = []
+        for l in lines:
+            star = Star(l, self)
+            # if star.label:
+            # self.logic_stars.append(star)
+            self.stars.append(QtStar(star, self, qtstars_parent))
 
+    def get_constellations(qtstars_parent):
+        path = './data/'
+        txt_files = [x for x in os.listdir(path) if x.endswith('.txt')]
+        # im_size = 10000
+        #im_size = 1000
 
-class PhotoViewer(QtWidgets.QGraphicsView):
-    photoClicked = QtCore.pyqtSignal(QtCore.QPoint)
-
-    def __init__(self, parent):
-        super(PhotoViewer, self).__init__(parent)
-        self._zoom = 0
-        self._empty = True
-        self._scene = QtWidgets.QGraphicsScene(self)
-        self._photo = QtWidgets.QGraphicsPixmapItem()
-        self._scene.addItem(self._photo)
-        self.setScene(self._scene)
-        self.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
-        self.setResizeAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
-        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setBackgroundBrush(QtGui.QBrush(QtGui.QColor(0, 0, 0)))
-        # self.setFrameShape(QtWidgets.QFrame.NoFrame)
-
-
-    def draw_stars(self):
-        logic_stars = StarsGetter.get_stars()
-        # print([s for s in logic_stars])
-        qtstars = [ QtStar(s, self) for s in logic_stars ]
-        # qts = QtStar(logic_stars.__next__(), self)
-
-    def dragEnterEvent(self, event):
-        if event.source() == self:
-            event.accept()
-        else:
-            event.acceptProposedAction()
-
-    def dropEvent(self, event):
-
-        # перемещение иконки
-        event.setDropAction(Qt.MoveAction)
-        event.accept()
-
-
-    def mousePressEvent(self, event):
-        print('mousePressEvent')
-        # нажатие именно на фигуру
-        child = self.childAt(event.pos())
-        if not child:
-            return
-
-
-        pixmap = QPixmap(child.pixmap())
-
-        itemData = QByteArray()
-        dataStream = QDataStream(itemData, QIODevice.WriteOnly)
-        dataStream << pixmap << QPoint(event.pos() - child.pos())
-
-        mimeData = QMimeData()
-        mimeData.setData('application/x-dnditemdata', itemData)
-
-        drag = QDrag(self)
-        drag.setMimeData(mimeData)
-        drag.setPixmap(pixmap)
-        drag.setHotSpot(event.pos() - child.pos())
-
-        # затемняет лейбл
-        tempPixmap = QPixmap(pixmap)
-        painter = QPainter()
-        painter.begin(tempPixmap)
-        painter.fillRect(pixmap.rect(), QColor(127, 127, 127, 127))
-        painter.end()
-
-        child.setPixmap(tempPixmap)
-
-        if drag.exec_(Qt.CopyAction | Qt.MoveAction, Qt.CopyAction) == Qt.MoveAction:
-            # если перемещение в доступное место
-            child.close()
-        else:
-            child.setPixmap(pixmap)
-
-
-    def hasPhoto(self):
-        return not self._empty
-
-    def fitInView(self, scale=True):
-        rect = QtCore.QRectF(self._photo.pixmap().rect())
-        if not rect.isNull():
-            self.setSceneRect(rect)
-            if self.hasPhoto():
-                unity = self.transform().mapRect(QtCore.QRectF(0, 0, 1, 1))
-                self.scale(1 / unity.width(), 1 / unity.height())
-                viewrect = self.viewport().rect()
-                scenerect = self.transform().mapRect(rect)
-                factor = min(viewrect.width() / scenerect.width(),
-                             viewrect.height() / scenerect.height())
-                self.scale(factor, factor)
-            # self._zoom = 0
-
-    def setPhoto(self, pixmap=None):
-        # print(self._zoom)
-        # self._zoom = 0        
-        if pixmap and not pixmap.isNull():
-            # print('!! set photo')
-            self._empty = False
-            self.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
-            self._photo.setPixmap(pixmap)
-        else:
-            print('was none')
-            self._empty = True
-            self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
-            self._photo.setPixmap(QtGui.QPixmap())
-        # self.fitInView()
-        if self._zoom == 0:
-            self.fitInView()
-
-    def wheelEvent(self, event):
-        if self.hasPhoto():
-            print(self._zoom)
-            if event.angleDelta().y() > 0:
-                factor = 1.25
-                self._zoom += 1
-            else:
-                factor = 0.8
-                self._zoom -= 1
-            if self._zoom > 0:
-                self.scale(factor, factor)
-            elif self._zoom == 0:
-                self.fitInView()
-            else:
-                self._zoom = 0
-
-    def toggleDragMode(self):
-        if self.dragMode() == QtWidgets.QGraphicsView.ScrollHandDrag:
-            self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
-        elif not self._photo.pixmap().isNull():
-            self.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
-
-    def mousePressEvent(self, event):
-        if self._photo.isUnderMouse():
-            self.photoClicked.emit(QtCore.QPoint(event.pos()))
-        super(PhotoViewer, self).mousePressEvent(event)
+        # stars = []
+        for name in txt_files:
+            with open(path + name) as f:
+                constellation = QtConstellation(f.read(), name[:-4], qtstars_parent)
+                yield constellation
 
 
 class StarsViewer(QFrame):
@@ -178,24 +63,22 @@ class StarsViewer(QFrame):
         self.setLineWidth(10)
         self.setAcceptDrops(True)
 
-        self.stars = self.draw_stars()
+        # self.stars = self.draw_stars()
+        self.stars = []
+        self.constellations = QtConstellation.get_constellations(self)
+        for c in self.constellations:
+            for s in c.stars:
+                s.show()
+                self.stars.append(s)
 
-    def draw_stars(self):
+        # self.changed_stars = []
+        self.changed_constellation = None
+
+    def get_stars000(self):
         logic_stars = StarsGetter.get_stars()
         # print([s for s in logic_stars])
         qtstars = [ QtStar(s, self) for s in logic_stars ]
-        return tstars
-
-    def dragEnterEvent00(self, event):
-        if event.source() == self:
-            event.accept()
-        else:
-            event.acceptProposedAction()
-
-    def dropEvent00(self, event):
-        # перемещение иконки
-        event.setDropAction(Qt.MoveAction)
-        event.accept()
+        return qtstars
 
 
     def mousePressEvent(self, event):
@@ -208,33 +91,38 @@ class StarsViewer(QFrame):
         # print(child.coords)
         # print(child.star.ra, child.star.dec)
         # print(child.star.constellation.name)
-        constellation = child.star.constellation
-        for s in self.stars:
-            if s.star.constellation == constellation:
-                s.setPixmap(QPixmap('small_pic/10_green.png'))
-                # s.setPixmap(s.pixmap)
-                s.resize(10, 10)
+        self.changed_stars = []
+        self.changed_constellation = child.constellation
+        for s in self.changed_constellation.stars:
+            s.setPixmap(QPixmap('small_pic/10_green.png'))
+            # s.setPixmap(s.pixmap)
+            s.resize(10, 10)
 
     def mouseReleaseEvent(self,event):
         print('mouseReleaseEvent')
-        # нажатие именно на фигуру
-        child = self.childAt(event.pos())
-        if not child:
-            for s in self.stars:
-                s.setPixmap(s.pixmap)
-        else:
-            constellation = child.star.constellation
-            for s in self.stars:
-                if s.star.constellation == constellation:
-                    s.setPixmap(s.pixmap)
+        # for s in self.changed_stars:
+        #     s.setPixmap(s.pixmap)
+        #     s.resize(2, 2)
+        if self.changed_constellation:
+            for s in self.changed_constellation.stars:
                 s.setPixmap(s.pixmap)
                 s.resize(5, 5)
 
+
+        # child = self.childAt(event.pos())
+        # if not child:
+        #     for s in self.stars:
+        #         s.setPixmap(s.pixmap)
+        # else:
+        #     constellation = child.star.constellation
+        #     for s in self.stars:
+        #         if s.star.constellation == constellation:
+        #             s.setPixmap(s.pixmap)
+        #         s.setPixmap(s.pixmap)
+        #         s.resize(5, 5)
+
         # child.resize(500, 500)
         # child.setPixmap(child.pixmap.scaled(child.size()))
-
-
-
 
 
 class Window(QtWidgets.QWidget):
@@ -396,6 +284,146 @@ class Window(QtWidgets.QWidget):
         vbox.addLayout(hbox0)
         vbox.addLayout(hbox2)
         return vbox
+
+
+
+class PhotoViewer(QtWidgets.QGraphicsView):
+    photoClicked = QtCore.pyqtSignal(QtCore.QPoint)
+
+    def __init__(self, parent):
+        super(PhotoViewer, self).__init__(parent)
+        self._zoom = 0
+        self._empty = True
+        self._scene = QtWidgets.QGraphicsScene(self)
+        self._photo = QtWidgets.QGraphicsPixmapItem()
+        self._scene.addItem(self._photo)
+        self.setScene(self._scene)
+        self.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
+        self.setResizeAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
+        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.setBackgroundBrush(QtGui.QBrush(QtGui.QColor(0, 0, 0)))
+        # self.setFrameShape(QtWidgets.QFrame.NoFrame)
+
+
+    def draw_stars(self):
+        logic_stars = StarsGetter.get_stars()
+        # print([s for s in logic_stars])
+        qtstars = [ QtStar(s, self) for s in logic_stars ]
+        # qts = QtStar(logic_stars.__next__(), self)
+
+    def dragEnterEvent(self, event):
+        if event.source() == self:
+            event.accept()
+        else:
+            event.acceptProposedAction()
+
+    def dropEvent(self, event):
+
+        # перемещение иконки
+        event.setDropAction(Qt.MoveAction)
+        event.accept()
+
+
+    def mousePressEvent(self, event):
+        print('mousePressEvent')
+        # нажатие именно на фигуру
+        child = self.childAt(event.pos())
+        if not child:
+            return
+
+
+        pixmap = QPixmap(child.pixmap())
+
+        itemData = QByteArray()
+        dataStream = QDataStream(itemData, QIODevice.WriteOnly)
+        dataStream << pixmap << QPoint(event.pos() - child.pos())
+
+        mimeData = QMimeData()
+        mimeData.setData('application/x-dnditemdata', itemData)
+
+        drag = QDrag(self)
+        drag.setMimeData(mimeData)
+        drag.setPixmap(pixmap)
+        drag.setHotSpot(event.pos() - child.pos())
+
+        # затемняет лейбл
+        tempPixmap = QPixmap(pixmap)
+        painter = QPainter()
+        painter.begin(tempPixmap)
+        painter.fillRect(pixmap.rect(), QColor(127, 127, 127, 127))
+        painter.end()
+
+        child.setPixmap(tempPixmap)
+
+        if drag.exec_(Qt.CopyAction | Qt.MoveAction, Qt.CopyAction) == Qt.MoveAction:
+            # если перемещение в доступное место
+            child.close()
+        else:
+            child.setPixmap(pixmap)
+
+
+    def hasPhoto(self):
+        return not self._empty
+
+    def fitInView(self, scale=True):
+        rect = QtCore.QRectF(self._photo.pixmap().rect())
+        if not rect.isNull():
+            self.setSceneRect(rect)
+            if self.hasPhoto():
+                unity = self.transform().mapRect(QtCore.QRectF(0, 0, 1, 1))
+                self.scale(1 / unity.width(), 1 / unity.height())
+                viewrect = self.viewport().rect()
+                scenerect = self.transform().mapRect(rect)
+                factor = min(viewrect.width() / scenerect.width(),
+                             viewrect.height() / scenerect.height())
+                self.scale(factor, factor)
+            # self._zoom = 0
+
+    def setPhoto(self, pixmap=None):
+        # print(self._zoom)
+        # self._zoom = 0        
+        if pixmap and not pixmap.isNull():
+            # print('!! set photo')
+            self._empty = False
+            self.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
+            self._photo.setPixmap(pixmap)
+        else:
+            print('was none')
+            self._empty = True
+            self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
+            self._photo.setPixmap(QtGui.QPixmap())
+        # self.fitInView()
+        if self._zoom == 0:
+            self.fitInView()
+
+    def wheelEvent(self, event):
+        if self.hasPhoto():
+            print(self._zoom)
+            if event.angleDelta().y() > 0:
+                factor = 1.25
+                self._zoom += 1
+            else:
+                factor = 0.8
+                self._zoom -= 1
+            if self._zoom > 0:
+                self.scale(factor, factor)
+            elif self._zoom == 0:
+                self.fitInView()
+            else:
+                self._zoom = 0
+
+    def toggleDragMode(self):
+        if self.dragMode() == QtWidgets.QGraphicsView.ScrollHandDrag:
+            self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
+        elif not self._photo.pixmap().isNull():
+            self.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
+
+    def mousePressEvent(self, event):
+        if self._photo.isUnderMouse():
+            self.photoClicked.emit(QtCore.QPoint(event.pos()))
+        super(PhotoViewer, self).mousePressEvent(event)
+
 
 
 if __name__ == '__main__':

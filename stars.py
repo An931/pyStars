@@ -19,10 +19,10 @@ class Star:
 		self.sp_class = m.group(4).strip()
 		self.label = m.group(5)
 
-		self.constellation = constellation
+		# self.constellation = constellation
 
 
-class Constellation:
+class Constellation000:
 	def __init__(self, text, name):
 		self.name = name
 		lines = text.splitlines()
@@ -30,7 +30,8 @@ class Constellation:
 		for l in lines:
 			star = Star(l, self)
 			# if star.label:
-			self.stars.append(star)
+			self.logic_stars.append(star)
+			# self.stars.append(QtStars(star))
 
 
 class RightAscension:
