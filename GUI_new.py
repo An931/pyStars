@@ -22,6 +22,58 @@ class QtStar(QLabel):
         self.move(*self.coords)
         self.show()
 
+        self.setAcceptDrops(True)
+
+
+    # def dragEnterEvent(self, event):
+    #     if event.source() == self:
+    #         event.accept()
+    #     else:
+    #         event.acceptProposedAction()
+
+    # def dropEvent(self, event):
+
+    #     # перемещение иконки
+    #     event.setDropAction(Qt.MoveAction)
+    #     event.accept()
+
+
+    # def mousePressEvent(self, event):
+    #     # нажатие именно на фигуру
+    #     child = self.childAt(event.pos())
+    #     if not child:
+    #         return
+
+
+    #     pixmap = QPixmap(child.pixmap())
+
+    #     itemData = QByteArray()
+    #     dataStream = QDataStream(itemData, QIODevice.WriteOnly)
+    #     dataStream << pixmap << QPoint(event.pos() - child.pos())
+
+    #     mimeData = QMimeData()
+    #     mimeData.setData('application/x-dnditemdata', itemData)
+
+    #     drag = QDrag(self)
+    #     drag.setMimeData(mimeData)
+    #     drag.setPixmap(pixmap)
+    #     drag.setHotSpot(event.pos() - child.pos())
+
+    #     # затемняет лейбл
+    #     tempPixmap = QPixmap(pixmap)
+    #     painter = QPainter()
+    #     painter.begin(tempPixmap)
+    #     painter.fillRect(pixmap.rect(), QColor(127, 127, 127, 127))
+    #     painter.end()
+
+    #     child.setPixmap(tempPixmap)
+
+    #     if drag.exec_(Qt.CopyAction | Qt.MoveAction, Qt.CopyAction) == Qt.MoveAction:
+    #         # если перемещение в доступное место
+    #         child.close()
+    #     else:
+    #         child.setPixmap(pixmap)
+
 class PhotoViewer(QtWidgets.QGraphicsView):
     photoClicked = QtCore.pyqtSignal(QtCore.QPoint)
 
@@ -41,12 +93,63 @@ class PhotoViewer(QtWidgets.QGraphicsView):
         # self.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.draw_stars()
 
+
     def draw_stars(self):
         logic_stars = StarsGetter.get_stars()
         # print([s for s in logic_stars])
-        # qtstars = [s for s in logic_stars]
-        # qtstars = [ QtStar(s) for s in logic_stars ]
-        qts = QtStar(logic_stars.__next__(), self)
+        qtstars = [ QtStar(s, self) for s in logic_stars ]
+        # qts = QtStar(logic_stars.__next__(), self)
+
+    def dragEnterEvent(self, event):
+        if event.source() == self:
+            event.accept()
+        else:
+            event.acceptProposedAction()
+
+    def dropEvent(self, event):
+
+        # перемещение иконки
+        event.setDropAction(Qt.MoveAction)
+        event.accept()
+
+
+    def mousePressEvent(self, event):
+        print('mousePressEvent')
+        # нажатие именно на фигуру
+        child = self.childAt(event.pos())
+        if not child:
+            return
+
+
+        pixmap = QPixmap(child.pixmap())
+
+        itemData = QByteArray()
+        dataStream = QDataStream(itemData, QIODevice.WriteOnly)
+        dataStream << pixmap << QPoint(event.pos() - child.pos())
+
+        mimeData = QMimeData()
+        mimeData.setData('application/x-dnditemdata', itemData)
+
+        drag = QDrag(self)
+        drag.setMimeData(mimeData)
+        drag.setPixmap(pixmap)
+        drag.setHotSpot(event.pos() - child.pos())
+
+        # затемняет лейбл
+        tempPixmap = QPixmap(pixmap)
+        painter = QPainter()
+        painter.begin(tempPixmap)
+        painter.fillRect(pixmap.rect(), QColor(127, 127, 127, 127))
+        painter.end()
+
+        child.setPixmap(tempPixmap)
+
+        if drag.exec_(Qt.CopyAction | Qt.MoveAction, Qt.CopyAction) == Qt.MoveAction:
+            # если перемещение в доступное место
+            child.close()
+        else:
+            child.setPixmap(pixmap)
+
 
     def hasPhoto(self):
         return not self._empty
@@ -108,6 +211,77 @@ class PhotoViewer(QtWidgets.QGraphicsView):
         if self._photo.isUnderMouse():
             self.photoClicked.emit(QtCore.QPoint(event.pos()))
         super(PhotoViewer, self).mousePressEvent(event)
+
+
+class StarsViewer(QFrame):
+    def __init__(self, parent):
+        super(StarsViewer, self).__init__(parent)
+
+        self.setStyleSheet('background-color:black;')
+        self.setMinimumSize(500, 700)
+        # self.move(0, 0)
+        self.setLineWidth(10)
+        self.setAcceptDrops(True)
+
+        self.draw_stars()
+
+    def draw_stars(self):
+        logic_stars = StarsGetter.get_stars()
+        # print([s for s in logic_stars])
+        qtstars = [ QtStar(s, self) for s in logic_stars ]
+        # qts = QtStar(logic_stars.__next__(), self)
+
+    def dragEnterEvent(self, event):
+        if event.source() == self:
+            event.accept()
+        else:
+            event.acceptProposedAction()
+
+    def dropEvent(self, event):
+
+        # перемещение иконки
+        event.setDropAction(Qt.MoveAction)
+        event.accept()
+
+
+    def mousePressEvent(self, event):
+        print('mousePressEvent')
+        # нажатие именно на фигуру
+        child = self.childAt(event.pos())
+        if not child:
+            return
+
+
+        pixmap = QPixmap(child.pixmap())
+
+        itemData = QByteArray()
+        dataStream = QDataStream(itemData, QIODevice.WriteOnly)
+        dataStream << pixmap << QPoint(event.pos() - child.pos())
+
+        mimeData = QMimeData()
+        mimeData.setData('application/x-dnditemdata', itemData)
+
+        drag = QDrag(self)
+        drag.setMimeData(mimeData)
+        drag.setPixmap(pixmap)
+        drag.setHotSpot(event.pos() - child.pos())
+
+        # затемняет лейбл
+        tempPixmap = QPixmap(pixmap)
+        painter = QPainter()
+        painter.begin(tempPixmap)
+        painter.fillRect(pixmap.rect(), QColor(127, 127, 127, 127))
+        painter.end()
+
+        child.setPixmap(tempPixmap)
+
+        if drag.exec_(Qt.CopyAction | Qt.MoveAction, Qt.CopyAction) == Qt.MoveAction:
+            # если перемещение в доступное место
+            child.close()
+        else:
+            child.setPixmap(pixmap)
+
+
 
 
 class Window(QtWidgets.QWidget):
@@ -231,7 +405,8 @@ class Window(QtWidgets.QWidget):
         self.btn_getview.setText('Show')
         self.btn_getview.clicked.connect(self.change_view)
 
-        self.pic = PhotoViewer(self)
+        # self.pic = PhotoViewer(self)
+        self.pic = StarsViewer(self)
 
     def get_layout(self):
         hbox0 = QtWidgets.QHBoxLayout()

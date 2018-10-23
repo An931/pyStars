@@ -80,14 +80,15 @@ class StarsGetter:
 		# im_size = 10000
 		#im_size = 1000
 
+		# stars = []
 		for name in txt_files:
-			# if name != 'cas.txt':
-			# 	continue
-			file = open(path + name)
-			constellation = Constellation(file.read())
-			for star in constellation.stars:
-				yield star
-			file.close()
+			with open(path + name) as f:
+				constellation = Constellation(f.read())
+				for s in constellation.stars:
+					# stars.append(s)
+					yield s
+			# return stars
+
 
 
 if __name__ == '__main__':
