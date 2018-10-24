@@ -1,113 +1,162 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+
+from PyQt5.QtCore import (QByteArray, QDataStream, QIODevice, QMimeData,
+        QPoint, Qt, QObject, QPointF, QPropertyAnimation, pyqtProperty,
+        QParallelAnimationGroup, QSequentialAnimationGroup)
+from PyQt5.QtGui import QColor, QDrag, QPainter, QPixmap, QPainterPath
+from PyQt5.QtWidgets import (QMainWindow, QApplication, QInputDialog , QFrame, QHBoxLayout,
+    QVBoxLayout, QLabel, QLineEdit, QMessageBox, QPushButton, QWidget)
+
 from drawer import *
 import re
 import os
 
-class PhotoViewer(QtWidgets.QGraphicsView):
-    photoClicked = QtCore.pyqtSignal(QtCore.QPoint)
+class QtStar(QLabel):
+    def __init__(self, star, constellation, parent=None):
+        color = Drawer.get_color(star)
+        self.radius = Drawer.get_radius(star)
 
+        self.pixmap = QPixmap('small_pic/{}_{}_round.png'.format(5, color)).scaled(self.radius, self.radius)
+        # self.dark_pixmap = QPixmap('small_pic/{}_{}_dark.png'.format(radius, 'white'))
+        self.dark_pixmap = QPixmap('small_pic/{}_{}_round.png'.format(5, 'white_dark')).scaled(self.radius, self.radius)
+
+        self.star = star
+        self.constellation = constellation
+        super(QLabel, self).__init__(parent)
+        self.setPixmap(self.dark_pixmap)
+        self.coords = Geom.get_image_coords(star, 800, 0, 0)
+        self.move(*self.coords)
+
+        self.resize(self.radius + 10, self.radius + 10)
+        # self.setToolTip(self.constellation.name+'\n'+str(self.coords))
+        self.setToolTip(self.constellation.name)
+
+    def enterEvent(self, event):
+        print('mouseEnterEvent')
+        for s in self.constellation.stars:
+            s.setPixmap(s.pixmap)
+
+    def leaveEvent(self, event):
+        for s in self.constellation.stars:
+            s.setPixmap(s.dark_pixmap)
+
+class QtConstellation:
+    def __init__(self, text, name, qtstars_parent):
+        self.name = name
+        lines = text.splitlines()
+        self.stars = []
+        for l in lines:
+            star = Star(l)
+            self.stars.append(QtStar(star, self, qtstars_parent))
+
+    def get_constellations(qtstars_parent):
+        path = './data/'
+        txt_files = [x for x in os.listdir(path) if x.endswith('.txt')]
+
+
+        # stars = []
+        for name in txt_files:
+            with open(path + name) as f:
+                constellation = QtConstellation(f.read(), name[:-4], qtstars_parent)
+                yield constellation
+
+
+class StarsViewer(QFrame):
     def __init__(self, parent):
-        super(PhotoViewer, self).__init__(parent)
-        self._zoom = 0
-        self._empty = True
-        self._scene = QtWidgets.QGraphicsScene(self)
-        self._photo = QtWidgets.QGraphicsPixmapItem()
-        self._scene.addItem(self._photo)
-        self.setScene(self._scene)
-        self.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
-        self.setResizeAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
-        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setBackgroundBrush(QtGui.QBrush(QtGui.QColor(0, 0, 0)))
-        # self.setFrameShape(QtWidgets.QFrame.NoFrame)
+        super(StarsViewer, self).__init__(parent)
+        self.setStyleSheet('background-color:black;')
+        self.setMinimumSize(800, 800)
+        self.setMaximumSize(800, 800)
+        self.setMouseTracking(True)
 
-    def hasPhoto(self):
-        return not self._empty
+        self.stars = []
+        self.constellations = QtConstellation.get_constellations(self)
+        for c in self.constellations:
+            for s in c.stars:
+                s.show()
+                self.stars.append(s)
 
-    def fitInView(self, scale=True):
-        rect = QtCore.QRectF(self._photo.pixmap().rect())
-        if not rect.isNull():
-            self.setSceneRect(rect)
-            if self.hasPhoto():
-                unity = self.transform().mapRect(QtCore.QRectF(0, 0, 1, 1))
-                self.scale(1 / unity.width(), 1 / unity.height())
-                viewrect = self.viewport().rect()
-                scenerect = self.transform().mapRect(rect)
-                factor = min(viewrect.width() / scenerect.width(),
-                             viewrect.height() / scenerect.height())
-                self.scale(factor, factor)
-            # self._zoom = 0
+        self.changed_constellation = None
 
-    def setPhoto(self, pixmap=None):
-        # print(self._zoom)
-        # self._zoom = 0        
-        if pixmap and not pixmap.isNull():
-            # print('!! set photo')
-            self._empty = False
-            self.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
-            self._photo.setPixmap(pixmap)
-        else:
-            print('was none')
-            self._empty = True
-            self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
-            self._photo.setPixmap(QtGui.QPixmap())
-        # self.fitInView()
-        if self._zoom == 0:
-            self.fitInView()
+        self._view_coef = 1
 
-    def wheelEvent(self, event):
-        if self.hasPhoto():
-            print(self._zoom)
-            if event.angleDelta().y() > 0:
-                factor = 1.25
-                self._zoom += 1
-            else:
-                factor = 0.8
-                self._zoom -= 1
-            if self._zoom > 0:
-                self.scale(factor, factor)
-            elif self._zoom == 0:
-                self.fitInView()
-            else:
-                self._zoom = 0
+    @property
+    def view_coef(self):
+        return self._view_coef
 
-    def toggleDragMode(self):
-        if self.dragMode() == QtWidgets.QGraphicsView.ScrollHandDrag:
-            self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
-        elif not self._photo.pixmap().isNull():
-            self.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
+    @view_coef.setter
+    def view_coef(self, value):
+        self._view_coef = max(1, value)
 
     def mousePressEvent(self, event):
-        if self._photo.isUnderMouse():
-            self.photoClicked.emit(QtCore.QPoint(event.pos()))
-        super(PhotoViewer, self).mousePressEvent(event)
+        print('mousePressEvent')
+        child = self.childAt(event.pos())
+        if not child:
+            return
+
+        self.changed_stars = []
+        self.changed_constellation = child.constellation
+        for s in self.changed_constellation.stars:
+            s.setPixmap(QPixmap('small_pic/6_white_round2.png'))
+
+
+    def mouseReleaseEvent(self, event):
+        print('mouseReleaseEvent')
+        if self.changed_constellation:
+            for s in self.changed_constellation.stars:
+                s.setPixmap(s.dark_pixmap)
+
+
+    def wheelEvent(self, event):
+        print('wheelEvent')
+        if event.angleDelta().y() > 0:
+            self.view_coef += 0.5
+        else:
+            self.view_coef -= 0.5
+
+        for s in self.stars:
+            new_coords = Geom.get_resize_image_coords(s.coords, 800, self.view_coef)
+            # s.coords = new_coords
+            # s.move(*self.coords)
+            s.move(*new_coords)
+
+
+    def get_dist00(coords, other_point):
+        x_dist = abs(other_point[0] - coords[0])
+        y_dist = abs(other_point[1] - coords[1])
+        # square view
+        # return max(x_dist, y_dist)
+
+        # round view
+        dist = sqrt(x_dist ** 2 + y_dist ** 2)
+        return dist
 
 
 class Window(QtWidgets.QWidget):
     def __init__(self):
         super(Window, self).__init__()
+        self.star_viewer = StarsViewer(self)
+
+        self.setMinimumSize(860, 900)
+        # self.setMaximumSize(800, 900)
+
+        self.setStyleSheet('background-color:black;')
         self.create_widgets()
         self.setLayout(self.get_layout())
         # self.change_view()
         # print(self.viewer.picture)
 
 
-    def change_view(self):
-        ra = self.get_ra_full_sec()
-        dec = self.get_dec_full_sec()
-        if ra is None or dec is None:
-            QtWidgets.QMessageBox.about(self, '', "Wrong input format")
-            return
-        pic_name = '{}ra_{}dec.png'.format(ra, dec)
-        path = os.getcwd()+'/shifts/'+pic_name
-        # print(path)
-        if not os.path.exists(path):
-            print('creating')
-            PictureCreator.create_lv(path, (ra, dec))
-        # print('going to set photo')
-        pixmap = QtGui.QPixmap(path)
-        self.pic.setPhoto(pixmap)
-        # print('got pixmap')
+    def change_view(self, delta_ra, delta_dec):
+        for s in self.star_viewer.stars:
+            s.star.ra.full_sec += delta_ra
+            s.star.dec.full_sec += delta_dec
+            s.coords = Geom.get_image_coords(s.star, 800, 0, 0)
+            s.coords = Geom.get_resize_image_coords(s.coords, 800, self.star_viewer.view_coef)
+            s.move(*s.coords)
+
+            s.setToolTip(s.constellation.name)
+
 
     def turn(self, side):
         c = 2
@@ -120,91 +169,31 @@ class Window(QtWidgets.QWidget):
         elif side == 'down':
             delta = (0, 3600*c)
 
-        ra = self.get_ra_full_sec()
-        dec = self.get_dec_full_sec()
-        if ra is None or dec is None:
-            QtWidgets.QMessageBox.about(self, '', "Wrong input format")
-            return
-        ra += delta[0]
-        dec += delta[1]
-        self.coords_edit_ra.setText('{} hours {} minutes {} seconds'.format(*self.get_ra_sep_measure(ra)))
-        self.coords_edit_dec.setText('{} degrees {} minutes {} seconds'.format(*self.get_dec_sep_measure(dec)))
-        self.change_view()
+        self.change_view(*delta)
 
-    def get_ra_full_sec(self):
-        text = self.coords_edit_ra.text()
-        match = re.match(r'(\d+) hours (\d+) minutes (\d+) seconds', text)
-        if match is None:
-            return None
-        h = int(match.group(1))
-        m = int(match.group(2))
-        s = int(match.group(3))
-        # if h >= 24 or m >= 60 or s >= 60:
-        #     return None
-        return h * 3600 + m * 60 + s
 
-    def get_dec_full_sec(self):
-        text = self.coords_edit_dec.text()
-        match = re.match(r'(-* *\d+) degrees (\d+) minutes (\d+) seconds', text)
-        if match is None:
-            return None
-        d = int(match.group(1))
-        m = int(match.group(2))
-        s = int(match.group(3))
-        # if d >= 90 or d <= -90 or m >= 60 or s >= 60:
-        #     return None
-        return -d * 60 * 60 + m * 60 + s
-
-    def get_ra_sep_measure(self, full_sec):
-        full_sec = full_sec % (24 * 60 * 60)
-        s = full_sec % 60
-        h = full_sec // 3600
-        m = (full_sec % 3600) // 60
-        return (h, m, s)
-
-    def get_dec_sep_measure(self, full_sec):
-        # if full_sec > 90 * 3600 or full_sec < -90 * 3600:
-            # return None
-        if full_sec > 90 * 3600:
-            print('>90')
-            delta = full_sec - 90 * 3600
-            full_sec = - 90 * 3600 + delta
-        elif full_sec < -90 * 3600:
-            print('<90')
-            delta = - 90 * 3600 - full_sec
-            full_sec = 90 * 3600 - delta
-        s = full_sec % 60
-        d = full_sec // 3600
-        m = (full_sec % 3600) // 60
-        return (-d, m, s)
 
     def create_widgets(self):
         self.btn_left = QtWidgets.QToolButton()
         self.btn_left.setText('ᐊ')
+        self.btn_left.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
         self.btn_left.clicked.connect(lambda: self.turn('left'))
 
-        self.btn_right = QtWidgets.QToolButton()
+        self.btn_right = QtWidgets.QToolButton(self)
         self.btn_right.setText('ᐅ')
+        self.btn_right.setStyleSheet('color: white; background-color: black;')
         self.btn_right.clicked.connect(lambda: self.turn('right'))
 
         self.btn_up = QtWidgets.QToolButton()
         self.btn_up.setText('ᐃ')
+        self.btn_up.setStyleSheet('color: white; background-color: black;')
         self.btn_up.clicked.connect(lambda: self.turn('up'))
 
         self.btn_down = QtWidgets.QToolButton()
         self.btn_down.setText('ᐁ')
+        self.btn_down.setStyleSheet('color: white; background-color: black;')
         self.btn_down.clicked.connect(lambda: self.turn('down'))
 
-        self.coords_edit_ra = QtWidgets.QLineEdit()
-        self.coords_edit_ra.setText('0 hours 0 minutes 0 seconds')
-        self.coords_edit_dec = QtWidgets.QLineEdit()
-        self.coords_edit_dec.setText('0 degrees 0 minutes 0 seconds')
-
-        self.btn_getview = QtWidgets.QToolButton()
-        self.btn_getview.setText('Show')
-        self.btn_getview.clicked.connect(self.change_view)
-
-        self.pic = PhotoViewer(self)
 
     def get_layout(self):
         hbox0 = QtWidgets.QHBoxLayout()
@@ -223,19 +212,21 @@ class Window(QtWidgets.QWidget):
 
         hbox2 = QtWidgets.QHBoxLayout()
         hbox2.addStretch()
-        hbox2.addWidget(self.coords_edit_ra)
-        hbox2.addWidget(self.coords_edit_dec)
-        hbox2.addWidget(self.btn_getview)
         hbox2.addSpacing(85)
         hbox2.addWidget(self.btn_down)
         hbox2.addSpacing(35)
 
+        hbox3 = QtWidgets.QHBoxLayout()
+        # hbox3.addStretch()
+        hbox3.addWidget(self.star_viewer)
+        # hbox3.addSpacing(35)
+
         vbox = QtWidgets.QVBoxLayout()
-        vbox.addStretch()
-        vbox.addSpacing(-900)
-        vbox.addWidget(self.pic)
-        # vbox.addWidget(self.pic2)
-        # vbox.addSpacing(80)
+        # vbox.addStretch()
+        # vbox.addSpacing(-900)
+        # vbox.addWidget(self.star_viewer)
+
+        vbox.addLayout(hbox3)
         vbox.addLayout(hbox1)
         vbox.addLayout(hbox0)
         vbox.addLayout(hbox2)
@@ -246,7 +237,6 @@ if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)
     window = Window()
-    # window.setGeometry(500, 300, 800, 600)
-    window.setGeometry(50, 50, 1800, 800)
+    # window.showMaximized()
     window.show()
     sys.exit(app.exec_())

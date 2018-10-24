@@ -3,11 +3,6 @@ from numpy import sqrt
 
 
 class Geom:
-	def get_image_coords000(star, im_size):
-		x, y = Geom.get_coords(star)
-		x += 1
-		y += 1
-		return im_size - x * im_size / 2, im_size - y * im_size / 2
 
 	def get_resize_image_coords(coords, im_size, coef):
 		center_coords = coords[0] - im_size/2, coords[1] - im_size/2

@@ -2,9 +2,9 @@
 import re
 
 class Star:
-	def __init__(self, str, constellation):
-		# if str == '': 
-		# 	return
+	def __init__(self, str=''):
+		if str == '': 
+			return
 		# print(str)
 		r_crds1 = r'([\+-]{0,1}[ \d]{1,2}:[ \d]{1,2}:[ \d\.]+)'
 		r_crds2 = r'([\+-]{0,1}[ \d]{1,2}:[ \d]{1,2}:[ \d]{2})'
@@ -21,19 +21,6 @@ class Star:
 		self.sp_class = m.group(4).strip()
 		self.label = m.group(5)
 
-		# self.constellation = constellation
-
-
-class Constellation000:
-	def __init__(self, text, name):
-		self.name = name
-		lines = text.splitlines()
-		self.stars = []
-		for l in lines:
-			star = Star(l, self)
-			# if star.label:
-			self.logic_stars.append(star)
-			# self.stars.append(QtStars(star))
 
 
 class RightAscension:

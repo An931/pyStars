@@ -141,7 +141,7 @@ class TestDrawer(unittest.TestCase):
     def test_get_color(self):
     	star = Star()
     	star.sp_class = 'M'
-    	self.assertEqual(Drawer.get_color(star), '#ff8f8f')
+    	self.assertEqual(Drawer.get_color(star), 'red')
 
     def test_get_radius(self):
     	star = Star()
