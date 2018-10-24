@@ -13,6 +13,8 @@ class Star:
 		r_smth2 = r'\s+[\+-]{0,1}[\d\.]+\s+[\+-]{0,1}[\d\.]+[\sD\d]+[\+-]\d{3}\s+\d+'
 		m = re.search(r_crds1+r'\s+'+r_crds2+r'\s+'+r_smth+r_m_sp+r_smth2+r'\s+\d*([A-Za-z]*)', str)
 
+		self.line = str
+
 		self.ra = RightAscension(m.group(1))
 		self.dec = Declination(m.group(2))
 		self.mag = float(m.group(3))
