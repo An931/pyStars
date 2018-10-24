@@ -86,6 +86,8 @@ class StarsViewer(QFrame):
         self.changed_constellation = None
 
         self.view_delta = 400 # self.size/2
+        self.current_ra_fullsec = 0
+        self.current_dec_fullsec = 0
 
     def get_stars000(self):
         logic_stars = StarsGetter.get_stars()
@@ -189,18 +191,16 @@ class Window(QtWidgets.QWidget):
         # print(self.viewer.picture)
 
 
-
-
     def change_view(self, show=False):
-        ra = self.get_ra_full_sec()
-        dec = self.get_dec_full_sec()
+        delta_ra = 3600
+        delta_dec = 3600
         if ra is None or dec is None:
             QtWidgets.QMessageBox.about(self, '', "Wrong input format")
             return
 
         for s in self.star_viewer.stars:
-            s.star.ra.full_sec += ra
-            s.star.dec.full_sec += dec
+            s.star.ra.full_sec += delta_ra
+            s.star.dec.full_sec += delta_dec
             s.coords = Geom.get_image_coords(s.star, 800)
             # возможна некорректная работа из-за чтения поля ввода координат 
             s.move(*s.coords)
@@ -229,8 +229,8 @@ class Window(QtWidgets.QWidget):
         elif side == 'down':
             delta = (0, 3600*c)
 
-        ra = self.get_ra_full_sec()
-        dec = self.get_dec_full_sec()
+        ra = self.star_viewer.current_ra_fullsec
+        dec = self.star_viewer.current_dec_fullsec
         if ra is None or dec is None:
             QtWidgets.QMessageBox.about(self, '', "Wrong input format")
             return
@@ -243,7 +243,7 @@ class Window(QtWidgets.QWidget):
         self.coords_edit_dec.setText('{} degrees {} minutes {} seconds'.format(0, 0, 0))
         
 
-    def get_ra_full_sec(self):
+    def get_ra_full_sec00(self):
         text = self.coords_edit_ra.text()
         match = re.match(r'(\d+) hours (\d+) minutes (\d+) seconds', text)
         if match is None:
@@ -255,7 +255,7 @@ class Window(QtWidgets.QWidget):
         #     return None
         return h * 3600 + m * 60 + s
 
-    def get_dec_full_sec(self):
+    def get_dec_full_sec00(self):
         text = self.coords_edit_dec.text()
         match = re.match(r'(-* *\d+) degrees (\d+) minutes (\d+) seconds', text)
         if match is None:
@@ -267,14 +267,14 @@ class Window(QtWidgets.QWidget):
         #     return None
         return -d * 60 * 60 + m * 60 + s
 
-    def get_ra_sep_measure(self, full_sec):
+    def get_ra_sep_measure00(self, full_sec):
         full_sec = full_sec % (24 * 60 * 60)
         s = full_sec % 60
         h = full_sec // 3600
         m = (full_sec % 3600) // 60
         return (h, m, s)
 
-    def get_dec_sep_measure(self, full_sec):
+    def get_dec_sep_measure00(self, full_sec):
         # if full_sec > 90 * 3600 or full_sec < -90 * 3600:
             # return None
         if full_sec > 90 * 3600:
