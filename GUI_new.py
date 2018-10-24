@@ -16,9 +16,9 @@ class QtStar(QLabel):
         color = Drawer.get_color(star)
         self.radius = Drawer.get_radius(star)
 
-        self.pixmap = QPixmap('small_pic/{}_{}.png'.format(5, color))
+        self.pixmap = QPixmap('small_pic/{}_{}.png'.format(5, color)).scaled(self.radius, self.radius)
         # self.dark_pixmap = QPixmap('small_pic/{}_{}_dark.png'.format(radius, 'white'))
-        self.dark_pixmap = QPixmap('small_pic/{}_{}.png'.format(10, 'grey'))
+        self.dark_pixmap = QPixmap('small_pic/{}_{}.png'.format(10, 'grey')).scaled(self.radius, self.radius)
         # self.dark_pixmap = QPixmap('small_pic/{}_{}.png'.format(5, 'white'))
 
         self.star = star
@@ -27,16 +27,13 @@ class QtStar(QLabel):
         self.setPixmap(self.dark_pixmap)
         # self.setPixmap(self.grey_pixmap)
         self.coords = Geom.get_image_coords(star, 1000, 100, 20)
-        # self.coords = (self.coords[0] + 50, self.coords[1])
         self.move(*self.coords)
-        # self.show()
-        self.resize(self.radius, self.radius)
+
+        self.resize(self.radius + 10, self.radius + 10)
         self.setToolTip(self.constellation.name)
 
     def enterEvent(self, event):
         print('mouseEnterEvent')
-        # нажатие именно на фигуру
-        # self.parent().mousePressEvent(event)
         for s in self.constellation.stars:
             s.setPixmap(s.pixmap)
 
@@ -51,15 +48,12 @@ class QtConstellation:
         self.stars = []
         for l in lines:
             star = Star(l, self)
-            # if star.label:
-            # self.logic_stars.append(star)
             self.stars.append(QtStar(star, self, qtstars_parent))
 
     def get_constellations(qtstars_parent):
         path = './data/'
         txt_files = [x for x in os.listdir(path) if x.endswith('.txt')]
-        # im_size = 10000
-        #im_size = 1000
+
 
         # stars = []
         for name in txt_files:
@@ -130,7 +124,7 @@ class StarsViewer(QFrame):
         if self.changed_constellation:
             for s in self.changed_constellation.stars:
                 s.setPixmap(s.dark_pixmap)
-                s.resize(s.radius, s.radius)
+                s.resize(s.radius + 10, s.radius + 10)
 
 
         # child = self.childAt(event.pos())
