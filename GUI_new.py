@@ -69,7 +69,6 @@ class StarsViewer(QFrame):
         self.setStyleSheet('background-color:black;')
         self.setMinimumSize(800, 800)
         self.setMaximumSize(800, 800)
-        # self.setMaximumSize(800, 800)
         self.setMouseTracking(True)
 
         self.stars = []
@@ -81,9 +80,15 @@ class StarsViewer(QFrame):
 
         self.changed_constellation = None
 
-        self.view_delta = 400 # self.size/2
-        self.view_coef = 1
+        self._view_coef = 1
 
+    @property
+    def view_coef(self):
+        return self._view_coef
+
+    @view_coef.setter
+    def view_coef(self, value):
+        self._view_coef = max(1, value)
 
     def mousePressEvent(self, event):
         print('mousePressEvent')
@@ -140,19 +145,18 @@ class StarsViewer(QFrame):
     def wheelEvent(self, event):
         print('wheelEvent')
         # print(event.angleDelta())
-        center = (400, 400)
         # self.view_delta -= 50
         if event.angleDelta().y() > 0:
-            self.view_delta -= 50
             self.view_coef += 0.5
         else:
-            self.view_delta += 50
             self.view_coef -= 0.5
 
         for s in self.stars:
             new_coords = Geom.get_resize_image_coords(s.coords, 800, self.view_coef)
-            s.move(*new_coords)
             # s.coords = new_coords
+            # s.move(*self.coords)
+            s.move(*new_coords)
+
 
             # dist = StarsViewer.get_dist(s.coords, center)
             # if dist > self.view_delta:
