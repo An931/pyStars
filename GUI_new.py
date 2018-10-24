@@ -26,7 +26,7 @@ class QtStar(QLabel):
         super(QLabel, self).__init__(parent)
         self.setPixmap(self.dark_pixmap)
         # self.setPixmap(self.grey_pixmap)
-        self.coords = Geom.get_image_coords(star, 800)
+        self.coords = Geom.get_image_coords(star, 800, 0, 0)
         self.move(*self.coords)
 
         self.resize(self.radius + 10, self.radius + 10)
@@ -67,7 +67,9 @@ class StarsViewer(QFrame):
     def __init__(self, parent):
         super(StarsViewer, self).__init__(parent)
         self.setStyleSheet('background-color:black;')
+        self.setMinimumSize(800, 800)
         self.setMaximumSize(800, 800)
+        # self.setMaximumSize(800, 800)
         self.setMouseTracking(True)
 
         self.stars = []
@@ -80,6 +82,7 @@ class StarsViewer(QFrame):
         self.changed_constellation = None
 
         self.view_delta = 400 # self.size/2
+        self.view_coef = 1
 
 
     def mousePressEvent(self, event):
@@ -141,19 +144,25 @@ class StarsViewer(QFrame):
         # self.view_delta -= 50
         if event.angleDelta().y() > 0:
             self.view_delta -= 50
+            self.view_coef += 0.5
         else:
             self.view_delta += 50
+            self.view_coef -= 0.5
 
         for s in self.stars:
-            dist = StarsViewer.get_dist(s.coords, center)
-            if dist > self.view_delta:
-                new_coords = Geom.get_resize_image_coords(s.coords, 800, 1.5)
-                s.move(*new_coords)
-                # s.hide()
-            else:
-                new_coords = Geom.get_resize_image_coords(s.coords, 800, 1.5)
-                s.move(*new_coords)
-                s.show()
+            new_coords = Geom.get_resize_image_coords(s.coords, 800, self.view_coef)
+            s.move(*new_coords)
+            # s.coords = new_coords
+
+            # dist = StarsViewer.get_dist(s.coords, center)
+            # if dist > self.view_delta:
+            #     new_coords = Geom.get_resize_image_coords(s.coords, 800, self.view_coef)
+            #     s.move(*new_coords)
+            #     # s.hide()
+            # else:
+            #     new_coords = Geom.get_resize_image_coords(s.coords, 800, self.view_coef)
+            #     s.move(*new_coords)
+            #     s.show()
 
 
 
@@ -191,6 +200,9 @@ class Window(QtWidgets.QWidget):
         super(Window, self).__init__()
         self.star_viewer = StarsViewer(self)
 
+        self.setMinimumSize(860, 900)
+        # self.setMaximumSize(800, 900)
+
         self.setStyleSheet('background-color:black;')
         self.create_widgets()
         self.setLayout(self.get_layout())
@@ -202,15 +214,16 @@ class Window(QtWidgets.QWidget):
         for s in self.star_viewer.stars:
             s.star.ra.full_sec += delta_ra
             s.star.dec.full_sec += delta_dec
-            s.coords = Geom.get_image_coords(s.star, 800)
+            s.coords = Geom.get_image_coords(s.star, 800, 0, 0)
+            s.coords = Geom.get_resize_image_coords(s.coords, 800, self.star_viewer.view_coef)
             s.move(*s.coords)
 
             # сокрытие и возврат в поле зрения звезд при сдвиге
-            dist = StarsViewer.get_dist(s.coords, (400, 400))
-            if dist > self.star_viewer.view_delta:
-                s.hide()
-            else:
-                s.show()
+            # dist = StarsViewer.get_dist(s.coords, (400, 400))
+            # if dist > self.star_viewer.view_delta:
+            #     s.hide()
+            # else:
+            #     s.show()
 
             # s.setToolTip(s.constellation.name+'\n'+str(s.coords))
             s.setToolTip(s.constellation.name)
@@ -670,6 +683,6 @@ if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)
     window = Window()
-    window.showMaximized()
+    # window.showMaximized()
     window.show()
     sys.exit(app.exec_())

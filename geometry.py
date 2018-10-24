@@ -3,7 +3,7 @@ from numpy import sqrt
 
 
 class Geom:
-	def get_image_coords(star, im_size):
+	def get_image_coords000(star, im_size):
 		x, y = Geom.get_coords(star)
 		x += 1
 		y += 1
@@ -17,7 +17,7 @@ class Geom:
 
 
 
-	def get_image_coords000(star, im_size, x_shift=0, y_shift=0):
+	def get_image_coords(star, im_size, x_shift=0, y_shift=0):
 		x, y = Geom.get_coords(star)
 		x += 1
 		y += 1
