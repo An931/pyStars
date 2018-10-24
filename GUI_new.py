@@ -365,6 +365,19 @@ class Window(QtWidgets.QWidget):
         vbox.addLayout(hbox2)
         return vbox
 
+    def keyPressEvent(self, event):
+        if event.key() == QtCore.Qt.Key_Up:
+            print('up')
+            self.turn('up')
+        if event.key() == QtCore.Qt.Key_Right:
+            self.turn('right')
+            print('right')
+        if event.key() == QtCore.Qt.Key_Down:
+            self.turn('down')
+            print('down')
+        if event.key() == QtCore.Qt.Key_Left:
+            self.turn('left')
+            print('left')
 
 
 class Window_WAS(QtWidgets.QWidget):
