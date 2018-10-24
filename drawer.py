@@ -1,4 +1,4 @@
-from PIL import Image, ImageDraw
+# from PIL import Image, ImageDraw
 import re
 import os
 from stars import *
@@ -71,7 +71,7 @@ class Drawer:
 
 
 class PictureCreator:
-	def create_lv(new_pic_name, coords=(0, 0), angle=360):
+	def create_lv00(new_pic_name, coords=(0, 0), angle=360):
 		path = './data/'
 		txt_files = [x for x in os.listdir(path) if x.endswith('.txt')]
 		# im_size = 10000

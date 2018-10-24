@@ -80,11 +80,6 @@ class StarsViewer(QFrame):
         self.changed_constellation = None
 
         self.view_delta = 400 # self.size/2
-        
-        # self.current_ra_fullsec = 0
-        # self.current_dec_fullsec = 0
-        # self.current_ra = 0, 0, 0 # h, m, s
-        # self.current_dec = 0, 0, 0
 
 
     def mousePressEvent(self, event):
@@ -112,7 +107,6 @@ class StarsViewer(QFrame):
         #     s.setPixmap(s.dark_pixmap)
         #     s.resize(s.radius, s.radius)
 
-
     def mouseReleaseEvent(self, event):
         print('mouseReleaseEvent')
         # for s in self.changed_stars:
@@ -139,7 +133,31 @@ class StarsViewer(QFrame):
         # child.resize(500, 500)
         # child.setPixmap(child.pixmap.scaled(child.size()))
 
+
     def wheelEvent(self, event):
+        print('wheelEvent')
+        # print(event.angleDelta())
+        center = (400, 400)
+        # self.view_delta -= 50
+        if event.angleDelta().y() > 0:
+            self.view_delta -= 50
+        else:
+            self.view_delta += 50
+
+        for s in self.stars:
+            dist = StarsViewer.get_dist(s.coords, center)
+            if dist > self.view_delta:
+                new_coords = Geom.get_resize_image_coords(s.coords, 800, 1.5)
+                s.move(*new_coords)
+                # s.hide()
+            else:
+                new_coords = Geom.get_resize_image_coords(s.coords, 800, 1.5)
+                s.move(*new_coords)
+                s.show()
+
+
+
+    def wheelEvent_000_just_cut_others(self, event):
         print('wheelEvent')
         print(event.angleDelta())
         center = (400, 400)
@@ -155,6 +173,7 @@ class StarsViewer(QFrame):
                 s.hide()
             else:
                 s.show()
+
 
     def get_dist(coords, other_point):
         x_dist = abs(other_point[0] - coords[0])
@@ -208,13 +227,6 @@ class Window(QtWidgets.QWidget):
         elif side == 'down':
             delta = (0, 3600*c)
 
-        # ra = self.star_viewer.current_ra_fullsec
-        # dec = self.star_viewer.current_dec_fullsec
-
-        # ra += delta[0]
-        # dec += delta[1]
-        # self.coords_edit_ra.setText('{} hours {} minutes {} seconds'.format(*self.get_ra_sep_measure(ra)))
-        # self.coords_edit_dec.setText('{} degrees {} minutes {} seconds'.format(*self.get_dec_sep_measure(dec)))
         self.change_view(*delta)
 
 
@@ -299,8 +311,6 @@ class Window(QtWidgets.QWidget):
         # self.btn_getview.setStyleSheet('color: white; background-color: black;')
         # self.btn_getview.clicked.connect(lambda: self.change_view())
 
-
-
     def get_layout(self):
         hbox0 = QtWidgets.QHBoxLayout()
         hbox0.addStretch()
@@ -341,7 +351,7 @@ class Window(QtWidgets.QWidget):
         vbox.addLayout(hbox2)
         return vbox
 
-    def keyPressEvent(self, event):
+    def keyPressEvent000(self, event):
         if event.key() == QtCore.Qt.Key_Up:
             print('up')
             self.turn('up')
@@ -661,7 +671,5 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     window = Window()
     window.showMaximized()
-    # window.setGeometry(500, 300, 800, 600)
-    # window.setGeometry(50, 50, 1800, 800)
     window.show()
     sys.exit(app.exec_())

@@ -9,6 +9,14 @@ class Geom:
 		y += 1
 		return im_size - x * im_size / 2, im_size - y * im_size / 2
 
+	def get_resize_image_coords(coords, im_size, coef):
+		center_coords = coords[0] - im_size/2, coords[1] - im_size/2
+		changed_center_coords = center_coords[0] * coef, center_coords[1] * coef
+		a = changed_center_coords[0] + im_size/2, changed_center_coords[1] + im_size/2
+		return changed_center_coords[0] + im_size/2, changed_center_coords[1] + im_size/2
+
+
+
 	def get_image_coords000(star, im_size, x_shift=0, y_shift=0):
 		x, y = Geom.get_coords(star)
 		x += 1
