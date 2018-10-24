@@ -157,15 +157,23 @@ class StarsViewer(QFrame):
             self.view_delta += 50
 
         for s in self.stars:
-            x_dist = abs(center[0] - s.coords[0])
-            y_dist = abs(center[1] - s.coords[1])
-            if x_dist > self.view_delta or y_dist > self.view_delta:
+            # x_dist = abs(center[0] - s.coords[0])
+            # y_dist = abs(center[1] - s.coords[1])
+            dist = StarsViewer.get_dist(s.coords, center)
+            if dist > self.view_delta:
                 s.hide()
             else:
                 s.show()
 
+    def get_dist(coords, other_point):
+        x_dist = abs(other_point[0] - coords[0])
+        y_dist = abs(other_point[1] - coords[1])
+        # square view
+        # return max(x_dist, y_dist)
 
-
+        # round view
+        dist = sqrt(x_dist ** 2 + y_dist ** 2)
+        return dist
 
 
 class Window(QtWidgets.QWidget):
@@ -197,9 +205,8 @@ class Window(QtWidgets.QWidget):
             #     s.move(*s.coords)
 
             # сокрытие и возврат в поле зрения звезд при сдвиге
-            x_dist = abs(400 - s.coords[0])
-            y_dist = abs(400 - s.coords[1])
-            if x_dist > self.star_viewer.view_delta or y_dist > self.star_viewer.view_delta:
+            dist = StarsViewer.get_dist(s.coords, (400, 400))
+            if dist > self.star_viewer.view_delta:
                 s.hide()
             else:
                 s.show()
