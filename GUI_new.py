@@ -67,14 +67,9 @@ class StarsViewer(QFrame):
     def __init__(self, parent):
         super(StarsViewer, self).__init__(parent)
         self.setStyleSheet('background-color:black;')
-        # self.setMinimumSize(200, 200)
         self.setMaximumSize(800, 800)
-        # self.move(0, 0)
-        # self.setLineWidth(10)
-        # self.setAcceptDrops(True)
         self.setMouseTracking(True)
 
-        # self.stars = self.draw_stars()
         self.stars = []
         self.constellations = QtConstellation.get_constellations(self)
         for c in self.constellations:
@@ -82,18 +77,14 @@ class StarsViewer(QFrame):
                 s.show()
                 self.stars.append(s)
 
-        # self.changed_stars = []
         self.changed_constellation = None
 
         self.view_delta = 400 # self.size/2
-        self.current_ra_fullsec = 0
-        self.current_dec_fullsec = 0
-
-    def get_stars000(self):
-        logic_stars = StarsGetter.get_stars()
-        # print([s for s in logic_stars])
-        qtstars = [ QtStar(s, self) for s in logic_stars ]
-        return qtstars
+        
+        # self.current_ra_fullsec = 0
+        # self.current_dec_fullsec = 0
+        # self.current_ra = 0, 0, 0 # h, m, s
+        # self.current_dec = 0, 0, 0
 
 
     def mousePressEvent(self, event):
@@ -120,7 +111,6 @@ class StarsViewer(QFrame):
         # if msg == QMessageBox.Ok:
         #     s.setPixmap(s.dark_pixmap)
         #     s.resize(s.radius, s.radius)
-
 
 
     def mouseReleaseEvent(self, event):
@@ -160,8 +150,6 @@ class StarsViewer(QFrame):
             self.view_delta += 50
 
         for s in self.stars:
-            # x_dist = abs(center[0] - s.coords[0])
-            # y_dist = abs(center[1] - s.coords[1])
             dist = StarsViewer.get_dist(s.coords, center)
             if dist > self.view_delta:
                 s.hide()
@@ -183,7 +171,7 @@ class Window(QtWidgets.QWidget):
     def __init__(self):
         super(Window, self).__init__()
         self.star_viewer = StarsViewer(self)
-        # self.console = QTextEdit()
+
         self.setStyleSheet('background-color:black;')
         self.create_widgets()
         self.setLayout(self.get_layout())
@@ -191,21 +179,12 @@ class Window(QtWidgets.QWidget):
         # print(self.viewer.picture)
 
 
-    def change_view(self, show=False):
-        delta_ra = 3600
-        delta_dec = 3600
-        if ra is None or dec is None:
-            QtWidgets.QMessageBox.about(self, '', "Wrong input format")
-            return
-
+    def change_view(self, delta_ra, delta_dec):
         for s in self.star_viewer.stars:
             s.star.ra.full_sec += delta_ra
             s.star.dec.full_sec += delta_dec
             s.coords = Geom.get_image_coords(s.star, 800)
-            # возможна некорректная работа из-за чтения поля ввода координат 
             s.move(*s.coords)
-            # if show: # костыль. откорректировать ввод координат
-            #     s.move(*s.coords)
 
             # сокрытие и возврат в поле зрения звезд при сдвиге
             dist = StarsViewer.get_dist(s.coords, (400, 400))
@@ -229,19 +208,15 @@ class Window(QtWidgets.QWidget):
         elif side == 'down':
             delta = (0, 3600*c)
 
-        ra = self.star_viewer.current_ra_fullsec
-        dec = self.star_viewer.current_dec_fullsec
-        if ra is None or dec is None:
-            QtWidgets.QMessageBox.about(self, '', "Wrong input format")
-            return
-        ra += delta[0]
-        dec += delta[1]
-        self.coords_edit_ra.setText('{} hours {} minutes {} seconds'.format(*self.get_ra_sep_measure(ra)))
-        self.coords_edit_dec.setText('{} degrees {} minutes {} seconds'.format(*self.get_dec_sep_measure(dec)))
-        self.change_view()
-        self.coords_edit_ra.setText('{} hours {} minutes {} seconds'.format(0, 0, 0))
-        self.coords_edit_dec.setText('{} degrees {} minutes {} seconds'.format(0, 0, 0))
-        
+        # ra = self.star_viewer.current_ra_fullsec
+        # dec = self.star_viewer.current_dec_fullsec
+
+        # ra += delta[0]
+        # dec += delta[1]
+        # self.coords_edit_ra.setText('{} hours {} minutes {} seconds'.format(*self.get_ra_sep_measure(ra)))
+        # self.coords_edit_dec.setText('{} degrees {} minutes {} seconds'.format(*self.get_dec_sep_measure(dec)))
+        self.change_view(*delta)
+
 
     def get_ra_full_sec00(self):
         text = self.coords_edit_ra.text()
@@ -290,6 +265,7 @@ class Window(QtWidgets.QWidget):
         m = (full_sec % 3600) // 60
         return (-d, m, s)
 
+
     def create_widgets(self):
         self.btn_left = QtWidgets.QToolButton()
         self.btn_left.setText('ᐊ')
@@ -311,17 +287,17 @@ class Window(QtWidgets.QWidget):
         self.btn_down.setStyleSheet('color: white; background-color: black;')
         self.btn_down.clicked.connect(lambda: self.turn('down'))
 
-        self.coords_edit_ra = QtWidgets.QLineEdit(self)
-        self.coords_edit_ra.setText('0 hours 0 minutes 0 seconds')
-        self.coords_edit_ra.setStyleSheet('color: white; background-color: black; border-color: black')
-        self.coords_edit_dec = QtWidgets.QLineEdit()
-        self.coords_edit_dec.setStyleSheet('color: white; background-color: black;')
-        self.coords_edit_dec.setText('0 degrees 0 minutes 0 seconds')
+        # self.coords_edit_ra = QtWidgets.QLineEdit(self)
+        # self.coords_edit_ra.setText('0 hours 0 minutes 0 seconds')
+        # self.coords_edit_ra.setStyleSheet('color: white; background-color: black; border-color: black')
+        # self.coords_edit_dec = QtWidgets.QLineEdit()
+        # self.coords_edit_dec.setStyleSheet('color: white; background-color: black;')
+        # self.coords_edit_dec.setText('0 degrees 0 minutes 0 seconds')
 
-        self.btn_getview = QtWidgets.QToolButton()
-        self.btn_getview.setText('Show')
-        self.btn_getview.setStyleSheet('color: white; background-color: black;')
-        self.btn_getview.clicked.connect(lambda: self.change_view(True))
+        # self.btn_getview = QtWidgets.QToolButton()
+        # self.btn_getview.setText('Show')
+        # self.btn_getview.setStyleSheet('color: white; background-color: black;')
+        # self.btn_getview.clicked.connect(lambda: self.change_view())
 
 
 
@@ -342,9 +318,9 @@ class Window(QtWidgets.QWidget):
 
         hbox2 = QtWidgets.QHBoxLayout()
         hbox2.addStretch()
-        hbox2.addWidget(self.coords_edit_ra)
-        hbox2.addWidget(self.coords_edit_dec)
-        hbox2.addWidget(self.btn_getview)
+        # hbox2.addWidget(self.coords_edit_ra)
+        # hbox2.addWidget(self.coords_edit_dec)
+        # hbox2.addWidget(self.btn_getview)
         hbox2.addSpacing(85)
         hbox2.addWidget(self.btn_down)
         hbox2.addSpacing(35)
