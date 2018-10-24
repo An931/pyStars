@@ -30,7 +30,8 @@ class QtStar(QLabel):
         self.move(*self.coords)
 
         self.resize(self.radius + 10, self.radius + 10)
-        self.setToolTip(self.constellation.name+'\n'+str(self.coords))
+        # self.setToolTip(self.constellation.name+'\n'+str(self.coords))
+        self.setToolTip(self.constellation.name)
 
     def enterEvent(self, event):
         print('mouseEnterEvent')
@@ -181,10 +182,12 @@ class Window(QtWidgets.QWidget):
         super(Window, self).__init__()
         self.star_viewer = StarsViewer(self)
         # self.console = QTextEdit()
+        self.setStyleSheet('background-color:black;')
         self.create_widgets()
         self.setLayout(self.get_layout())
         # self.change_view()
         # print(self.viewer.picture)
+
 
 
 
@@ -211,7 +214,8 @@ class Window(QtWidgets.QWidget):
             else:
                 s.show()
 
-            s.setToolTip(s.constellation.name+'\n'+str(s.coords))
+            # s.setToolTip(s.constellation.name+'\n'+str(s.coords))
+            s.setToolTip(s.constellation.name)
 
 
     def turn(self, side):
@@ -289,27 +293,34 @@ class Window(QtWidgets.QWidget):
     def create_widgets(self):
         self.btn_left = QtWidgets.QToolButton()
         self.btn_left.setText('ᐊ')
+        self.btn_left.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
         self.btn_left.clicked.connect(lambda: self.turn('left'))
 
-        self.btn_right = QtWidgets.QToolButton()
+        self.btn_right = QtWidgets.QToolButton(self)
         self.btn_right.setText('ᐅ')
+        self.btn_right.setStyleSheet('color: white; background-color: black;')
         self.btn_right.clicked.connect(lambda: self.turn('right'))
 
         self.btn_up = QtWidgets.QToolButton()
         self.btn_up.setText('ᐃ')
+        self.btn_up.setStyleSheet('color: white; background-color: black;')
         self.btn_up.clicked.connect(lambda: self.turn('up'))
 
         self.btn_down = QtWidgets.QToolButton()
         self.btn_down.setText('ᐁ')
+        self.btn_down.setStyleSheet('color: white; background-color: black;')
         self.btn_down.clicked.connect(lambda: self.turn('down'))
 
-        self.coords_edit_ra = QtWidgets.QLineEdit()
+        self.coords_edit_ra = QtWidgets.QLineEdit(self)
         self.coords_edit_ra.setText('0 hours 0 minutes 0 seconds')
+        self.coords_edit_ra.setStyleSheet('color: white; background-color: black; border-color: black')
         self.coords_edit_dec = QtWidgets.QLineEdit()
+        self.coords_edit_dec.setStyleSheet('color: white; background-color: black;')
         self.coords_edit_dec.setText('0 degrees 0 minutes 0 seconds')
 
         self.btn_getview = QtWidgets.QToolButton()
         self.btn_getview.setText('Show')
+        self.btn_getview.setStyleSheet('color: white; background-color: black;')
         self.btn_getview.clicked.connect(lambda: self.change_view(True))
 
 
