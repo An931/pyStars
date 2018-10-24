@@ -16,9 +16,9 @@ class QtStar(QLabel):
         color = Drawer.get_color(star)
         self.radius = Drawer.get_radius(star)
 
-        self.pixmap = QPixmap('small_pic/{}_{}.png'.format(5, color)).scaled(self.radius, self.radius)
+        self.pixmap = QPixmap('small_pic/{}_{}_round.png'.format(5, color)).scaled(self.radius, self.radius)
         # self.dark_pixmap = QPixmap('small_pic/{}_{}_dark.png'.format(radius, 'white'))
-        self.dark_pixmap = QPixmap('small_pic/{}_{}.png'.format(10, 'grey')).scaled(self.radius, self.radius)
+        self.dark_pixmap = QPixmap('small_pic/{}_{}_round.png'.format(5, 'white_dark')).scaled(self.radius, self.radius)
         # self.dark_pixmap = QPixmap('small_pic/{}_{}.png'.format(5, 'white'))
 
         self.star = star
