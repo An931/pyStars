@@ -26,11 +26,11 @@ class QtStar(QLabel):
         super(QLabel, self).__init__(parent)
         self.setPixmap(self.dark_pixmap)
         # self.setPixmap(self.grey_pixmap)
-        self.coords = Geom.get_image_coords(star, 1000, 100, 20)
+        self.coords = Geom.get_image_coords(star, 800)
         self.move(*self.coords)
 
         self.resize(self.radius + 10, self.radius + 10)
-        self.setToolTip(self.constellation.name)
+        self.setToolTip(self.constellation.name+'\n'+str(self.coords))
 
     def enterEvent(self, event):
         print('mouseEnterEvent')
@@ -67,6 +67,7 @@ class StarsViewer(QFrame):
         super(StarsViewer, self).__init__(parent)
         self.setStyleSheet('background-color:black;')
         # self.setMinimumSize(200, 200)
+        self.setMaximumSize(800, 800)
         # self.move(0, 0)
         # self.setLineWidth(10)
         # self.setAcceptDrops(True)
@@ -82,6 +83,8 @@ class StarsViewer(QFrame):
 
         # self.changed_stars = []
         self.changed_constellation = None
+
+        self.view_delta = 400 # self.size/2
 
     def get_stars000(self):
         logic_stars = StarsGetter.get_stars()
@@ -106,7 +109,8 @@ class StarsViewer(QFrame):
         for s in self.changed_constellation.stars:
             s.setPixmap(QPixmap('small_pic/6_white_round2.png'))
             # s.setPixmap(s.pixmap)
-            s.resize(4, 4)
+            # s.resize(4, 4)
+
         # print(child.constellation.name)
         # msg = QMessageBox.information(self.parent(), '', child.constellation.name+'\n'+child.star.line, 
         #     QMessageBox.Ok)
@@ -124,7 +128,7 @@ class StarsViewer(QFrame):
         if self.changed_constellation:
             for s in self.changed_constellation.stars:
                 s.setPixmap(s.dark_pixmap)
-                s.resize(s.radius + 10, s.radius + 10)
+                # s.resize(s.radius + 10, s.radius + 10)
 
 
         # child = self.childAt(event.pos())
@@ -142,6 +146,27 @@ class StarsViewer(QFrame):
         # child.resize(500, 500)
         # child.setPixmap(child.pixmap.scaled(child.size()))
 
+    def wheelEvent(self, event):
+        print('wheelEvent')
+        print(event.angleDelta())
+        center = (400, 400)
+        # self.view_delta -= 50
+        if event.angleDelta().y() > 0:
+            self.view_delta -= 50
+        else:
+            self.view_delta += 50
+
+        for s in self.stars:
+            x_dist = abs(center[0] - s.coords[0])
+            y_dist = abs(center[1] - s.coords[1])
+            if x_dist > self.view_delta or y_dist > self.view_delta:
+                s.hide()
+            else:
+                s.show()
+
+
+
+
 
 class Window(QtWidgets.QWidget):
     def __init__(self):
@@ -155,20 +180,31 @@ class Window(QtWidgets.QWidget):
 
 
 
-    def change_view(self):
+    def change_view(self, show=False):
         ra = self.get_ra_full_sec()
         dec = self.get_dec_full_sec()
         if ra is None or dec is None:
             QtWidgets.QMessageBox.about(self, '', "Wrong input format")
             return
-        pic_name = '{}ra_{}dec.png'.format(ra, dec)
-        path = os.getcwd()+'/shifts/'+pic_name
-        # print(path)
+
         for s in self.star_viewer.stars:
             s.star.ra.full_sec += ra
             s.star.dec.full_sec += dec
-            s.coords = Geom.get_image_coords(s.star, 1000, 100, 20)
+            s.coords = Geom.get_image_coords(s.star, 800)
+            # возможна некорректная работа из-за чтения поля ввода координат 
             s.move(*s.coords)
+            # if show: # костыль. откорректировать ввод координат
+            #     s.move(*s.coords)
+
+            # сокрытие и возврат в поле зрения звезд при сдвиге
+            x_dist = abs(400 - s.coords[0])
+            y_dist = abs(400 - s.coords[1])
+            if x_dist > self.star_viewer.view_delta or y_dist > self.star_viewer.view_delta:
+                s.hide()
+            else:
+                s.show()
+
+            s.setToolTip(s.constellation.name+'\n'+str(s.coords))
 
 
     def turn(self, side):
@@ -192,6 +228,9 @@ class Window(QtWidgets.QWidget):
         self.coords_edit_ra.setText('{} hours {} minutes {} seconds'.format(*self.get_ra_sep_measure(ra)))
         self.coords_edit_dec.setText('{} degrees {} minutes {} seconds'.format(*self.get_dec_sep_measure(dec)))
         self.change_view()
+        self.coords_edit_ra.setText('{} hours {} minutes {} seconds'.format(0, 0, 0))
+        self.coords_edit_dec.setText('{} degrees {} minutes {} seconds'.format(0, 0, 0))
+        
 
     def get_ra_full_sec(self):
         text = self.coords_edit_ra.text()
@@ -264,7 +303,7 @@ class Window(QtWidgets.QWidget):
 
         self.btn_getview = QtWidgets.QToolButton()
         self.btn_getview.setText('Show')
-        self.btn_getview.clicked.connect(self.change_view)
+        self.btn_getview.clicked.connect(lambda: self.change_view(True))
 
 
 
