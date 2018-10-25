@@ -109,11 +109,12 @@ class StarsViewer(QFrame):
 
     def wheelEvent(self, event):
         print('wheelEvent')
+
         if event.angleDelta().y() > 0:
             self.view_coef += 0.5
         else:
             self.view_coef -= 0.5
-
+        print(self.view_coef)
         for s in self.stars:
             new_coords = Geom.get_resize_image_coords(s.coords, 800, self.view_coef)
             # s.coords = new_coords
@@ -152,8 +153,9 @@ class Window(QtWidgets.QWidget):
             s.star.ra.full_sec += delta_ra
             s.star.dec.full_sec += delta_dec
             s.coords = Geom.get_image_coords(s.star, 800, 0, 0)
-            s.coords = Geom.get_resize_image_coords(s.coords, 800, self.star_viewer.view_coef)
-            s.move(*s.coords)
+            # s.coords = Geom.get_resize_image_coords(s.coords, 800, self.star_viewer.view_coef)
+            new_coords = Geom.get_resize_image_coords(s.coords, 800, self.star_viewer.view_coef)
+            s.move(*new_coords)
 
             s.setToolTip(s.constellation.name)
 
