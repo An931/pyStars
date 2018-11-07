@@ -184,17 +184,14 @@ class Window(QtWidgets.QWidget):
     def create_direction_btns(self):
         self.btn_left = QtWidgets.QToolButton()
         self.btn_left.setText('ᐊ')
-        # self.btn_left.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
         self.btn_left.clicked.connect(lambda: self.turn('left'))
 
         self.btn_right = QtWidgets.QToolButton(self)
         self.btn_right.setText('ᐅ')
-        # self.btn_right.setStyleSheet('color: white; background-color: black;')
         self.btn_right.clicked.connect(lambda: self.turn('right'))
 
         self.btn_up = QtWidgets.QToolButton()
         self.btn_up.setText('ᐃ')
-        # self.btn_up.setStyleSheet('color: white; background-color: black;')
         self.btn_up.clicked.connect(lambda: self.turn('up'))
 
         self.btn_down = QtWidgets.QToolButton()
@@ -211,38 +208,27 @@ class Window(QtWidgets.QWidget):
         self.day_minus = QtWidgets.QToolButton()
         self.day_minus.setText('day -')
         self.day_minus.clicked.connect(lambda: self.turn('right'))
-        # self.day.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
-        # self.day_plus.setStyleSheet('color: white; background-color: black;')
-        # self.day_minus.setStyleSheet('color: white; background-color: black;')
 
         self.hour = QtWidgets.QLabel()
         self.hour.setText('Hour: ')
         self.hour_num = QtWidgets.QLineEdit()
         self.hour_num.setText('0')
-        # self.hour.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
+        self.hour_num.setMaximumSize(30, 20)
         self.hour_plus = QtWidgets.QToolButton()
         self.hour_plus.setText('hour +')
-        self.hour_plus.clicked.connect(lambda: (self.turn('left'), self.hour_num.setText(str(int(self.hour_num.text())+1)))) # день - сдвиг на 1 градус
+        self.hour_plus.clicked.connect(lambda: (self.turn('left'), self.hour_num.setText(str(int(self.hour_num.text())+1)))) 
         self.hour_minus = QtWidgets.QToolButton()
         self.hour_minus.setText('hour -')
         self.hour_minus.clicked.connect(lambda: self.turn('right'))
-        # self.hour.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
-        # self.hour_num.setStyleSheet('color: white; background-color: black;')
-        # self.hour_plus.setStyleSheet('color: white; background-color: black;')
-        # self.hour_minus.setStyleSheet('color: white; background-color: black;')
 
         self.minute = QtWidgets.QLabel()
         self.minute.setText('Minute: 0')
-        # self.minute.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
         self.minute_plus = QtWidgets.QToolButton()
         self.minute_plus.setText('minute +')
-        self.minute_plus.clicked.connect(lambda: self.turn('left')) # день - сдвиг на 1 градус
+        self.minute_plus.clicked.connect(lambda: self.turn('left')) 
         self.minute_minus = QtWidgets.QToolButton()
         self.minute_minus.setText('minute -')
         self.minute_minus.clicked.connect(lambda: self.turn('right'))
-        # self.minute.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
-        # self.minute_plus.setStyleSheet('color: white; background-color: black;')
-        # self.minute_minus.setStyleSheet('color: white; background-color: black;')
 
         self.hlayout_time_change = QHBoxLayout()
         self.hlayout_time_change.addWidget(self.day)
