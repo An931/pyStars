@@ -34,24 +34,30 @@ direction = 'right'
 
 stars = get_stars()
 
+
 while True: # the main game loop
     DISPLAYSURF.fill(WHITE)
 
     pos = pygame.mouse.get_pos()
-    print(pos)
-    pygame.draw.line(DISPLAYSURF, (  0, 255,   0), [0, 0], pos, 5)
-    pygame.draw.circle(DISPLAYSURF, (  255,  0, 0), pos, 6)
+    # print(pos)
+    # pygame.draw.line(DISPLAYSURF, (  0, 255,   0), [0, 0], pos, 5)
+    # pygame.draw.circle(DISPLAYSURF, (  255,  0, 0), pos, 6)
 
     for s in stars:
         pygame.draw.circle(DISPLAYSURF, (  0,   0, 255), [int(s.x), int(s.y)], 1)
-        if direction == 'right':
-            s.x+=1
-        elif direction == 'down':
-            s.y+=1
-        elif direction == 'left':
-            s.x-=1
-        elif direction == 'up':
-            s.y-=1
+        if abs(int(s.x) - pos[0]) < 9 and abs(int(s.y) - pos[1]) < 9:
+            print(pos)
+            pygame.draw.circle(DISPLAYSURF, (  255,   0, 0), [int(s.x), int(s.y)], 1)
+
+        # pygame.draw.line(DISPLAYSURF, (  0,   0, 255), [int(s.x), int(s.y)], [int(s.x), int(s.y)], 1)
+        # if direction == 'right':
+        #     s.x+=1
+        # elif direction == 'down':
+        #     s.y+=1
+        # elif direction == 'left':
+        #     s.x-=1
+        # elif direction == 'up':
+        #     s.y-=1
 
     if direction == 'right':
         catx += 5
