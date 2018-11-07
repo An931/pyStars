@@ -189,17 +189,17 @@ class Window(QtWidgets.QWidget):
 
         self.btn_right = QtWidgets.QToolButton(self)
         self.btn_right.setText('ᐅ')
-        self.btn_right.setStyleSheet('color: white; background-color: black;')
+        # self.btn_right.setStyleSheet('color: white; background-color: black;')
         self.btn_right.clicked.connect(lambda: self.turn('right'))
 
         self.btn_up = QtWidgets.QToolButton()
         self.btn_up.setText('ᐃ')
-        self.btn_up.setStyleSheet('color: white; background-color: black;')
+        # self.btn_up.setStyleSheet('color: white; background-color: black;')
         self.btn_up.clicked.connect(lambda: self.turn('up'))
 
         self.btn_down = QtWidgets.QToolButton()
         self.btn_down.setText('ᐁ')
-        self.btn_down.setStyleSheet('color: white; background-color: black;')
+        # self.btn_down.setStyleSheet('color: white; background-color: black;')
         self.btn_down.clicked.connect(lambda: self.turn('down'))
 
     def create_time_change_widgets(self):
@@ -211,9 +211,9 @@ class Window(QtWidgets.QWidget):
         self.day_minus = QtWidgets.QToolButton()
         self.day_minus.setText('day -')
         self.day_minus.clicked.connect(lambda: self.turn('right'))
-        self.day.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
-        self.day_plus.setStyleSheet('color: white; background-color: black;')
-        self.day_minus.setStyleSheet('color: white; background-color: black;')
+        # self.day.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
+        # self.day_plus.setStyleSheet('color: white; background-color: black;')
+        # self.day_minus.setStyleSheet('color: white; background-color: black;')
 
         self.hour = QtWidgets.QLabel()
         self.hour.setText('Hour: ')
@@ -226,10 +226,10 @@ class Window(QtWidgets.QWidget):
         self.hour_minus = QtWidgets.QToolButton()
         self.hour_minus.setText('hour -')
         self.hour_minus.clicked.connect(lambda: self.turn('right'))
-        self.hour.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
-        self.hour_num.setStyleSheet('color: white; background-color: black;')
-        self.hour_plus.setStyleSheet('color: white; background-color: black;')
-        self.hour_minus.setStyleSheet('color: white; background-color: black;')
+        # self.hour.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
+        # self.hour_num.setStyleSheet('color: white; background-color: black;')
+        # self.hour_plus.setStyleSheet('color: white; background-color: black;')
+        # self.hour_minus.setStyleSheet('color: white; background-color: black;')
 
         self.minute = QtWidgets.QLabel()
         self.minute.setText('Minute: 0')
@@ -240,9 +240,9 @@ class Window(QtWidgets.QWidget):
         self.minute_minus = QtWidgets.QToolButton()
         self.minute_minus.setText('minute -')
         self.minute_minus.clicked.connect(lambda: self.turn('right'))
-        self.minute.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
-        self.minute_plus.setStyleSheet('color: white; background-color: black;')
-        self.minute_minus.setStyleSheet('color: white; background-color: black;')
+        # self.minute.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
+        # self.minute_plus.setStyleSheet('color: white; background-color: black;')
+        # self.minute_minus.setStyleSheet('color: white; background-color: black;')
 
         self.hlayout_time_change = QHBoxLayout()
         self.hlayout_time_change.addWidget(self.day)
@@ -299,7 +299,7 @@ class Window(QtWidgets.QWidget):
 if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    app.setStyleSheet('QLabel{color: red} QToolButton{background-color: red; color: red}')
+    app.setStyleSheet('QLabel{color: white} QToolButton{background-color: red; color: white} QLineEdit{color: white}')
     window = Window()
     # window.showMaximized()
     window.show()
