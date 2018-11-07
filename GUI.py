@@ -11,25 +11,27 @@ from drawer import *
 import re
 import os
 
+SIZE = 800
+
 class QtStar(QLabel):
     def __init__(self, star, constellation, parent=None):
         color = Drawer.get_color(star)
         self.radius = Drawer.get_radius(star)
 
         self.pixmap = QPixmap('small_pic/{}_{}_round.png'.format(5, color)).scaled(self.radius, self.radius)
-        # self.dark_pixmap = QPixmap('small_pic/{}_{}_dark.png'.format(radius, 'white'))
         self.dark_pixmap = QPixmap('small_pic/{}_{}_round.png'.format(5, 'white_dark')).scaled(self.radius, self.radius)
 
         self.star = star
         self.constellation = constellation
         super(QLabel, self).__init__(parent)
         self.setPixmap(self.dark_pixmap)
-        self.coords = Geom.get_image_coords(star, 800, 0, 0)
+        self.coords = Geom.get_image_coords(star, SIZE, 0, 0)
         self.move(*self.coords)
 
         self.resize(self.radius + 10, self.radius + 10)
         # self.setToolTip(self.constellation.name+'\n'+str(self.coords))
-        self.setToolTip(self.constellation.name)
+        # self.setToolTip(self.constellation.name)
+        self.setToolTip(self.constellation.name+'\n'+str(self.star.ra) + ' '+str(self.star.dec))
 
     def enterEvent(self, event):
         print('mouseEnterEvent')
@@ -65,8 +67,8 @@ class StarsViewer(QFrame):
     def __init__(self, parent):
         super(StarsViewer, self).__init__(parent)
         self.setStyleSheet('background-color:black;')
-        self.setMinimumSize(800, 800)
-        self.setMaximumSize(800, 800)
+        self.setMinimumSize(SIZE, SIZE)
+        self.setMaximumSize(SIZE, SIZE)
         self.setMouseTracking(True)
 
         self.stars = []
@@ -79,6 +81,7 @@ class StarsViewer(QFrame):
         self.changed_constellation = None
 
         self._view_coef = 1
+        # self._view_coef = 6
 
     @property
     def view_coef(self):
@@ -116,7 +119,7 @@ class StarsViewer(QFrame):
             self.view_coef -= 0.5
         print(self.view_coef)
         for s in self.stars:
-            new_coords = Geom.get_resize_image_coords(s.coords, 800, self.view_coef)
+            new_coords = Geom.get_resize_image_coords(s.coords, SIZE, self.view_coef)
             # s.coords = new_coords
             # s.move(*self.coords)
             s.move(*new_coords)
@@ -138,11 +141,12 @@ class Window(QtWidgets.QWidget):
         super(Window, self).__init__()
         self.star_viewer = StarsViewer(self)
 
-        self.setMinimumSize(860, 900)
-        # self.setMaximumSize(800, 900)
+        self.setMinimumSize(SIZE+60, SIZE+100)
+        # self.setMaximumSize(SIZE, 900)
 
         self.setStyleSheet('background-color:black;')
-        self.create_widgets()
+        self.create_time_change_widgets()
+        self.create_direction_btns()
         self.setLayout(self.get_layout())
         # self.change_view()
         # print(self.viewer.picture)
@@ -152,15 +156,19 @@ class Window(QtWidgets.QWidget):
         for s in self.star_viewer.stars:
             s.star.ra.full_sec += delta_ra
             s.star.dec.full_sec += delta_dec
-            s.coords = Geom.get_image_coords(s.star, 800, 0, 0)
+            s.coords = Geom.get_image_coords(s.star, SIZE, 0, 0)
             # s.coords = Geom.get_resize_image_coords(s.coords, 800, self.star_viewer.view_coef)
-            new_coords = Geom.get_resize_image_coords(s.coords, 800, self.star_viewer.view_coef)
+            new_coords = Geom.get_resize_image_coords(s.coords, SIZE, self.star_viewer.view_coef)
             s.move(*new_coords)
+            # ---------------------------
+            # if s.radius > 2:
+            #     s.move(*new_coords)
 
-            s.setToolTip(s.constellation.name)
+
+            # s.setToolTip(s.constellation.name)
 
 
-    def turn(self, side):
+    def turn(self, side, angle=360):
         c = 2
         if side == 'right':
             delta = (360*c, 0)
@@ -173,12 +181,10 @@ class Window(QtWidgets.QWidget):
 
         self.change_view(*delta)
 
-
-
-    def create_widgets(self):
+    def create_direction_btns(self):
         self.btn_left = QtWidgets.QToolButton()
         self.btn_left.setText('ᐊ')
-        self.btn_left.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
+        # self.btn_left.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
         self.btn_left.clicked.connect(lambda: self.turn('left'))
 
         self.btn_right = QtWidgets.QToolButton(self)
@@ -196,6 +202,59 @@ class Window(QtWidgets.QWidget):
         self.btn_down.setStyleSheet('color: white; background-color: black;')
         self.btn_down.clicked.connect(lambda: self.turn('down'))
 
+    def create_time_change_widgets(self):
+        self.day = QtWidgets.QLabel()
+        self.day.setText('Day: 0')
+        self.day_plus = QtWidgets.QToolButton()
+        self.day_plus.setText('day +')
+        self.day_plus.clicked.connect(lambda: self.turn('left')) # день - сдвиг на 1 градус
+        self.day_minus = QtWidgets.QToolButton()
+        self.day_minus.setText('day -')
+        self.day_minus.clicked.connect(lambda: self.turn('right'))
+        self.day.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
+        self.day_plus.setStyleSheet('color: white; background-color: black;')
+        self.day_minus.setStyleSheet('color: white; background-color: black;')
+
+        self.hour = QtWidgets.QLabel()
+        self.hour.setText('Hour: ')
+        self.hour_num = QtWidgets.QLineEdit()
+        self.hour_num.setText('0')
+        # self.hour.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
+        self.hour_plus = QtWidgets.QToolButton()
+        self.hour_plus.setText('hour +')
+        self.hour_plus.clicked.connect(lambda: (self.turn('left'), self.hour_num.setText(str(int(self.hour_num.text())+1)))) # день - сдвиг на 1 градус
+        self.hour_minus = QtWidgets.QToolButton()
+        self.hour_minus.setText('hour -')
+        self.hour_minus.clicked.connect(lambda: self.turn('right'))
+        self.hour.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
+        self.hour_num.setStyleSheet('color: white; background-color: black;')
+        self.hour_plus.setStyleSheet('color: white; background-color: black;')
+        self.hour_minus.setStyleSheet('color: white; background-color: black;')
+
+        self.minute = QtWidgets.QLabel()
+        self.minute.setText('Minute: 0')
+        # self.minute.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
+        self.minute_plus = QtWidgets.QToolButton()
+        self.minute_plus.setText('minute +')
+        self.minute_plus.clicked.connect(lambda: self.turn('left')) # день - сдвиг на 1 градус
+        self.minute_minus = QtWidgets.QToolButton()
+        self.minute_minus.setText('minute -')
+        self.minute_minus.clicked.connect(lambda: self.turn('right'))
+        self.minute.setStyleSheet('color: white; background-color: black;') # dark-grey "#ff423e50"
+        self.minute_plus.setStyleSheet('color: white; background-color: black;')
+        self.minute_minus.setStyleSheet('color: white; background-color: black;')
+
+        self.hlayout_time_change = QHBoxLayout()
+        self.hlayout_time_change.addWidget(self.day)
+        self.hlayout_time_change.addWidget(self.day_plus)
+        self.hlayout_time_change.addWidget(self.day_minus)
+        self.hlayout_time_change.addWidget(self.hour)
+        self.hlayout_time_change.addWidget(self.hour_num)
+        self.hlayout_time_change.addWidget(self.hour_plus)
+        self.hlayout_time_change.addWidget(self.hour_minus)
+        self.hlayout_time_change.addWidget(self.minute)
+        self.hlayout_time_change.addWidget(self.minute_plus)
+        self.hlayout_time_change.addWidget(self.minute_minus)
 
     def get_layout(self):
         hbox0 = QtWidgets.QHBoxLayout()
@@ -232,12 +291,15 @@ class Window(QtWidgets.QWidget):
         vbox.addLayout(hbox1)
         vbox.addLayout(hbox0)
         vbox.addLayout(hbox2)
+
+        vbox.addLayout(self.hlayout_time_change)
         return vbox
 
 
 if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)
+    app.setStyleSheet('QLabel{color: red} QToolButton{background-color: red; color: red}')
     window = Window()
     # window.showMaximized()
     window.show()

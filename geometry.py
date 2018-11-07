@@ -26,6 +26,7 @@ class Geom:
 		dec = Geom.get_dec_coords(star.dec)
 		return (ra * get_half_chord(dec), dec)
 
+
 	def get_ra_coords(ra):
 		all_sec = 12*60*60
 		if ra.full_sec < all_sec:
