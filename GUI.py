@@ -26,12 +26,19 @@ class QtStar(QLabel):
         super(QLabel, self).__init__(parent)
         self.setPixmap(self.dark_pixmap)
         self.coords = Geom.get_image_coords(star, SIZE, 0, 0)
+
+        self.ra_coord = Geom.get_ra_coords(self.star.ra)
+        self.dec_coord = Geom.get_dec_coords(self.star.dec)
+
         self.move(*self.coords)
 
         self.resize(self.radius + 10, self.radius + 10)
         # self.setToolTip(self.constellation.name+'\n'+str(self.coords))
         # self.setToolTip(self.constellation.name)
-        self.setToolTip(self.constellation.name+'\n'+str(self.star.ra) + ' '+str(self.star.dec))
+        self.setToolTip(str(self.ra_coord) + ' ' +str(self.dec_coord))
+
+        # self.setToolTip(self.constellation.name+'\n'
+        # 	+str(self.star.ra) + ' '+str(self.star.dec) + '\n'+str(self.coords))
 
     def enterEvent(self, event):
         print('mouseEnterEvent')

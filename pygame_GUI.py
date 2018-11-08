@@ -6,14 +6,14 @@ from stars import *
 
 class PyGameApp:
 	def __init__(self):
-		self.window_size = 1000
+		self.window_size = 500
 		pygame.init()
 		self.FPS = 30 # frames per second setting
 		self.fpsClock = pygame.time.Clock()
 		pygame.display.set_caption('Stars')
 
 		# set up the window
-		self.screen = pygame.display.set_mode((self.window_size, self.window_size), 0, 32)
+		self.screen = pygame.display.set_mode((self.window_size+200, self.window_size+50), 0, 32)
 
 		catImg = pygame.image.load('cat.png')
 		catx = 10
@@ -21,15 +21,21 @@ class PyGameApp:
 		direction = 'right'
 
 		self.stars = PyGameApp.get_stars()
-		# self.create_buttons()
+		self.create_buttons()
 
 	def Start(self):
 		while True: # the main game loop
 			self.turn('up')
+			self.turn('right')
 			self.screen.fill(Color.black)
+			# print(pygame.mouse.get_pressed())
+			pressed = pygame.mouse.get_pressed()
+			pos = pygame.mouse.get_pos()
+			if pressed[0] and pos[0]>80 and pos[1]<30 and pos[0]<130:
+				self.turn('right', 30)
+
 
 			highlight_cons = ''
-			pos = pygame.mouse.get_pos()
 			for s in self.stars:
 				if abs(s.x - pos[0]) < 5 and abs(s.y - pos[1]) < 5:
 					highlight_cons = s.const_name
@@ -41,8 +47,7 @@ class PyGameApp:
 				if highlight_cons and s.const_name == highlight_cons:
 					pygame.draw.circle(self.screen, s.color, [s.x, s.y], s.radius)
 
-
-			# self.screen.blit(catImg, (catx, caty))
+			self.screen.blit(self.right_btn, (80, 0))
 
 			for event in pygame.event.get():
 					if event.type == QUIT:
@@ -54,9 +59,9 @@ class PyGameApp:
 	def draw_star(self):
 			pass
 
-	def create_buttons():
+	def create_buttons(self):
 		# pygame.draw.rect(screen, BLACK, [150, 10, 50, 20])
-		self.right_btn = ()
+		self.right_btn = pygame.image.load('btn.png')
 
 
 	def get_stars():
@@ -67,8 +72,8 @@ class PyGameApp:
 			with open(path + name) as f:
 				lines = f.readlines()
 				for l in lines:
-					s = Star(l, name)
-					s.x, s.y = Geom.get_int_image_coords(s, 1000)
+					s = Star(l, name[:-4])
+					# s.x, s.y = Geom.get_int_image_coords(s, self.window_size, 30, 30)
 					s.color = Drawer.get_color_for_pygame(s)
 					s.radius = Drawer.get_radius_for_pygame(s)
 					stars.append(s)
@@ -101,14 +106,19 @@ class PyGameApp:
 		for s in self.stars:
 			s.ra.full_sec += delta_ra
 			s.dec.full_sec += delta_dec
-			coords = Geom.get_int_image_coords(s, self.window_size)
+			coords = Geom.get_int_image_coords(s, self.window_size, 30, 30)
 			s.x, s.y = coords[0], coords[1]
 			# new_coords = Geom.get_resize_image_coords(s.coords, SIZE, self.star_viewer.view_coef)
 			# s.move(*new_coords)
 
-class PyGameButton00:
+class PyGameButton:
 	def __init__(self):
 		pass
+		self.img = img
+		self.x1 = x1
+		self.y1 = y1
+		self.x2 = x2
+		self.y2 = y2
 
 	def draw(self):
 		pass
