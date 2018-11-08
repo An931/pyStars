@@ -20,19 +20,22 @@ class PyGameApp:
 		caty = 10
 		direction = 'right'
 
-		self.stars = PyGameApp.get_stars()
+		self.stars = PyGameApp.get_stars(self.window_size)
 		self.create_buttons()
+
+		self.view_coef = 1
 
 	def Start(self):
 		while True: # the main game loop
-			self.turn('up')
-			self.turn('right')
+			# self.turn('up')
+			# self.turn('right')
 			self.screen.fill(Color.black)
 			# print(pygame.mouse.get_pressed())
 			pressed = pygame.mouse.get_pressed()
 			pos = pygame.mouse.get_pos()
 			if pressed[0] and pos[0]>80 and pos[1]<30 and pos[0]<130:
-				self.turn('right', 30)
+				self.turn('right', 3, self.view_coef)
+				self.view_coef += 0.2
 
 
 			highlight_cons = ''
@@ -63,8 +66,14 @@ class PyGameApp:
 		# pygame.draw.rect(screen, BLACK, [150, 10, 50, 20])
 		self.right_btn = pygame.image.load('btn.png')
 
+	def get_start_time(self):
+		self.day = 0
+		self.month = 0
+		self.hour = 0
+		self.minute = 0
 
-	def get_stars():
+
+	def get_stars(window_size):
 		stars = []
 		path = './data/'
 		txt_files = [x for x in os.listdir(path) if x.endswith('.txt')]
@@ -73,7 +82,7 @@ class PyGameApp:
 				lines = f.readlines()
 				for l in lines:
 					s = Star(l, name[:-4])
-					# s.x, s.y = Geom.get_int_image_coords(s, self.window_size, 30, 30)
+					s.x, s.y = Geom.get_int_image_coords(s, window_size, 30, 30)
 					s.color = Drawer.get_color_for_pygame(s)
 					s.radius = Drawer.get_radius_for_pygame(s)
 					stars.append(s)
@@ -86,7 +95,7 @@ class PyGameApp:
 				stars.append(s)
 		return stars
 
-	def turn(self, side, angle=1):
+	def turn(self, side, angle=1, view_coef=1):
 		ra_angle = (24*60*60)/360
 		dec_angle = (60*60*180)/360
 		if side == 'right':
@@ -99,16 +108,17 @@ class PyGameApp:
 				delta = (0, angle*dec_angle)
 		else:
 			raise Exception()
-		self.change_view(*delta)
+		self.change_view(*delta, view_coef)
 
 
-	def change_view(self, delta_ra, delta_dec):
+	def change_view(self, delta_ra, delta_dec, view_coef=1):
 		for s in self.stars:
 			s.ra.full_sec += delta_ra
 			s.dec.full_sec += delta_dec
 			coords = Geom.get_int_image_coords(s, self.window_size, 30, 30)
 			s.x, s.y = coords[0], coords[1]
-			# new_coords = Geom.get_resize_image_coords(s.coords, SIZE, self.star_viewer.view_coef)
+			new_coords = Geom.get_resize_int_image_coords((s.x, s.y), SIZE, view_coef)
+			s.x, s.y = new_coords[0], new_coords[1]
 			# s.move(*new_coords)
 
 class PyGameButton:
@@ -119,6 +129,14 @@ class PyGameButton:
 		self.y1 = y1
 		self.x2 = x2
 		self.y2 = y2
+
+	def on_click(self, mouse_pos, mouse_pressed):
+		if not mouse_pressed[0]:
+			return False
+		return (mouse_pos[0] > self.x1 and mouse_pos[0] < self.x2
+			and mouse_pos[1] > self.y1 and mouse_pos[1] < self.y2)
+
+
 
 	def draw(self):
 		pass
