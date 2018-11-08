@@ -7,7 +7,7 @@ from GUI import *
 
 class Drawer:
 
-	def get_color_forPyQt(star):
+	def get_color(star):
 		main_colors = dict(
 			M = 'red',  # '#ff8f8f'
 			K = 'orange',  # '#ffc78a'
