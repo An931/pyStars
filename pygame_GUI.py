@@ -6,7 +6,7 @@ from stars import *
 
 class PyGameApp:
 	def __init__(self):
-		self.window_size = 500
+		self.window_size = 800
 		pygame.init()
 		self.FPS = 30 # frames per second setting
 		self.fpsClock = pygame.time.Clock()
@@ -63,7 +63,7 @@ class PyGameApp:
 
 	def draw_star(self, star, color):
 		if star.radius == 1:
-			pygame.draw.line(self.screen, color, [star.x, star.y], [star.x, star.y], 1)
+			pygame.draw.line(self.screen, color, [star.x, star.y], [star.x+1, star.y], 2)
 		else:
 			pygame.draw.circle(self.screen, color, [star.x, star.y], star.radius)
 
