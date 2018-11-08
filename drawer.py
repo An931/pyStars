@@ -54,11 +54,11 @@ class Drawer:
 		# r = 2 * c
 		r = 1
 		if star.mag < 2:
-			r = 4
+			r = 4-1
 		elif star.mag < 4:
-			r = 3
+			r = 3-1
 		elif star.mag < 5:
-			r = 2
+			r = 2-1
 		return r
 
 	def add_draw_parametrs_for_pygame00(stars, window_size):

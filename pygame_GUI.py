@@ -46,9 +46,11 @@ class PyGameApp:
 					continue
 
 			for s in self.stars:
-				pygame.draw.circle(self.screen, Color.grey, [s.x, s.y], s.radius)
+				# pygame.draw.circle(self.screen, Color.grey, [s.x, s.y], s.radius)
+				self.draw_star(s, Color.grey)
 				if highlight_cons and s.const_name == highlight_cons:
-					pygame.draw.circle(self.screen, s.color, [s.x, s.y], s.radius)
+					# pygame.draw.circle(self.screen, s.color, [s.x, s.y], s.radius)
+					self.draw_star(s, s.color)
 
 			self.screen.blit(self.right_btn, (80, 0))
 
@@ -59,8 +61,11 @@ class PyGameApp:
 			pygame.display.update()
 			self.fpsClock.tick(self.FPS)
 
-	def draw_star(self):
-			pass
+	def draw_star(self, star, color):
+		if star.radius == 1:
+			pygame.draw.line(self.screen, color, [star.x, star.y], [star.x, star.y], 1)
+		else:
+			pygame.draw.circle(self.screen, color, [star.x, star.y], star.radius)
 
 	def create_buttons(self):
 		# pygame.draw.rect(screen, BLACK, [150, 10, 50, 20])
