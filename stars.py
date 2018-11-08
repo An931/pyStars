@@ -3,7 +3,7 @@ import re
 import os
 
 class Star:
-	def __init__(self, str='', constellation=None, const_name=''):
+	def __init__(self, str='', const_name=''):
 		if str == '': 
 			return
 		# print(str)
@@ -21,8 +21,7 @@ class Star:
 		self.mag = float(m.group(3))
 		self.sp_class = m.group(4).strip()
 		self.label = m.group(5)
-		self.const_name = constellation.name
-		self.constellation = constellation
+		self.const_name = const_name
 
 class Constellation:
 	def __init__(self, name, text):

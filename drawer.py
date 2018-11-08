@@ -61,7 +61,7 @@ class Drawer:
 			r = 2
 		return r
 
-	def add_draw_parametrs_for_pygame(stars, window_size):
+	def add_draw_parametrs_for_pygame00(stars, window_size):
 		for s in stars:
 			s.x, s.y = Geom.get_int_image_coords(s, window_size)
 			s.color = Drawer.get_color_for_pygame(s)

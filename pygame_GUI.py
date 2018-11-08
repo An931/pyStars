@@ -8,7 +8,7 @@ class PyGameApp:
 	def __init__(self):
 		self.window_size = 1000
 		pygame.init()
-		self.FPS = 30 # frames per second setting
+		self.FPS = 5 # frames per second setting
 		self.fpsClock = pygame.time.Clock()
 		pygame.display.set_caption('Stars')
 
@@ -20,11 +20,7 @@ class PyGameApp:
 		caty = 10
 		direction = 'right'
 
-
-
-		self.constellations = Constellation.get_constellations()
-		self.stars = self.get_all_stars()
-		Drawer.add_draw_parametrs_for_pygame(self.stars, self.window_size)
+		self.stars = PyGameApp.get_stars()
 		# self.create_buttons()
 
 	def Start(self):
@@ -62,7 +58,7 @@ class PyGameApp:
 		self.right_btn = ()
 
 
-	def get_stars00():
+	def get_stars():
 			stars = []
 			path = './data/'
 			txt_files = [x for x in os.listdir(path) if x.endswith('.txt')]
@@ -77,14 +73,14 @@ class PyGameApp:
 									stars.append(s)
 			return stars
 
-	def get_all_stars(self):
+	def get_all_stars00(self):
 		stars = []
 		for cons in self.constellations:
 			for s in cons.stars:
 				stars.append(s)
 		return stars
 
-	
+
 
 
 class PyGameButton00:
