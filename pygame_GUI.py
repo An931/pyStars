@@ -31,25 +31,19 @@ class PyGameApp:
 		while True: # the main game loop
 			self.screen.fill(Color.black)
 
+			highlight_cons = ''
 			pos = pygame.mouse.get_pos()
-			# print(pos)
-			# pygame.draw.line(self.screen, (  0, 255,   0), [0, 0], pos, 5)
-			# pygame.draw.circle(self.screen, (  255,  0, 0), pos, 6)
+			for s in self.stars:
+				if abs(s.x - pos[0]) < 5 and abs(s.y - pos[1]) < 5:
+					highlight_cons = s.const_name
+					print(highlight_cons)
+					continue
 
 			for s in self.stars:
 				pygame.draw.circle(self.screen, Color.grey, [s.x, s.y], s.radius)
-				if abs(s.x - pos[0]) < 3 and abs(s.y - pos[1]) < 3:
-					print(pos)
-					const = s.const_name
-					# pygame.draw.rect(screen, BLACK, [150, 10, 50, 20])
-					for s1 in self.stars:
-						if s1.const_name == const:
-							# pygame.draw.circle(self.screen, (  255,   0, 0), [s1.x, s1.y], 2)
-							pygame.draw.circle(self.screen, s1.color, [s1.x, s1.y], s1.radius)
-						else:
-							pass
-							# pygame.draw.circle(self.screen, s1.color, [s1.x, s1.y], 2)
-							pygame.draw.circle(self.screen, Color.grey, [s1.x, s1.y], s1.radius)
+				if highlight_cons and s.const_name == highlight_cons:
+					pygame.draw.circle(self.screen, s.color, [s.x, s.y], s.radius)
+
 
 			# self.screen.blit(catImg, (catx, caty))
 
@@ -89,6 +83,8 @@ class PyGameApp:
 			for s in cons.stars:
 				stars.append(s)
 		return stars
+
+	
 
 
 class PyGameButton00:
