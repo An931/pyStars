@@ -8,7 +8,7 @@ class PyGameApp:
 	def __init__(self):
 		self.window_size = 1000
 		pygame.init()
-		self.FPS = 5 # frames per second setting
+		self.FPS = 30 # frames per second setting
 		self.fpsClock = pygame.time.Clock()
 		pygame.display.set_caption('Stars')
 
@@ -25,6 +25,7 @@ class PyGameApp:
 
 	def Start(self):
 		while True: # the main game loop
+			self.turn('up')
 			self.screen.fill(Color.black)
 
 			highlight_cons = ''
@@ -59,19 +60,19 @@ class PyGameApp:
 
 
 	def get_stars():
-			stars = []
-			path = './data/'
-			txt_files = [x for x in os.listdir(path) if x.endswith('.txt')]
-			for name in txt_files:
-					with open(path + name) as f:
-							lines = f.readlines()
-							for l in lines:
-									s = Star(l, name)
-									s.x, s.y = Geom.get_int_image_coords(s, 1000)
-									s.color = Drawer.get_color_for_pygame(s)
-									s.radius = Drawer.get_radius_for_pygame(s)
-									stars.append(s)
-			return stars
+		stars = []
+		path = './data/'
+		txt_files = [x for x in os.listdir(path) if x.endswith('.txt')]
+		for name in txt_files:
+			with open(path + name) as f:
+				lines = f.readlines()
+				for l in lines:
+					s = Star(l, name)
+					s.x, s.y = Geom.get_int_image_coords(s, 1000)
+					s.color = Drawer.get_color_for_pygame(s)
+					s.radius = Drawer.get_radius_for_pygame(s)
+					stars.append(s)
+		return stars
 
 	def get_all_stars00(self):
 		stars = []
@@ -80,8 +81,30 @@ class PyGameApp:
 				stars.append(s)
 		return stars
 
+	def turn(self, side, angle=1):
+		ra_angle = (24*60*60)/360
+		dec_angle = (60*60*180)/360
+		if side == 'right':
+				delta = (angle*ra_angle, 0)
+		elif side == 'left':
+				delta = (-angle*ra_angle, 0)
+		elif side == 'up':
+				delta = (0, -angle*dec_angle)
+		elif side == 'down':
+				delta = (0, angle*dec_angle)
+		else:
+			raise Exception()
+		self.change_view(*delta)
 
 
+	def change_view(self, delta_ra, delta_dec):
+		for s in self.stars:
+			s.ra.full_sec += delta_ra
+			s.dec.full_sec += delta_dec
+			coords = Geom.get_int_image_coords(s, self.window_size)
+			s.x, s.y = coords[0], coords[1]
+			# new_coords = Geom.get_resize_image_coords(s.coords, SIZE, self.star_viewer.view_coef)
+			# s.move(*new_coords)
 
 class PyGameButton00:
 	def __init__(self):
