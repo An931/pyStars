@@ -3,87 +3,110 @@ from pygame.locals import *
 from drawer import *
 from stars import *
 
-def get_stars():
-    stars = []
-    path = './data/'
-    txt_files = [x for x in os.listdir(path) if x.endswith('.txt')]
-    for name in txt_files:
-        with open(path + name) as f:
-            lines = f.readlines()
-            for l in lines:
-                s = Star(l)
-                s.x, s.y = Geom.get_image_coords(s, 1000)
-                s.color = Drawer.get_color_for_pygame(s)
-                stars.append(s)
-    return stars
+
+class PyGameApp:
+	def __init__(self):
+		self.window_size = 1000
+		pygame.init()
+		self.FPS = 30 # frames per second setting
+		self.fpsClock = pygame.time.Clock()
+		pygame.display.set_caption('Stars')
+
+		# set up the window
+		self.screen = pygame.display.set_mode((self.window_size, self.window_size), 0, 32)
+
+		catImg = pygame.image.load('cat.png')
+		catx = 10
+		caty = 10
+		direction = 'right'
 
 
-pygame.init()
 
-FPS = 30 # frames per second setting
-fpsClock = pygame.time.Clock()
+		self.constellations = Constellation.get_constellations()
+		self.stars = self.get_all_stars()
+		Drawer.add_draw_parametrs_for_pygame(self.stars, self.window_size)
+		# self.create_buttons()
 
-# set up the window
-DISPLAYSURF = pygame.display.set_mode((1000, 1000), 0, 32)
-pygame.display.set_caption('Stars')
+	def Start(self):
+		while True: # the main game loop
+			self.screen.fill(Color.black)
 
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-catImg = pygame.image.load('cat.png')
-catx = 10
-caty = 10
-direction = 'right'
+			pos = pygame.mouse.get_pos()
+			# print(pos)
+			# pygame.draw.line(self.screen, (  0, 255,   0), [0, 0], pos, 5)
+			# pygame.draw.circle(self.screen, (  255,  0, 0), pos, 6)
 
-stars = get_stars()
+			for s in self.stars:
+				pygame.draw.circle(self.screen, Color.grey, [s.x, s.y], s.radius)
+				if abs(s.x - pos[0]) < 3 and abs(s.y - pos[1]) < 3:
+					print(pos)
+					const = s.const_name
+					# pygame.draw.rect(screen, BLACK, [150, 10, 50, 20])
+					for s1 in self.stars:
+						if s1.const_name == const:
+							# pygame.draw.circle(self.screen, (  255,   0, 0), [s1.x, s1.y], 2)
+							pygame.draw.circle(self.screen, s1.color, [s1.x, s1.y], s1.radius)
+						else:
+							pass
+							# pygame.draw.circle(self.screen, s1.color, [s1.x, s1.y], 2)
+							pygame.draw.circle(self.screen, Color.grey, [s1.x, s1.y], s1.radius)
+
+			# self.screen.blit(catImg, (catx, caty))
+
+			for event in pygame.event.get():
+					if event.type == QUIT:
+							pygame.quit()
+							sys.exit()
+			pygame.display.update()
+			self.fpsClock.tick(self.FPS)
+
+	def draw_star(self):
+			pass
+
+	def create_buttons():
+		# pygame.draw.rect(screen, BLACK, [150, 10, 50, 20])
+		self.right_btn = ()
 
 
-while True: # the main game loop
-    DISPLAYSURF.fill(BLACK)
+	def get_stars00():
+			stars = []
+			path = './data/'
+			txt_files = [x for x in os.listdir(path) if x.endswith('.txt')]
+			for name in txt_files:
+					with open(path + name) as f:
+							lines = f.readlines()
+							for l in lines:
+									s = Star(l, name)
+									s.x, s.y = Geom.get_int_image_coords(s, 1000)
+									s.color = Drawer.get_color_for_pygame(s)
+									s.radius = Drawer.get_radius_for_pygame(s)
+									stars.append(s)
+			return stars
 
-    pos = pygame.mouse.get_pos()
-    # print(pos)
-    # pygame.draw.line(DISPLAYSURF, (  0, 255,   0), [0, 0], pos, 5)
-    # pygame.draw.circle(DISPLAYSURF, (  255,  0, 0), pos, 6)
+	def get_all_stars(self):
+		stars = []
+		for cons in self.constellations:
+			for s in cons.stars:
+				stars.append(s)
+		return stars
 
-    for s in stars:
-        pygame.draw.circle(DISPLAYSURF, s.color, [int(s.x), int(s.y)], 2)
-        if abs(int(s.x) - pos[0]) < 9 and abs(int(s.y) - pos[1]) < 9:
-            print(pos)
-            pygame.draw.circle(DISPLAYSURF, (  255,   0, 0), [int(s.x), int(s.y)], 2)
 
-        # pygame.draw.line(DISPLAYSURF, (  0,   0, 255), [int(s.x), int(s.y)], [int(s.x), int(s.y)], 1)
-        # if direction == 'right':
-        #     s.x+=1
-        # elif direction == 'down':
-        #     s.y+=1
-        # elif direction == 'left':
-        #     s.x-=1
-        # elif direction == 'up':
-        #     s.y-=1
+class PyGameButton00:
+	def __init__(self):
+		pass
 
-    if direction == 'right':
-        catx += 5
-        if catx == 280:
-            direction = 'down'
-    elif direction == 'down':
-        caty += 5
-        if caty == 220:
-            direction = 'left'
-    elif direction == 'left':
-        catx -= 5
-        if catx == 10:
-            direction = 'up'
-    elif direction == 'up':
-        caty -= 5
-        if caty == 10:
-            direction = 'right'
+	def draw(self):
+		pass
 
-    DISPLAYSURF.blit(catImg, (catx, caty))
 
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
+class Color:
+	white = (255, 255, 255)
+	black = (0, 0, 0)
+	grey = (70, 70, 70)
 
-    pygame.display.update()
-    fpsClock.tick(FPS)
+if __name__ == '__main__':
+	app = PyGameApp()
+	app.Start()
+
+
+

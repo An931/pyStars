@@ -1,8 +1,9 @@
 
 import re
+import os
 
 class Star:
-	def __init__(self, str=''):
+	def __init__(self, str='', constellation=None, const_name=''):
 		if str == '': 
 			return
 		# print(str)
@@ -20,7 +21,24 @@ class Star:
 		self.mag = float(m.group(3))
 		self.sp_class = m.group(4).strip()
 		self.label = m.group(5)
+		self.const_name = constellation.name
+		self.constellation = constellation
 
+class Constellation:
+	def __init__(self, name, text):
+		self.name = name
+		self.stars = []
+		for line in text.splitlines():
+			self.stars.append(Star(line, self))
+
+	def get_constellations(folder='./data/'):
+		constellations = []
+		txt_files = [x for x in os.listdir(folder) if x.endswith('.txt')]
+		for name in txt_files:
+			with open(folder + name) as f:
+				text = f.read()
+				constellations.append(Constellation(name[:-4], text))
+		return constellations
 
 
 class RightAscension:

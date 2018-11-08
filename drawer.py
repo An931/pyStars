@@ -49,3 +49,20 @@ class Drawer:
 			r = 2
 		return r
 
+	def get_radius_for_pygame(star, im_size=1000):
+		# c = im_size / 10000
+		# r = 2 * c
+		r = 1
+		if star.mag < 2:
+			r = 4
+		elif star.mag < 4:
+			r = 3
+		elif star.mag < 5:
+			r = 2
+		return r
+
+	def add_draw_parametrs_for_pygame(stars, window_size):
+		for s in stars:
+			s.x, s.y = Geom.get_int_image_coords(s, window_size)
+			s.color = Drawer.get_color_for_pygame(s)
+			s.radius = Drawer.get_radius_for_pygame(s)
