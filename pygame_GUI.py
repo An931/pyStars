@@ -59,7 +59,8 @@ class PyGameApp:
 					# pygame.draw.circle(self.screen, s.color, [s.x, s.y], s.radius)
 					self.draw_star(s, s.color)
 
-			self.screen.blit(self.plus.get_img(), (self.plus.x, self.plus.y))
+			for b in self.buttons:
+				self.screen.blit(b.get_img(), (b.x, b.y))
 			# self.screen.blit(self.right_btn, (80, 0))
 
 			for event in pygame.event.get():
@@ -67,7 +68,8 @@ class PyGameApp:
 							pygame.quit()
 							sys.exit()
 					if event.type == pygame.MOUSEBUTTONDOWN:
-							self.screen.blit(self.plus.update(), (self.plus.x, self.plus.y))
+						for b in self.buttons:
+							self.screen.blit(b.update(), (b.x, b.y))
 
 			pygame.display.update()
 			self.fpsClock.tick(self.FPS)
@@ -81,7 +83,12 @@ class PyGameApp:
 	def create_buttons(self):
 		# pygame.draw.rect(screen, BLACK, [150, 10, 50, 20])
 		# self.right_btn = pygame.image.load('btn.png')
-		self.plus = ChangeVieweButton('btn_plus.png', 'btn_plus_onclick.png', 100, 10, self, 'up', 10, 1)
+		self.up = ChangeVieweButton('btn_plus.png', 'btn_plus_onclick.png', 100, 10, self, 'up', 10, 1)
+		self.down = ChangeVieweButton('btn_plus.png', 'btn_plus_onclick.png', 100, 90, self, 'down', 10, 1)
+		self.right = ChangeVieweButton('btn_plus.png', 'btn_plus_onclick.png', 50, 40, self, 'right', 10, 1)
+		self.left = ChangeVieweButton('btn_plus.png', 'btn_plus_onclick.png', 150, 40, self, 'left', 10, 1)
+
+		self.buttons = [self.up, self.down, self.right, self.left]
 
 	def get_start_time(self):
 		self.day = 0
