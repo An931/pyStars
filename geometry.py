@@ -28,14 +28,23 @@ class Geom:
 
 	def get_coords(star):
 		def get_half_chord(dec):
-			return sqrt(1 - dec * dec)
+			return sqrt(abs(1 - dec * dec))
 		# def get_half_chord2(ra):
-		# 	return sqrt(1 - ra * ra)
-		# def get_half_ellipse(ra):
-		# 	return (1/2)*3.14159265*(ra+90*60*60)
+		# 	return sqrt(abs(1 - ra * ra))
+		def get_half_ellipse000(dec, ra):
+			pi = 3.14159265
+			ellipse_perimetr = 2*pi*((ra*ra+1*1)/2)**0.5
+			y=dec
+			y1=y*(1/4)*ellipse_perimetr
+			p = y
+			return p
 		ra = Geom.get_ra_coords(star.ra)
 		dec = Geom.get_dec_coords(star.dec)
-		return (ra * get_half_chord(dec), dec)
+		# print(ra, dec)
+		# return (ra * get_half_chord(dec), dec)
+		dec_coef = sqrt(ra**4 + 1)
+		# return (ra * get_half_chord(dec*dec_coef), dec * dec_coef)
+		return (ra * get_half_chord(dec*dec_coef), dec * dec_coef)
 
 
 	def get_ra_coords(ra):
@@ -46,6 +55,11 @@ class Geom:
 			return ra.full_sec / all_sec
 		return (ra.full_sec - all_sec * 4) / all_sec
 
+	def get_ra_coords24(ra):
+		all_sec = 12*60*60
+		if ra.full_sec < all_sec:
+			return ra.full_sec / all_sec
+		return (ra.full_sec - all_sec * 2) / all_sec
 
 	def get_dec_coords(dec):
 		all_sec = 90*60*60
