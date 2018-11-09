@@ -30,6 +30,35 @@ class PyGameApp:
 			return
 		self._view_coef = value
 
+	def get_stars(window_size):
+		stars = []
+		path = './data/'
+		txt_files = [x for x in os.listdir(path) if x.endswith('.txt')]
+		for name in txt_files:
+			with open(path + name) as f:
+				lines = f.readlines()
+				for l in lines:
+					s = Star(l, name[:-4])
+					s.x, s.y = Geom.get_int_image_coords(s, window_size, 30, 30)
+					s.color = Drawer.get_color_for_pygame(s)
+					s.radius = Drawer.get_radius_for_pygame(s)
+					stars.append(s)
+		return stars
+
+	def create_buttons(self):
+		# pygame.draw.rect(screen, BLACK, [150, 10, 50, 20])
+		# self.right_btn = pygame.image.load('btn.png')
+		btn_path = './buttons/template.png'
+		btn_onclick_path = './buttons/template(onclick).png'
+		self.up = ChangeVieweButton(btn_path, btn_onclick_path, 100, 10, self, 'up', 1, 1)
+		self.down = ChangeVieweButton(btn_path, btn_onclick_path, 100, 50, self, 'down', 1, 1)
+		self.right = ChangeVieweButton(btn_path, btn_onclick_path, 120, 30, self, 'right', 1, 1)
+		self.left = ChangeVieweButton(btn_path, btn_onclick_path, 80, 30, self, 'left', 1, 1)
+
+		self.zoom_plus = ChangeVieweButton(btn_path, btn_onclick_path, 170, 20, self, 'left', 0, 1.01)
+		self.zoom_minus = ChangeVieweButton(btn_path, btn_onclick_path, 170, 50, self, 'left', 0, 0.99)
+
+		self.buttons = [self.up, self.down, self.right, self.left, self.zoom_plus, self.zoom_minus]
 
 	def Start(self):
 		while True:
@@ -38,12 +67,13 @@ class PyGameApp:
 			pressed = pygame.mouse.get_pressed()
 			pos = pygame.mouse.get_pos()
 
+
 			highlight_cons = ''
 			for s in self.stars:
 				if abs(s.x - pos[0]) < 5 and abs(s.y - pos[1]) < 5:
 					highlight_cons = s.const_name
-					print(highlight_cons)
-					# continue
+					# print(highlight_cons)
+					self.draw_toolTip(highlight_cons)
 					break
 
 			for s in self.stars:
@@ -80,45 +110,16 @@ class PyGameApp:
 		else:
 			pygame.draw.circle(self.screen, color, [star.x, star.y], star.radius)
 
-	def create_buttons(self):
-		# pygame.draw.rect(screen, BLACK, [150, 10, 50, 20])
-		# self.right_btn = pygame.image.load('btn.png')
-		btn_path = './buttons/template.png'
-		btn_onclick_path = './buttons/template(onclick).png'
-		self.up = ChangeVieweButton(btn_path, btn_onclick_path, 100, 10, self, 'up', 1, 1)
-		self.down = ChangeVieweButton(btn_path, btn_onclick_path, 100, 50, self, 'down', 1, 1)
-		self.right = ChangeVieweButton(btn_path, btn_onclick_path, 120, 30, self, 'right', 1, 1)
-		self.left = ChangeVieweButton(btn_path, btn_onclick_path, 80, 30, self, 'left', 1, 1)
-
-		self.zoom_plus = ChangeVieweButton(btn_path, btn_onclick_path, 170, 20, self, 'left', 0, 1.01)
-		self.zoom_minus = ChangeVieweButton(btn_path, btn_onclick_path, 170, 50, self, 'left', 0, 0.99)
-
-		self.buttons = [self.up, self.down, self.right, self.left, self.zoom_plus, self.zoom_minus]
-
-	def get_start_time(self):
-		self.day = 0
-		self.month = 0
-		self.hour = 0
-		self.minute = 0
+	def draw_toolTip(self, text):
+		font = pygame.font.SysFont('Arial', 18)
+		# self.screen.blit(font.render(text, True, Color.white), (750, 100)) # в одном и том же углу 
+		pos = pygame.mouse.get_pos()
+		# pygame.draw.rect(self.screen, Color.white, [pos[0], pos[1], 20, 10])
+		self.screen.blit(font.render(text, True, Color.white), [pos[0]+5, pos[1]+5])
 
 	def create_observer_pos(self):
 		self.observer_lat = 0 # Latitude (-180, 180)
 		self.observer_long = 0 # Longitude (-90, 90)
-
-	def get_stars(window_size):
-		stars = []
-		path = './data/'
-		txt_files = [x for x in os.listdir(path) if x.endswith('.txt')]
-		for name in txt_files:
-			with open(path + name) as f:
-				lines = f.readlines()
-				for l in lines:
-					s = Star(l, name[:-4])
-					s.x, s.y = Geom.get_int_image_coords(s, window_size, 30, 30)
-					s.color = Drawer.get_color_for_pygame(s)
-					s.radius = Drawer.get_radius_for_pygame(s)
-					stars.append(s)
-		return stars
 
 	def turn(self, side, angle=1, view_coef=1):
 		self.view_coef *= view_coef
@@ -145,6 +146,12 @@ class PyGameApp:
 			new_coords = Geom.get_resize_int_image_coords((s.x, s.y), SIZE, view_coef)
 			s.x, s.y = new_coords[0], new_coords[1]
 			# s.move(*new_coords)
+
+	def init_time(self):
+		self.month = 0
+		self.day = 0
+		self.hour = 0
+		self.minute = 0
 
 	def update_time_information(self):
 		pass
