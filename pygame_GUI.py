@@ -71,6 +71,8 @@ class PyGameApp:
 						for b in self.buttons:
 							self.screen.blit(b.update(), (b.x, b.y))
 
+			print('day:', self.right.click_count-self.left.click_count)
+
 			pygame.display.update()
 			self.fpsClock.tick(self.FPS)
 
@@ -140,6 +142,9 @@ class PyGameApp:
 			s.x, s.y = new_coords[0], new_coords[1]
 			# s.move(*new_coords)
 
+	def update_time_information(self):
+		pass
+
 
 class ChangeVieweButton:
 	def __init__(self, img, img_light, x1, y1, parent, direction, angle, view_coef):
@@ -154,6 +159,8 @@ class ChangeVieweButton:
 		self.direction = direction
 		self.angle = angle
 		self.view_coef = view_coef
+
+		self.click_count = 0
 
 	def check_on_click000(self, mouse_pos, mouse_pressed):
 		if not mouse_pressed[0]:
@@ -182,6 +189,7 @@ class ChangeVieweButton:
 
 	def update(self):
 		if self.on_click():
+			self.click_count += 1
 			self.parent.turn(self.direction, self.angle, self.view_coef)
 			return pygame.image.load(self.img_onclick)
 		return pygame.image.load(self.img)
