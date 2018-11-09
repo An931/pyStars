@@ -18,6 +18,7 @@ class PyGameApp:
 		self.create_buttons()
 
 		self.view_coef = 1
+		self.pressed = False
 
 	def Start(self):
 		while True:
@@ -26,8 +27,13 @@ class PyGameApp:
 			self.screen.fill(Color.black)
 			# print(pygame.mouse.get_pressed())
 
-
-			# pressed = pygame.mouse.get_pressed()
+			pressed = pygame.mouse.get_pressed()
+			if not pressed[0]:
+				self.again_press = True
+			elif self.again_press:
+				self.again_press = False
+			else:
+				self.again_press = True
 			pos = pygame.mouse.get_pos()
 			# if pressed[0] and pos[0]>80 and pos[1]<30 and pos[0]<130:
 			# 	self.right_btn = pygame.image.load('btn_pressed.png')
@@ -53,13 +59,16 @@ class PyGameApp:
 					# pygame.draw.circle(self.screen, s.color, [s.x, s.y], s.radius)
 					self.draw_star(s, s.color)
 
-			self.screen.blit(self.plus.update(), (self.plus.x, self.plus.y))
+			self.screen.blit(self.plus.get_img(), (self.plus.x, self.plus.y))
 			# self.screen.blit(self.right_btn, (80, 0))
 
 			for event in pygame.event.get():
 					if event.type == QUIT:
 							pygame.quit()
 							sys.exit()
+					if event.type == pygame.MOUSEBUTTONDOWN:
+							self.screen.blit(self.plus.update(), (self.plus.x, self.plus.y))
+
 			pygame.display.update()
 			self.fpsClock.tick(self.FPS)
 
@@ -149,11 +158,20 @@ class ChangeVieweButton:
 		mouse_pos = pygame.mouse.get_pos()
 		mouse_pressed = pygame.mouse.get_pressed()
 		print(mouse_pos, mouse_pressed)
-		if not mouse_pressed[0]:
+		if not mouse_pressed[0] or not self.parent.again_press:
 			return False
 		return (mouse_pos[0] > self.x and mouse_pos[0] < self.x2
 			and mouse_pos[1] > self.y and mouse_pos[1] < self.y2)
 
+	def on_enter(self):
+		mouse_pos = pygame.mouse.get_pos()
+		return (mouse_pos[0] > self.x and mouse_pos[0] < self.x2
+			and mouse_pos[1] > self.y and mouse_pos[1] < self.y2)
+
+	def get_img(self):
+		if self.on_enter():
+			return pygame.image.load(self.img_onclick)
+		return pygame.image.load(self.img)
 
 	def update(self):
 		if self.on_click():
