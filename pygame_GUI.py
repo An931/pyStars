@@ -6,19 +6,30 @@ from stars import *
 
 class PyGameApp:
 	def __init__(self):
-		self.window_size = 800
+		self.window_size = 1000
 		pygame.init()
 		self.FPS = 30
 		self.fpsClock = pygame.time.Clock()
 
 		pygame.display.set_caption('Stars')
-		self.screen = pygame.display.set_mode((self.window_size+200, self.window_size+50), 0, 32)
+		self.screen = pygame.display.set_mode((self.window_size+60, self.window_size+60), 0, 32)
 		self.indent = 30 # отступ сверху и слева
 
 		self.stars = PyGameApp.get_stars(self.window_size)
 		self.create_buttons()
 
-		self.view_coef = 1
+		self._view_coef = 1
+
+	@property
+	def view_coef(self):
+		return self._view_coef
+
+	@view_coef.setter
+	def view_coef(self, value):
+		if value < 1 or value > 5:
+			return
+		self._view_coef = value
+
 
 	def Start(self):
 		while True:
@@ -79,7 +90,10 @@ class PyGameApp:
 		self.right = ChangeVieweButton(btn_path, btn_onclick_path, 120, 30, self, 'right', 1, 1)
 		self.left = ChangeVieweButton(btn_path, btn_onclick_path, 80, 30, self, 'left', 1, 1)
 
-		self.buttons = [self.up, self.down, self.right, self.left]
+		self.zoom_plus = ChangeVieweButton(btn_path, btn_onclick_path, 170, 20, self, 'left', 0, 1.01)
+		self.zoom_minus = ChangeVieweButton(btn_path, btn_onclick_path, 170, 50, self, 'left', 0, 0.99)
+
+		self.buttons = [self.up, self.down, self.right, self.left, self.zoom_plus, self.zoom_minus]
 
 	def get_start_time(self):
 		self.day = 0
@@ -107,6 +121,7 @@ class PyGameApp:
 		return stars
 
 	def turn(self, side, angle=1, view_coef=1):
+		self.view_coef *= view_coef
 		ra_angle = (24*60*60)/360
 		dec_angle = (60*60*180)/360
 		if side == 'right':
@@ -119,7 +134,7 @@ class PyGameApp:
 				delta = (0, angle*dec_angle)
 		else:
 			raise Exception()
-		self.change_view(*delta, view_coef)
+		self.change_view(*delta, self.view_coef)
 
 	def change_view(self, delta_ra, delta_dec, view_coef=1):
 		for s in self.stars:
