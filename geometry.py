@@ -39,10 +39,12 @@ class Geom:
 
 
 	def get_ra_coords(ra):
-		all_sec = 12*60*60
+		all_sec = 12*60*60/2
+		if ra.full_sec>6*60*60 and ra.full_sec<18*60*60:
+			return 10000 # to draw only half sphere
 		if ra.full_sec < all_sec:
 			return ra.full_sec / all_sec
-		return (ra.full_sec - all_sec * 2) / all_sec
+		return (ra.full_sec - all_sec * 4) / all_sec
 
 
 	def get_dec_coords(dec):

@@ -35,10 +35,10 @@ class QtStar(QLabel):
         self.resize(self.radius + 10, self.radius + 10)
         # self.setToolTip(self.constellation.name+'\n'+str(self.coords))
         # self.setToolTip(self.constellation.name)
-        self.setToolTip(str(self.ra_coord) + ' ' +str(self.dec_coord))
+        # self.setToolTip(str(self.ra_coord) + ' ' +str(self.dec_coord))
 
-        # self.setToolTip(self.constellation.name+'\n'
-        # 	+str(self.star.ra) + ' '+str(self.star.dec) + '\n'+str(self.coords))
+        self.setToolTip(self.constellation.name+'\n'
+        	+str(self.star.ra) + ' '+str(self.star.dec) + '\n'+str(self.coords))
 
     def enterEvent(self, event):
         print('mouseEnterEvent')
@@ -60,7 +60,7 @@ class QtConstellation:
 
     def get_constellations(qtstars_parent):
         path = './data_test/'
-        # path = './data/'
+        path = './data/'
         txt_files = [x for x in os.listdir(path) if x.endswith('.txt')]
 
 

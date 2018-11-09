@@ -78,6 +78,9 @@ class Declination:
 			raise Exception()
 		self._full_sec = self.sign * (self.degrees*3600 + self.minutes*60 + self.seconds)
 
+		# if self.sign == -1 and self.degrees > 20:
+		# 	print(self.degrees)
+
 	@property
 	def full_sec(self):
 		return self._full_sec

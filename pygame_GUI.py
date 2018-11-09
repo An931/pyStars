@@ -201,6 +201,9 @@ class ChangeVieweButton:
 		pass
 
 
+class DatePanel:
+	pass
+
 class Color:
 	white = (255, 255, 255)
 	black = (0, 0, 0)
