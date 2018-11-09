@@ -49,6 +49,7 @@ class PyGameApp:
 							pygame.quit()
 							sys.exit()
 					if event.type == pygame.MOUSEBUTTONDOWN:
+						pass #when would only one turn on one click
 						for b in self.buttons:
 							self.screen.blit(b.update(), (b.x, b.y))
 
@@ -71,10 +72,12 @@ class PyGameApp:
 	def create_buttons(self):
 		# pygame.draw.rect(screen, BLACK, [150, 10, 50, 20])
 		# self.right_btn = pygame.image.load('btn.png')
-		self.up = ChangeVieweButton('btn_plus.png', 'btn_plus_onclick.png', 100, 10, self, 'up', 10, 1)
-		self.down = ChangeVieweButton('btn_plus.png', 'btn_plus_onclick.png', 100, 90, self, 'down', 10, 1)
-		self.right = ChangeVieweButton('btn_plus.png', 'btn_plus_onclick.png', 150, 40, self, 'right', 1, 1)
-		self.left = ChangeVieweButton('btn_plus.png', 'btn_plus_onclick.png', 50, 40, self, 'left', 10, 1)
+		btn_path = './buttons/template.png'
+		btn_onclick_path = './buttons/template(onclick).png'
+		self.up = ChangeVieweButton(btn_path, btn_onclick_path, 100, 10, self, 'up', 1, 1)
+		self.down = ChangeVieweButton(btn_path, btn_onclick_path, 100, 50, self, 'down', 1, 1)
+		self.right = ChangeVieweButton(btn_path, btn_onclick_path, 120, 30, self, 'right', 1, 1)
+		self.left = ChangeVieweButton(btn_path, btn_onclick_path, 80, 30, self, 'left', 1, 1)
 
 		self.buttons = [self.up, self.down, self.right, self.left]
 
