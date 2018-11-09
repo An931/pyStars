@@ -19,6 +19,8 @@ class PyGameApp:
 		self.create_buttons()
 
 		self._view_coef = 1
+		self.main_stars_button = MainStarsButton('./buttons/template.png', './buttons/template(onclick).png', 0, 0, self)
+		self.main_stars_flag = False
 
 	@property
 	def view_coef(self):
@@ -57,8 +59,8 @@ class PyGameApp:
 
 		self.zoom_plus = ChangeVieweButton(btn_path, btn_onclick_path, 170, 20, self, 'left', 0, 1.01)
 		self.zoom_minus = ChangeVieweButton(btn_path, btn_onclick_path, 170, 50, self, 'left', 0, 0.99)
-
 		self.buttons = [self.up, self.down, self.right, self.left, self.zoom_plus, self.zoom_minus]
+
 
 	def Start(self):
 		while True:
@@ -77,6 +79,8 @@ class PyGameApp:
 					break
 
 			for s in self.stars:
+				if self.main_stars_flag and not s.label:
+					continue # when draw only main stars
 				self.draw_star(s, Color.grey)
 				if highlight_cons and s.const_name == highlight_cons:
 					self.draw_star(s, s.color)
@@ -90,12 +94,16 @@ class PyGameApp:
 							pygame.quit()
 							sys.exit()
 					if event.type == pygame.MOUSEBUTTONDOWN:
-						pass #when would only one turn on one click
+						#when would only one turn on one click
+						if self.main_stars_button.on_click():
+							self.main_stars_flag = not self.main_stars_flag
+						pass
 						for b in self.buttons:
 							self.screen.blit(b.update(), (b.x, b.y))
 
 			print('day:', self.right.click_count-self.left.click_count)
 
+			self.screen.blit(self.main_stars_button.get_img(), (self.main_stars_button.x, self.main_stars_button.y))
 			pygame.display.update()
 			self.fpsClock.tick(self.FPS)
 
@@ -111,7 +119,7 @@ class PyGameApp:
 			pygame.draw.circle(self.screen, color, [star.x, star.y], star.radius)
 
 	def draw_toolTip(self, text):
-		font = pygame.font.SysFont('Arial', 18)
+		font = pygame.font.SysFont('Georgia', 15)
 		# self.screen.blit(font.render(text, True, Color.white), (750, 100)) # в одном и том же углу 
 		pos = pygame.mouse.get_pos()
 		# pygame.draw.rect(self.screen, Color.white, [pos[0], pos[1], 20, 10])
@@ -210,6 +218,42 @@ class ChangeVieweButton:
 
 	def draw(self):
 		pass
+
+class MainStarsButton:
+	def __init__(self, img, img_light, x1, y1, parent):
+		self.img = img
+		self.img_onclick = img_light
+		self.x = x1
+		self.y = y1
+		pic = pygame.image.load(self.img)
+		self.x2 = pic.get_rect().size[0] + x1
+		self.y2 = pic.get_rect().size[1] + y1
+		self.parent = parent
+
+
+
+	def on_click(self):
+		mouse_pos = pygame.mouse.get_pos()
+		mouse_pressed = pygame.mouse.get_pressed()
+		if not mouse_pressed[0]:
+			return False
+		return (mouse_pos[0] > self.x and mouse_pos[0] < self.x2
+			and mouse_pos[1] > self.y and mouse_pos[1] < self.y2)
+
+	def on_enter(self):
+		mouse_pos = pygame.mouse.get_pos()
+		return (mouse_pos[0] > self.x and mouse_pos[0] < self.x2
+			and mouse_pos[1] > self.y and mouse_pos[1] < self.y2)
+
+	def get_img(self):
+		if self.on_enter() or self.parent.main_stars_flag:
+			return pygame.image.load(self.img_onclick)
+		return pygame.image.load(self.img)
+
+	def update(self):
+		if self.on_click():
+			return pygame.image.load(self.img_onclick)
+		return pygame.image.load(self.img)
 
 
 class DatePanel:
