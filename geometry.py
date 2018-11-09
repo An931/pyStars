@@ -42,7 +42,7 @@ class Geom:
 		dec = Geom.get_dec_coords(star.dec)
 		# print(ra, dec)
 		# return (ra * get_half_chord(dec), dec)
-		dec_coef = sqrt(ra**4 + 1)
+		dec_coef = sqrt(ra**2 + 1)
 		# return (ra * get_half_chord(dec*dec_coef), dec * dec_coef)
 		return (ra * get_half_chord(dec*dec_coef), dec * dec_coef)
 

@@ -13,6 +13,7 @@ class PyGameApp:
 
 		pygame.display.set_caption('Stars')
 		self.screen = pygame.display.set_mode((self.window_size+200, self.window_size+50), 0, 32)
+		self.indent = 30 # отступ сверху и слева
 
 		self.stars = PyGameApp.get_stars(self.window_size)
 		self.create_buttons()
@@ -77,6 +78,11 @@ class PyGameApp:
 			self.fpsClock.tick(self.FPS)
 
 	def draw_star(self, star, color):
+		# print(star.x, star.y)
+		if abs(star.x)>self.window_size*2 or abs(star.y)>self.window_size*2:
+			return # костыль с увеличением координат ra 
+		if star.x < self.indent or star.y < self.indent:
+			return
 		if star.radius == 1:
 			pygame.draw.line(self.screen, color, [star.x, star.y], [star.x+1, star.y], 2)
 		else:
@@ -136,7 +142,7 @@ class PyGameApp:
 		for s in self.stars:
 			s.ra.full_sec += delta_ra
 			s.dec.full_sec += delta_dec
-			coords = Geom.get_int_image_coords(s, self.window_size, 30, 30)
+			coords = Geom.get_int_image_coords(s, self.window_size, self.indent, self.indent)
 			s.x, s.y = coords[0], coords[1]
 			new_coords = Geom.get_resize_int_image_coords((s.x, s.y), SIZE, view_coef)
 			s.x, s.y = new_coords[0], new_coords[1]

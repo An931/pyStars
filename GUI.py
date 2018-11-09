@@ -59,7 +59,7 @@ class QtConstellation:
             self.stars.append(QtStar(star, self, qtstars_parent))
 
     def get_constellations(qtstars_parent):
-        path = './data_test/'
+        # path = './data_test/'
         path = './data/'
         txt_files = [x for x in os.listdir(path) if x.endswith('.txt')]
 
