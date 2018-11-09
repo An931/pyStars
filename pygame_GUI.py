@@ -8,17 +8,11 @@ class PyGameApp:
 	def __init__(self):
 		self.window_size = 800
 		pygame.init()
-		self.FPS = 30 # frames per second setting
+		self.FPS = 30
 		self.fpsClock = pygame.time.Clock()
+
 		pygame.display.set_caption('Stars')
-
-		# set up the window
 		self.screen = pygame.display.set_mode((self.window_size+200, self.window_size+50), 0, 32)
-
-		catImg = pygame.image.load('cat.png')
-		catx = 10
-		caty = 10
-		direction = 'right'
 
 		self.stars = PyGameApp.get_stars(self.window_size)
 		self.create_buttons()
@@ -26,7 +20,7 @@ class PyGameApp:
 		self.view_coef = 1
 
 	def Start(self):
-		while True: # the main game loop
+		while True:
 			# self.turn('up')
 			# self.turn('right')
 			self.screen.fill(Color.black)
@@ -34,9 +28,11 @@ class PyGameApp:
 			pressed = pygame.mouse.get_pressed()
 			pos = pygame.mouse.get_pos()
 			if pressed[0] and pos[0]>80 and pos[1]<30 and pos[0]<130:
-				self.turn('right', 3, self.view_coef)
-				self.view_coef += 0.2
-
+				self.right_btn = pygame.image.load('btn_pressed.png')
+				self.turn('right', 10, self.view_coef)
+				# self.view_coef += 0.2
+			else:
+				self.right_btn = pygame.image.load('btn.png')
 
 			highlight_cons = ''
 			for s in self.stars:
@@ -77,6 +73,10 @@ class PyGameApp:
 		self.hour = 0
 		self.minute = 0
 
+	def create_observer_pos(self):
+		self.observer_lat = 0 # Latitude (-180, 180)
+		self.observer_long = 0 # Longitude (-90, 90)
+
 
 	def get_stars(window_size):
 		stars = []
@@ -93,12 +93,6 @@ class PyGameApp:
 					stars.append(s)
 		return stars
 
-	def get_all_stars00(self):
-		stars = []
-		for cons in self.constellations:
-			for s in cons.stars:
-				stars.append(s)
-		return stars
 
 	def turn(self, side, angle=1, view_coef=1):
 		ra_angle = (24*60*60)/360
@@ -115,7 +109,6 @@ class PyGameApp:
 			raise Exception()
 		self.change_view(*delta, view_coef)
 
-
 	def change_view(self, delta_ra, delta_dec, view_coef=1):
 		for s in self.stars:
 			s.ra.full_sec += delta_ra
@@ -125,6 +118,7 @@ class PyGameApp:
 			new_coords = Geom.get_resize_int_image_coords((s.x, s.y), SIZE, view_coef)
 			s.x, s.y = new_coords[0], new_coords[1]
 			# s.move(*new_coords)
+
 
 class PyGameButton:
 	def __init__(self):
@@ -151,6 +145,7 @@ class Color:
 	white = (255, 255, 255)
 	black = (0, 0, 0)
 	grey = (70, 70, 70)
+
 
 if __name__ == '__main__':
 	app = PyGameApp()
