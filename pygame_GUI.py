@@ -25,14 +25,19 @@ class PyGameApp:
 			# self.turn('right')
 			self.screen.fill(Color.black)
 			# print(pygame.mouse.get_pressed())
-			pressed = pygame.mouse.get_pressed()
+
+
+			# pressed = pygame.mouse.get_pressed()
 			pos = pygame.mouse.get_pos()
-			if pressed[0] and pos[0]>80 and pos[1]<30 and pos[0]<130:
-				self.right_btn = pygame.image.load('btn_pressed.png')
-				self.turn('right', 10, self.view_coef)
-				# self.view_coef += 0.2
-			else:
-				self.right_btn = pygame.image.load('btn.png')
+			# if pressed[0] and pos[0]>80 and pos[1]<30 and pos[0]<130:
+			# 	self.right_btn = pygame.image.load('btn_pressed.png')
+			# 	print(type(self.right_btn))
+			# 	print(self.right_btn.get_rect().size)
+			# 	self.turn('right', 10, self.view_coef)
+			# 	# self.view_coef += 0.2
+			# else:
+			# 	self.right_btn = pygame.image.load('btn.png')
+
 
 			highlight_cons = ''
 			for s in self.stars:
@@ -48,7 +53,8 @@ class PyGameApp:
 					# pygame.draw.circle(self.screen, s.color, [s.x, s.y], s.radius)
 					self.draw_star(s, s.color)
 
-			self.screen.blit(self.right_btn, (80, 0))
+			self.screen.blit(self.plus.update(), (self.plus.x, self.plus.y))
+			# self.screen.blit(self.right_btn, (80, 0))
 
 			for event in pygame.event.get():
 					if event.type == QUIT:
@@ -65,7 +71,8 @@ class PyGameApp:
 
 	def create_buttons(self):
 		# pygame.draw.rect(screen, BLACK, [150, 10, 50, 20])
-		self.right_btn = pygame.image.load('btn.png')
+		# self.right_btn = pygame.image.load('btn.png')
+		self.plus = ChangeVieweButton('btn_plus.png', 'btn_plus_onclick.png', 100, 10, self, 'up', 10, 1)
 
 	def get_start_time(self):
 		self.day = 0
@@ -76,7 +83,6 @@ class PyGameApp:
 	def create_observer_pos(self):
 		self.observer_lat = 0 # Latitude (-180, 180)
 		self.observer_long = 0 # Longitude (-90, 90)
-
 
 	def get_stars(window_size):
 		stars = []
@@ -92,7 +98,6 @@ class PyGameApp:
 					s.radius = Drawer.get_radius_for_pygame(s)
 					stars.append(s)
 		return stars
-
 
 	def turn(self, side, angle=1, view_coef=1):
 		ra_angle = (24*60*60)/360
@@ -120,20 +125,42 @@ class PyGameApp:
 			# s.move(*new_coords)
 
 
-class PyGameButton:
-	def __init__(self):
-		pass
+class ChangeVieweButton:
+	def __init__(self, img, img_light, x1, y1, parent, direction, angle, view_coef):
 		self.img = img
-		self.x1 = x1
-		self.y1 = y1
-		self.x2 = x2
-		self.y2 = y2
+		self.img_onclick = img_light
+		self.x = x1
+		self.y = y1
+		pic = pygame.image.load(self.img)
+		self.x2 = pic.get_rect().size[0] + x1
+		self.y2 = pic.get_rect().size[1] + y1
+		self.parent = parent
+		self.direction = direction
+		self.angle = angle
+		self.view_coef = view_coef
 
-	def on_click(self, mouse_pos, mouse_pressed):
+	def check_on_click000(self, mouse_pos, mouse_pressed):
 		if not mouse_pressed[0]:
 			return False
 		return (mouse_pos[0] > self.x1 and mouse_pos[0] < self.x2
 			and mouse_pos[1] > self.y1 and mouse_pos[1] < self.y2)
+
+	def on_click(self):
+		mouse_pos = pygame.mouse.get_pos()
+		mouse_pressed = pygame.mouse.get_pressed()
+		print(mouse_pos, mouse_pressed)
+		if not mouse_pressed[0]:
+			return False
+		return (mouse_pos[0] > self.x and mouse_pos[0] < self.x2
+			and mouse_pos[1] > self.y and mouse_pos[1] < self.y2)
+
+
+	def update(self):
+		if self.on_click():
+			self.parent.turn(self.direction, self.angle, self.view_coef)
+			return pygame.image.load(self.img_onclick)
+		return pygame.image.load(self.img)
+
 
 
 
