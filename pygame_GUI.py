@@ -19,50 +19,30 @@ class PyGameApp:
 		self.create_buttons()
 
 		self.view_coef = 1
-		self.pressed = False
 
 	def Start(self):
 		while True:
-			# self.turn('up')
-			# self.turn('right')
 			self.screen.fill(Color.black)
-			# print(pygame.mouse.get_pressed())
 
 			pressed = pygame.mouse.get_pressed()
-			if not pressed[0]:
-				self.again_press = True
-			elif self.again_press:
-				self.again_press = False
-			else:
-				self.again_press = True
 			pos = pygame.mouse.get_pos()
-			# if pressed[0] and pos[0]>80 and pos[1]<30 and pos[0]<130:
-			# 	self.right_btn = pygame.image.load('btn_pressed.png')
-			# 	print(type(self.right_btn))
-			# 	print(self.right_btn.get_rect().size)
-			# 	self.turn('right', 10, self.view_coef)
-			# 	# self.view_coef += 0.2
-			# else:
-			# 	self.right_btn = pygame.image.load('btn.png')
-
 
 			highlight_cons = ''
 			for s in self.stars:
 				if abs(s.x - pos[0]) < 5 and abs(s.y - pos[1]) < 5:
 					highlight_cons = s.const_name
 					print(highlight_cons)
-					continue
+					# continue
+					break
 
 			for s in self.stars:
-				# pygame.draw.circle(self.screen, Color.grey, [s.x, s.y], s.radius)
 				self.draw_star(s, Color.grey)
 				if highlight_cons and s.const_name == highlight_cons:
-					# pygame.draw.circle(self.screen, s.color, [s.x, s.y], s.radius)
 					self.draw_star(s, s.color)
 
 			for b in self.buttons:
-				self.screen.blit(b.get_img(), (b.x, b.y))
-			# self.screen.blit(self.right_btn, (80, 0))
+				# self.screen.blit(b.get_img(), (b.x, b.y))
+				self.screen.blit(b.update(), (b.x, b.y))
 
 			for event in pygame.event.get():
 					if event.type == QUIT:
@@ -93,8 +73,8 @@ class PyGameApp:
 		# self.right_btn = pygame.image.load('btn.png')
 		self.up = ChangeVieweButton('btn_plus.png', 'btn_plus_onclick.png', 100, 10, self, 'up', 10, 1)
 		self.down = ChangeVieweButton('btn_plus.png', 'btn_plus_onclick.png', 100, 90, self, 'down', 10, 1)
-		self.right = ChangeVieweButton('btn_plus.png', 'btn_plus_onclick.png', 50, 40, self, 'right', 10, 1)
-		self.left = ChangeVieweButton('btn_plus.png', 'btn_plus_onclick.png', 150, 40, self, 'left', 10, 1)
+		self.right = ChangeVieweButton('btn_plus.png', 'btn_plus_onclick.png', 150, 40, self, 'right', 1, 1)
+		self.left = ChangeVieweButton('btn_plus.png', 'btn_plus_onclick.png', 50, 40, self, 'left', 10, 1)
 
 		self.buttons = [self.up, self.down, self.right, self.left]
 
@@ -177,8 +157,7 @@ class ChangeVieweButton:
 	def on_click(self):
 		mouse_pos = pygame.mouse.get_pos()
 		mouse_pressed = pygame.mouse.get_pressed()
-		print(mouse_pos, mouse_pressed)
-		if not mouse_pressed[0] or not self.parent.again_press:
+		if not mouse_pressed[0]:
 			return False
 		return (mouse_pos[0] > self.x and mouse_pos[0] < self.x2
 			and mouse_pos[1] > self.y and mouse_pos[1] < self.y2)
@@ -187,6 +166,7 @@ class ChangeVieweButton:
 		mouse_pos = pygame.mouse.get_pos()
 		return (mouse_pos[0] > self.x and mouse_pos[0] < self.x2
 			and mouse_pos[1] > self.y and mouse_pos[1] < self.y2)
+
 
 	def get_img(self):
 		if self.on_enter():
