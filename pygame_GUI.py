@@ -15,7 +15,7 @@ class PyGameApp:
 		self.screen = pygame.display.set_mode((self.window_size+60, self.window_size+60), 0, 32)
 		self.indent = 30 # отступ сверху и слева
 
-		self.stars = PyGameApp.get_stars(self.window_size)
+		self.stars = self.get_stars()
 		self.create_buttons()
 
 		self._view_coef = 1
@@ -32,7 +32,7 @@ class PyGameApp:
 			return
 		self._view_coef = value
 
-	def get_stars(window_size):
+	def get_stars(self):
 		stars = []
 		path = './data/'
 		txt_files = [x for x in os.listdir(path) if x.endswith('.txt')]
@@ -41,7 +41,7 @@ class PyGameApp:
 				lines = f.readlines()
 				for l in lines:
 					s = Star(l, name[:-4])
-					s.x, s.y = Geom.get_int_image_coords(s, window_size, 30, 30)
+					s.x, s.y = Geom.get_int_image_coords(s, self.window_size, self.indent, self.indent)
 					s.color = Drawer.get_color_for_pygame(s)
 					s.radius = Drawer.get_radius_for_pygame(s)
 					stars.append(s)
@@ -100,8 +100,6 @@ class PyGameApp:
 						pass
 						for b in self.buttons:
 							self.screen.blit(b.update(), (b.x, b.y))
-
-			print('day:', self.right.click_count-self.left.click_count)
 
 			self.screen.blit(self.main_stars_button.get_img(), (self.main_stars_button.x, self.main_stars_button.y))
 			pygame.display.update()

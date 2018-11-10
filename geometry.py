@@ -4,14 +4,14 @@ from numpy import sqrt
 
 class Geom:
 
-	def get_resize_image_coords(coords, im_size, coef):
+	def get_resize_image_coords(coords, im_size, coef, x_shift=0, y_shift=0):
 		center_coords = coords[0] - im_size/2, coords[1] - im_size/2
 		changed_center_coords = center_coords[0] * coef, center_coords[1] * coef
 		a = changed_center_coords[0] + im_size/2, changed_center_coords[1] + im_size/2
 		return changed_center_coords[0] + im_size/2, changed_center_coords[1] + im_size/2
 
-	def get_resize_int_image_coords(coords, im_size, coef):
-		coords = Geom.get_resize_image_coords(coords, im_size, coef)
+	def get_resize_int_image_coords(coords, im_size, coef, x_shift=0, y_shift=0):
+		coords = Geom.get_resize_image_coords(coords, im_size, coef, x_shift, y_shift)
 		return int(coords[0]), int(coords[1])
 
 
@@ -23,28 +23,56 @@ class Geom:
 		x, y = Geom.get_coords(star)
 		x += 1
 		y += 1
+		# if star.const_name == 'umi' and star.label == 'Alp':
+		if x>2 or y>2:
+			print(im_size - x * im_size / 2 + x_shift, im_size - y * im_size / 2 + y_shift)
+		# return abs(im_size - x * im_size / 2 + x_shift), abs(im_size - y * im_size / 2 + y_shift)
 		return im_size - x * im_size / 2 + x_shift, im_size - y * im_size / 2 + y_shift
 
 
-	def get_coords(star):
+	def get_coords01(star):
 		def get_half_chord(dec):
+			# return sqrt(1 - dec * dec)
 			return sqrt(abs(1 - dec * dec))
-		# def get_half_chord2(ra):
-		# 	return sqrt(abs(1 - ra * ra))
-		def get_half_ellipse000(dec, ra):
-			pi = 3.14159265
-			ellipse_perimetr = 2*pi*((ra*ra+1*1)/2)**0.5
-			y=dec
-			y1=y*(1/4)*ellipse_perimetr
-			p = y
-			return p
 		ra = Geom.get_ra_coords(star.ra)
 		dec = Geom.get_dec_coords(star.dec)
-		# print(ra, dec)
+
 		# return (ra * get_half_chord(dec), dec)
-		dec_coef = sqrt(ra**2 + 1)
-		# return (ra * get_half_chord(dec*dec_coef), dec * dec_coef)
+
+		dec_coef = (ra**2 + 1)**0.5 
+		if dec*dec_coef > 1 and ra != 10000:
+			print(star.ra, star.dec)
+		# new_dec = dec*dec_coef
+
+		if star.const_name == 'umi' and star.label == 'Alp':
+			print(ra, dec)
+			print(ra * get_half_chord(dec*dec_coef), dec * dec_coef)
+
+		# return (ra * get_half_chord(dec), dec * dec_coef)
 		return (ra * get_half_chord(dec*dec_coef), dec * dec_coef)
+		# return (ra * get_half_chord(dec*dec_coef), min(1, dec * dec_coef))
+
+	def get_coords(star):
+		def get_half_chord(dec):
+			# return sqrt(1 - dec * dec)
+			return sqrt(abs(1 - dec * dec))
+		ra = Geom.get_ra_coords(star.ra)
+		dec = Geom.get_dec_coords(star.dec)
+
+		# return (ra * get_half_chord(dec), dec)
+
+		dec_coef = (ra**2 + 1)**0.5 
+		if dec*dec_coef > 1 and ra != 10000:
+			print(star.ra, star.dec)
+		new_dec = dec*dec_coef
+
+		# if star.const_name == 'umi' and star.label == 'Alp':
+		# 	print(ra, dec)
+		# 	print(ra * get_half_chord(dec*dec_coef), dec * dec_coef)
+
+		# return (ra * get_half_chord(dec), dec * dec_coef)
+		# return (ra * get_half_chord(dec*dec_coef), dec * dec_coef)
+		return (ra * get_half_chord(dec*dec_coef), min(1, dec * dec_coef))
 
 
 	def get_ra_coords(ra):
