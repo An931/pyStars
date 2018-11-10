@@ -21,6 +21,8 @@ class Geom:
 
 	def get_image_coords(star, im_size, x_shift=0, y_shift=0):
 		x, y = Geom.get_coords(star)
+		if not x and not y:
+			return im_size, im_size
 		x += 1
 		y += 1
 		# if star.const_name == 'umi' and star.label == 'Alp':
@@ -58,11 +60,13 @@ class Geom:
 			return sqrt(abs(1 - dec * dec))
 		ra = Geom.get_ra_coords(star.ra)
 		dec = Geom.get_dec_coords(star.dec)
+		if not ra: # invisible stars on other halph sphere (6-18 hours)
+			return None, None
 
 		# return (ra * get_half_chord(dec), dec)
 
 		dec_coef = (ra**2 + 1)**0.5 
-		if dec*dec_coef > 1 and ra != 10000:
+		if dec*dec_coef > 1:
 			print(star.ra, star.dec)
 		new_dec = dec*dec_coef
 
@@ -78,7 +82,7 @@ class Geom:
 	def get_ra_coords(ra):
 		all_sec = 12*60*60/2
 		if ra.full_sec>6*60*60 and ra.full_sec<18*60*60:
-			return 10000 # to draw only half sphere
+			return None # to draw only half sphere
 		if ra.full_sec < all_sec:
 			return ra.full_sec / all_sec
 		return (ra.full_sec - all_sec * 4) / all_sec

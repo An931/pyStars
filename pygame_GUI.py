@@ -107,8 +107,8 @@ class PyGameApp:
 
 	def draw_star(self, star, color):
 		# print(star.x, star.y)
-		if abs(star.x)>self.window_size*2 or abs(star.y)>self.window_size*2:
-			return # костыль с увеличением координат ra 
+		# if abs(star.x)>self.window_size*2 or abs(star.y)>self.window_size*2:
+		# 	return # костыль с увеличением координат ra 
 		if star.x < self.indent or star.y < self.indent:
 			return
 		if star.radius == 1:
