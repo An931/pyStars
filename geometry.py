@@ -42,13 +42,13 @@ class Geom:
 		# return (ra * get_half_chord(dec), dec)
 
 		dec_coef = (ra**2 + 1)**0.5 
-		if dec*dec_coef > 1 and ra != 10000:
-			print(star.ra, star.dec)
-		# new_dec = dec*dec_coef
+		# if dec*dec_coef > 1 and ra != 10000:
+		# 	print(star.ra, star.dec)
+		# # new_dec = dec*dec_coef
 
-		if star.const_name == 'umi' and star.label == 'Alp':
-			print(ra, dec)
-			print(ra * get_half_chord(dec*dec_coef), dec * dec_coef)
+		# if star.const_name == 'umi' and star.label == 'Alp':
+		# 	print(ra, dec)
+		# 	print(ra * get_half_chord(dec*dec_coef), dec * dec_coef)
 
 		# return (ra * get_half_chord(dec), dec * dec_coef)
 		return (ra * get_half_chord(dec*dec_coef), dec * dec_coef)
@@ -56,6 +56,8 @@ class Geom:
 
 	def get_coords(star):
 		def get_half_chord(dec):
+			# if dec>1:
+			# 	return 10000
 			# return sqrt(1 - dec * dec)
 			return sqrt(abs(1 - dec * dec))
 		ra = Geom.get_ra_coords(star.ra)
@@ -64,19 +66,21 @@ class Geom:
 			return None, None
 
 		# return (ra * get_half_chord(dec), dec)
+		def get_dec_coef(ra):
+			dec_coef = (ra**2 + 1)**0.5 
+			return dec_coef
+			if dec*dec_coef > 1:
+				print(star.ra, star.dec, dec*dec_coef)
+			new_dec = dec*dec_coef
 
-		dec_coef = (ra**2 + 1)**0.5 
-		if dec*dec_coef > 1:
-			print(star.ra, star.dec)
-		new_dec = dec*dec_coef
-
+		dec_coef = get_dec_coef(ra)
 		# if star.const_name == 'umi' and star.label == 'Alp':
 		# 	print(ra, dec)
 		# 	print(ra * get_half_chord(dec*dec_coef), dec * dec_coef)
 
-		# return (ra * get_half_chord(dec), dec * dec_coef)
-		# return (ra * get_half_chord(dec*dec_coef), dec * dec_coef)
-		return (ra * get_half_chord(dec*dec_coef), min(1, dec * dec_coef))
+		# return (ra * get_half_chord(dec), dec)
+		return (ra * get_half_chord(dec*dec_coef), dec * dec_coef)
+		# return (ra * get_half_chord(dec*dec_coef), min(1, dec * dec_coef))
 
 
 	def get_ra_coords(ra):

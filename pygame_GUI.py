@@ -6,7 +6,7 @@ from stars import *
 
 class PyGameApp:
 	def __init__(self):
-		self.window_size = 1000
+		self.window_size = 800
 		pygame.init()
 		self.FPS = 30
 		self.fpsClock = pygame.time.Clock()
