@@ -18,6 +18,7 @@ class PyGameApp:
 		self.stars = self.get_stars()
 		self.create_buttons()
 
+		self.delta_sec = 0
 		self._view_coef = 1
 		self.main_stars_button = MainStarsButton('./buttons/template.png', './buttons/template(onclick).png', 0, 0, self)
 		self.main_stars_flag = False
@@ -41,7 +42,7 @@ class PyGameApp:
 				lines = f.readlines()
 				for l in lines:
 					s = Star(l, name[:-4])
-					s.x, s.y = Geom.get_int_image_coords(s, self.window_size, self.indent, self.indent)
+					s.x, s.y = Geom.get_int_image_coords(s, 0, self.window_size, self.indent, self.indent)
 					s.color = Drawer.get_color_for_pygame(s)
 					s.radius = Drawer.get_radius_for_pygame(s)
 					stars.append(s)
@@ -52,14 +53,15 @@ class PyGameApp:
 		# self.right_btn = pygame.image.load('btn.png')
 		btn_path = './buttons/template.png'
 		btn_onclick_path = './buttons/template(onclick).png'
-		self.up = ChangeVieweButton(btn_path, btn_onclick_path, 100, 10, self, 'up', 1, 1)
-		self.down = ChangeVieweButton(btn_path, btn_onclick_path, 100, 50, self, 'down', 1, 1)
-		self.right = ChangeVieweButton(btn_path, btn_onclick_path, 120, 30, self, 'right', 1, 1)
-		self.left = ChangeVieweButton(btn_path, btn_onclick_path, 80, 30, self, 'left', 1, 1)
+		# self.up = ChangeVieweButton(btn_path, btn_onclick_path, 100, 10, self, 'up', 1, 1)
+		# self.down = ChangeVieweButton(btn_path, btn_onclick_path, 100, 50, self, 'down', 1, 1)
+		self.right = ChangeVieweButton(btn_path, btn_onclick_path, 120, 30, self, 10*60, 1)
+		self.left = ChangeVieweButton(btn_path, btn_onclick_path, 80, 30, self, -10*60, 1)
 
-		self.zoom_plus = ChangeVieweButton(btn_path, btn_onclick_path, 170, 20, self, 'left', 0, 1.01)
-		self.zoom_minus = ChangeVieweButton(btn_path, btn_onclick_path, 170, 50, self, 'left', 0, 0.99)
-		self.buttons = [self.up, self.down, self.right, self.left, self.zoom_plus, self.zoom_minus]
+		self.zoom_plus = ChangeVieweButton(btn_path, btn_onclick_path, 170, 20, self, 0, 1.01)
+		self.zoom_minus = ChangeVieweButton(btn_path, btn_onclick_path, 170, 50, self, 0, 0.99)
+		self.buttons = [self.right, self.left, self.zoom_plus, self.zoom_minus]
+		# self.buttons = [self.up, self.down, self.right, self.left, self.zoom_plus, self.zoom_minus]
 
 
 	def Start(self):
@@ -127,7 +129,20 @@ class PyGameApp:
 		self.observer_lat = 0 # Latitude (-180, 180)
 		self.observer_long = 0 # Longitude (-90, 90)
 
-	def turn(self, side, angle=1, view_coef=1):
+	def turn(self, delta_sec, view_coef=1):
+		self.view_coef *= view_coef
+		self.delta_sec += delta_sec
+		# ra_angle = (24*60*60)/360
+		# if side == 'right':
+		# 		delta = seconds
+		# elif side == 'left':
+		# 		delta = -seconds
+		# else:
+		# 	return
+		# 	raise Exception()
+		self.change_view(self.delta_sec, self.view_coef)
+
+	def turnOLD(self, side, angle=1, view_coef=1):
 		self.view_coef *= view_coef
 		ra_angle = (24*60*60)/360
 		dec_angle = (60*60*180)/360
@@ -143,14 +158,23 @@ class PyGameApp:
 			raise Exception()
 		self.change_view(*delta, self.view_coef)
 
-	def change_view(self, delta_ra, delta_dec, view_coef=1):
+	def change_view_WRONG(self, delta_ra, delta_dec, view_coef=1):
 		for s in self.stars:
 			s.ra.full_sec += delta_ra
 			s.dec.full_sec += delta_dec
-			coords = Geom.get_int_image_coords(s, self.window_size, self.indent, self.indent)
+			coords = Geom.get_int_image_coords(s, 0, self.window_size, self.indent, self.indent)
 			s.x, s.y = coords[0], coords[1]
-			new_coords = Geom.get_resize_int_image_coords((s.x, s.y), SIZE, view_coef)
-			s.x, s.y = new_coords[0], new_coords[1]
+			# new_coords = Geom.get_resize_int_image_coords((s.x, s.y), SIZE, view_coef)
+			# s.x, s.y = new_coords[0], new_coords[1]
+
+	def change_view(self, delta_time, view_coef=1):
+		for s in self.stars:
+			# s.ra.full_sec += delta_ra
+			# s.dec.full_sec += delta_dec
+			coords = Geom.get_int_image_coords(s, delta_time, self.window_size, self.indent, self.indent)
+			s.x, s.y = coords[0], coords[1]
+			# new_coords = Geom.get_resize_int_image_coords((s.x, s.y), SIZE, view_coef)
+			# s.x, s.y = new_coords[0], new_coords[1]
 			# s.move(*new_coords)
 
 	def init_time(self):
@@ -164,7 +188,7 @@ class PyGameApp:
 
 
 class ChangeVieweButton:
-	def __init__(self, img, img_light, x1, y1, parent, direction, angle, view_coef):
+	def __init__(self, img, img_light, x1, y1, parent, delta_sec, view_coef):
 		self.img = img
 		self.img_onclick = img_light
 		self.x = x1
@@ -173,8 +197,9 @@ class ChangeVieweButton:
 		self.x2 = pic.get_rect().size[0] + x1
 		self.y2 = pic.get_rect().size[1] + y1
 		self.parent = parent
-		self.direction = direction
-		self.angle = angle
+		# self.direction = direction
+		# self.angle = angle
+		self.delta_sec = delta_sec
 		self.view_coef = view_coef
 
 		self.click_count = 0
@@ -207,7 +232,7 @@ class ChangeVieweButton:
 	def update(self):
 		if self.on_click():
 			self.click_count += 1
-			self.parent.turn(self.direction, self.angle, self.view_coef)
+			self.parent.turn(self.delta_sec, self.view_coef)
 			return pygame.image.load(self.img_onclick)
 		return pygame.image.load(self.img)
 
