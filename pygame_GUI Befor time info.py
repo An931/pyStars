@@ -6,7 +6,7 @@ from stars import *
 
 class PyGameApp:
 	def __init__(self):
-		self.window_size = 800
+		self.window_size = 700
 		pygame.init()
 		self.FPS = 30
 		self.fpsClock = pygame.time.Clock()
@@ -17,7 +17,6 @@ class PyGameApp:
 
 		self.stars = self.get_stars()
 		self.create_buttons()
-		self.datePanel = DatePanel(self)
 
 		self.delta_sec = 0
 		self._view_coef = 1
@@ -64,14 +63,11 @@ class PyGameApp:
 		self.buttons = [self.right, self.left, self.zoom_plus, self.zoom_minus]
 		# self.buttons = [self.up, self.down, self.right, self.left, self.zoom_plus, self.zoom_minus]
 
-	def create_time_info00(self):
+	def create_time_info(self):
 		self.month = 0
 		self.day = 0
 		self.hour = 0
 		self.minute = 0
-
-	def create_datePanel(self):
-		pass
 
 	# def change_time_info(self):
 		pass
@@ -100,9 +96,7 @@ class PyGameApp:
 
 			for b in self.buttons:
 				# self.screen.blit(b.get_img(), (b.x, b.y))
-				# update вызывает turn и возвращает картинку кнопки
 				self.screen.blit(b.update(), (b.x, b.y))
-			self.datePanel.draw_on_screen(self.screen, self.indent, self.window_size+self.indent-150)
 
 			for event in pygame.event.get():
 					if event.type == QUIT:
@@ -112,8 +106,8 @@ class PyGameApp:
 						#when would only one turn on one click
 						if self.main_stars_button.on_click():
 							self.main_stars_flag = not self.main_stars_flag
-						# for b in self.buttons:
-						# 	self.screen.blit(b.update(), (b.x, b.y))
+						for b in self.buttons:
+							self.screen.blit(b.update(), (b.x, b.y))
 
 			self.screen.blit(self.main_stars_button.get_img(), (self.main_stars_button.x, self.main_stars_button.y))
 			pygame.display.update()
@@ -195,7 +189,7 @@ class PyGameApp:
 		self.hour = 0
 		self.minute = 0
 
-	def draw_time_info00(self):
+	def draw_time_info(self):
 		font = pygame.font.SysFont('Georgia', 15)
 		# self.screen.blit(font.render(text, True, Color.white), (750, 100)) # в одном и том же углу 
 		pos = pygame.mouse.get_pos()
@@ -291,109 +285,10 @@ class MainStarsButton:
 
 
 class DatePanel:
-	def __init__(self, parent):
-		self.heigh = 40
-		self.width = parent.window_size
-		self.parent = parent
-
-		self.month = 0
-		self.day = 0
-		self.hour = 0
-		self.minute = 0
-
-		self.create_buttons()
-
-	def create_buttons(self):
-		full_round = 60*60*24
-		self.btn_month = ChangeTimeButton(100, 100, self, full_round/12, 'month')
-		self.btn_day = ChangeTimeButton(150, 100, self, full_round//365, 'day')
-		self.btn_hour = ChangeTimeButton(200, 100, self, full_round/24, 'hour')
-		self.btn_minute = ChangeTimeButton(250, 100, self, full_round/(24*60), 'minute')
-
-		self.buttons = [self.btn_month, self.btn_day, self.btn_hour, self.btn_minute]
-
-
-	def draw_on_screen(self, screen, x, y):
-		font = pygame.font.SysFont('Georgia', 15)
-
-		pygame.draw.rect(screen, Color.black, [x, y, self.width, self.heigh])
-		y_text = y + self.heigh/2 - 10
-		screen.blit(font.render('month: ', True, Color.white), [x+4, y_text])
-		screen.blit(font.render(str(self.month), True, Color.white), [x+60, y_text])
-		# screen.blit(img, [x, y])
-		screen.blit(self.btn_month.update([x+70, y]), [x+70, y])
-
-		screen.blit(font.render('day: ', True, Color.white), [x+100, y_text])
-		screen.blit(font.render(str(self.day), True, Color.white), [x+140, y_text])
-		screen.blit(font.render('hour: ', True, Color.white), [x+170, y_text])
-		screen.blit(font.render(str(self.hour), True, Color.white), [x+210, y_text])
-		screen.blit(font.render('minute: ', True, Color.white), [x+240, y_text])
-		screen.blit(font.render(str(self.minute), True, Color.white), [x+300, y_text])
-
-		# screen.blit(b.update(), (b.x, b.y))
+	pass
 
 class ChangeTimeButton:
-	def __init__(self, x1, y1, panel, delta_sec, fieldname_to_change):
-		self.img = './buttons/plus-minus.png'
-		self.img_plus_onclick = './buttons/plus_onclick.png'
-		self.img_minus_onclick = './buttons/minus_onclick.png'
-		# self.x = x1
-		# self.y = y1
-		pic = pygame.image.load(self.img)
-		self.heigh, self.width = pic.get_rect().size[1], pic.get_rect().size[0]
-		# self.x2 = pic.get_rect().size[0] + x1
-		# self.y2 = pic.get_rect().size[1] + y1
-		self.panel = panel
-		self.delta_sec = delta_sec
-		# self.field = fieldname_to_change
-
-	def check_on_click000(self, mouse_pos, mouse_pressed):
-		if not mouse_pressed[0]:
-			return False
-		return (mouse_pos[0] > self.x1 and mouse_pos[0] < self.x2
-			and mouse_pos[1] > self.y1 and mouse_pos[1] < self.y2)
-
-	def on_plus_click(self, btn_pos):
-		mouse_pos = pygame.mouse.get_pos()
-		mouse_pressed = pygame.mouse.get_pressed()
-		x, y = btn_pos
-		if not mouse_pressed[0]:
-			return False
-		return (mouse_pos[0] > x and mouse_pos[0] < x+self.width
-			and mouse_pos[1] > y and mouse_pos[1] < y+self.heigh/2)
-
-	def on_minus_click(self, btn_pos):
-		mouse_pos = pygame.mouse.get_pos()
-		mouse_pressed = pygame.mouse.get_pressed()
-		x, y = btn_pos
-		if not mouse_pressed[0]:
-			return False
-		return (mouse_pos[0] > x and mouse_pos[0] < x+self.width
-			and mouse_pos[1] > y+self.heigh/2 and mouse_pos[1] < y+self.heigh)
-
-	def on_enter00(self):
-		mouse_pos = pygame.mouse.get_pos()
-		return (mouse_pos[0] > self.x and mouse_pos[0] < self.x2
-			and mouse_pos[1] > self.y and mouse_pos[1] < self.y2)
-
-
-	def get_img(self):
-		if self.on_enter():
-			return pygame.image.load(self.img_onclick)
-		return pygame.image.load(self.img)
-
-	def update(self, btn_pos):
-		if self.on_plus_click(btn_pos):
-			self.panel.parent.turn(self.delta_sec, 1)
-			return pygame.image.load(self.img_plus_onclick)
-		if self.on_minus_click(btn_pos):
-			self.panel.parent.turn(-self.delta_sec, 1)
-			return pygame.image.load(self.img_minus_onclick)
-		return pygame.image.load(self.img)
-
-	def draw(self):
-		pass
-
+	pass
 
 class Color:
 	white = (255, 255, 255)
