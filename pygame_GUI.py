@@ -297,10 +297,10 @@ class DatePanel:
 		self.width = parent.window_size
 		self.parent = parent
 
-		self.month = 12
-		self.day = 0
-		self.hour = 0
-		self.minute = 0
+		self._month = 1
+		self._day = 1
+		self._hour = 0
+		self._minute = 0
 
 		self.create_buttons()
 
@@ -312,7 +312,6 @@ class DatePanel:
 		self.btn_minute = ChangeTimeButton(250, 100, self, full_round/(24*60), 'minute')
 
 		self.buttons = [self.btn_month, self.btn_day, self.btn_hour, self.btn_minute]
-
 
 	def draw_on_screen(self, screen, x, y, mouse_pressed):
 		font = pygame.font.SysFont('Georgia', 15)
@@ -336,6 +335,61 @@ class DatePanel:
 		screen.blit(self.btn_minute.update([x+380, y], mouse_pressed), [x+380, y])
 
 		# screen.blit(b.update(), (b.x, b.y))
+
+# !! all setters works only for add 1
+	@property
+	def month(self):
+		return self._month
+	@month.setter
+	def month(self, value):
+		# работает только для пошагового прибавления 1
+		if value == 13:
+			self._month = 1
+		elif value == 0:
+			self._month = 12
+		else:
+			self._month = value
+	@property
+	def day(self):
+		return self._day
+	@day.setter
+	def day(self, value):
+		# работает только для пошагового прибавления 1
+		# !! пока так будто в месяце 30 дней
+		if value == 31:
+			self.month += 1
+			self._day = 1
+		elif value == 0:
+			self.month -= 1
+			self._day = 30
+		else:
+			self._day = value
+	@property
+	def hour(self):
+		return self._hour
+	@hour.setter
+	def hour(self, value):
+		if value < 0:
+			self.day-=1
+			self._hour = 23
+		elif value < 24:
+			self._hour = value
+		else:
+			self.day += value // 24
+			self._hour = value % 24
+	@property
+	def minute(self):
+		return self._minute
+	@minute.setter
+	def minute(self, value):
+		if value < 0:
+			self.day -= 1
+			self._minute = 59
+		elif value < 60:
+			self._minute = value
+		else:
+			self.hour += value // 60
+			self._minute = value % 60
 
 class ChangeTimeButton:
 	def __init__(self, x1, y1, panel, delta_sec, fieldname_to_change):
@@ -392,11 +446,11 @@ class ChangeTimeButton:
 			was = getattr(self.panel, self.field)
 			if self.on_plus_click(btn_pos):
 				setattr(self.panel, self.field, was+1)
-				self.panel.parent.turn(self.delta_sec, 1)
+				self.panel.parent.turn(-self.delta_sec, 1)
 				return pygame.image.load(self.img_plus_onclick)
 			if self.on_minus_click(btn_pos):
 				setattr(self.panel, self.field, was-1)
-				self.panel.parent.turn(-self.delta_sec, 1)
+				self.panel.parent.turn(self.delta_sec, 1)
 				return pygame.image.load(self.img_minus_onclick)
 		return pygame.image.load(self.img)
 
