@@ -1,4 +1,4 @@
-from datetime import time, datetime
+from datetime import time, datetime, timedelta
 # import datetime
 import math
 
@@ -14,9 +14,41 @@ class Satellite():
 
 	def get_current_pos(self, time, size):
 		# возвр (x, y)
+		alt, azim = self.get_alt_and_azimith(time)
+
+
+	def get_alt_and_azimith(self, time):
+		# возвр предположительные выс и азим в момент времени
 		if time < self.start_info.time or time > self.end_info.time:
 			return
-		pass
+		if time < self.highest_info:
+			# можно (нужно) считать в ините. дельта времени старт-выс, дельта высоты, дельта азимута
+			half_delta_time = (self.highest_info.time - self.start_info.time).seconds
+			half_delta_alt = math.abs(self.highest_info.alt - self.start_info.alt)
+			half_delta_azim = math.abs(self.highest_info.azim - self.start_info.azim)
+			# !!! смотреть что там по знакам!
+			time_delta = (self.start_info.time - time).seconds
+			coef = half_delta_time / time_delta
+			delta_alt = coef * half_delta_alt
+			delta_azim = coef * half_delta_azim
+			alt = self.start_info.alt + delta_alt
+			azim = self.start_info.azim + delta_azim
+		else:
+			# можно (нужно) считать в ините. дельта времени старт-выс, дельта высоты, дельта азимута
+			half_delta_time = (self.end_info.time - self.highest_info.time).seconds
+			half_delta_alt = math.abs(self.end_info.alt - self.highest_info.alt)
+			half_delta_azim = math.abs(self.end_info.azim - self.highest_info.azim)
+			# !!! смотреть что там по знакам!
+			time_delta = (self.end_info.time - time).seconds
+			coef = half_delta_time / time_delta
+			delta_alt = coef * half_delta_alt
+			delta_azim = coef * half_delta_azim
+			alt = self.highest_info.alt + delta_alt
+			azim = self.highest_info.azim + delta_azim
+
+		return (alt, azim)
+
+
 
 	def get_pos_on_standart_coords(self, time):
 		# возвр координаты на единичном круге с центром в 0, 0
@@ -29,18 +61,26 @@ class Satellite():
 		x, y = x * v, y * v
 		return (x, y)
 
-	def get_image_coords(self, time, size):
-		pass
+	def get_image_coords(self, sky_coords, size):
+		alt, azim = sky_coords
+		# координаты для системы от -1 до 1
+		x = 0 # cos(azim ) * alt * (1/90) ? -- см знаки азимута и коэф для высоты (длины вектора)
+
 
 
 
 
 class Satellite_info:
+	rus_azimuths = {'С':0, 'Ю':180, 'З':270, 'В':90,
+										'С':0, 'Ю':180, 'З':270, 'В':90,
+										'С':0, 'Ю':180, 'З':270, 'В':90 }
+		# смотри вики стороны света
+
 	def __init__(self, time, altitude, azimuth):
 		self.time_str = time
 		self.time = datetime.strptime(time, '%H:%M:%S')
 		self.alt = int(altitude[-1])
-		self.azim = azimuth
+		self.azim = rus_azimuths[azimuth]
 
 
 # мб прописать соответствия рус-англ азимут 
@@ -54,5 +94,7 @@ if __name__ == '__main__':
 	# print(t)
 	# =======================
 	FMT = '%H:%M:%S'
-	print(datetime.strptime(time2, FMT) - datetime.strptime(time, FMT))
+	d1 = datetime.strptime(time, FMT)
+	d2 = datetime.strptime(time2, FMT)
+	print((d2-d1).seconds)
 	print((datetime.strptime(time2, FMT) > datetime.strptime(time, FMT)))

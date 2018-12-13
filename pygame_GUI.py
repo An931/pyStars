@@ -2,6 +2,7 @@ import pygame, sys
 from pygame.locals import *
 from drawer import *
 from stars import *
+from iridium_flare import *
 
 
 class PyGameApp:
@@ -16,6 +17,7 @@ class PyGameApp:
 		self.indent = 30 # отступ сверху и слева
 
 		self.stars = self.get_stars()
+		self.flares = IridiumFlare.get_flares()
 		self.create_buttons()
 		self.datePanel = DatePanel(self)
 
@@ -97,6 +99,9 @@ class PyGameApp:
 				self.draw_star(s, Color.grey)
 				if highlight_cons and s.const_name == highlight_cons:
 					self.draw_star(s, s.color)
+
+			# for f in self.flares:
+			# 	if f.
 
 			for b in self.buttons:
 				# self.screen.blit(b.get_img(), (b.x, b.y))
@@ -404,7 +409,7 @@ class DatePanel:
 	@seconds.setter
 	def seconds(self, value):
 		# !!! для вычитания/прибавления значений < 60 (?)
-		self.parent.turn(1, self.parent.view_coef)
+		self.parent.turn(self._seconds-value, self.parent.view_coef)
 		if value < 0:
 			self.minute -= 1
 			self._seconds = 60 + value

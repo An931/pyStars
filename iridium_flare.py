@@ -12,16 +12,22 @@ class IridiumFlare():
 		self.azim = int(info[3].split()[0][:-1])
 		self.name = info[0]
 
+	def get_flares():
+		return []
 
 	def get_date(info):
 		# дек 21 08:23:34
-		months = { 'янв' : 01, 'фев' : 02, 'дек' : 12, 'ноя' : 11 }
+		months = { 'янв' : '01', 'фев' : '02', 'дек' : '12', 'ноя' : '11' }
 		FMT = '%Y-%m-%d %H:%M:%S'
 		info = info.split()
 		# ! год не учитывается
 		s = '2018-{}-{} {}'.format(months[info[0]], info[1], info[2])
 		dt = datetime.strptime(s, FMT)
 		return dt
+
+	def is_visible(self, datetime):
+		# datetime is list of elements: month, day, h, m, sec
+		pass
 
 	def get_current_pos(self, time, size):
 		# возвр (x, y)
