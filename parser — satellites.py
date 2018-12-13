@@ -4,7 +4,7 @@ import re
 import satellites
 
 class Parser:
-	link = 'https://heavens-above.com/IridiumFlares.aspx?lat=0&lng=0'
+	link = 'https://heavens-above.com/AllSats.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT'
 
 	def get_satellites():
 		page_code = Parser.get_page_code(link)
@@ -14,17 +14,15 @@ class Parser:
 		return satellites
 
 	def get_page_code(link):
-		# with urlopen(link) as page:
-		# 	return page.read()
-		with open('page_code.txt') as file:
-			return file.read()
+		with urlopen(link) as page:
+			return page.read()
 
 	def get_rows(page_code):
 		soup = BeautifulSoup(page_code, "html5lib")
-		table_info = soup.find_all('tr', 'clickableRow')
-		return table_info
+		satellites_info = soup.find_all('tr', 'clickableRow')
+		return satellites_info
 
-	def get_flares_info(row):
+	def get_satellites_info(row):
 		info = row.find_all('td')
 		info = [i.text.strip() for i in info]
 		# print(info)
@@ -32,12 +30,10 @@ class Parser:
 
 
 if __name__ == '__main__':
-	page_code = Parser.get_page_code('https://heavens-above.com/IridiumFlares.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT')
-	# print(page_code)
+	page_code = Parser.get_page_code('https://heavens-above.com/AllSats.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT')
 	blocks = Parser.get_rows(page_code)
 	for b in blocks:
-		c = Parser.get_flares_info(b)
-		print(c)
+		c = Parser.get_satellites_info(b)
 
 		# print(c)
 		# print(b.attr)

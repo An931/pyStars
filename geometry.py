@@ -25,7 +25,6 @@ class Geom:
 			return im_size, im_size
 		x += 1
 		y += 1
-		# if star.const_name == 'umi' and star.label == 'Alp':
 		if x>2 or y>2:
 			print(im_size - x * im_size / 2 + x_shift, im_size - y * im_size / 2 + y_shift)
 		# return abs(im_size - x * im_size / 2 + x_shift), abs(im_size - y * im_size / 2 + y_shift)
@@ -83,7 +82,9 @@ class Geom:
 		if not ra: # invisible stars on other halph sphere (6-18 hours)
 			return None, None
 		dec_coef = get_dec_coef(ra)
+		# прямые горизонтальн линии
 		# return (ra * get_half_chord(dec), dec)
+		# эллипсы
 		return (ra * get_half_chord(dec*dec_coef), dec * dec_coef)
 
 

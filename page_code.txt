@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head><title>
+	Вспышки Иридиумов
+</title><meta http-equiv="X-UA-Compatible" content="IE=edge" /><meta name="description" content="Satellite predictions and other astronomical data customised for your location." /><link href="css/ha.css" rel="stylesheet" type="text/css" /><link rel="shortcut icon" href="/favicon.ico" type="image/vnd.microsoft.icon" /><link rel="icon" href="/favicon.ico" type="image/vnd.microsoft.icon" />
+	<script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script type="text/javascript" src="//www.heavens-above.com/scripts/standard.min.js"></script>
+	<script type="text/javascript">
+		function updateLocalTime(utc) {
+			var localdiff = parseInt($('#utcOffset').val());
+			var local_now = new Date(utc.getTime() + localdiff);
+			$('#spanTime').text(formatTime(local_now));
+		}
+
+		$(function () {
+			onClockTick = updateLocalTime;
+			startClock();
+		});
+	</script>
+	
+	</head>
+<body>
+	<form name="aspnetForm" method="post" action="/IridiumFlares.aspx?lat=0&amp;lng=0&amp;loc=Unspecified&amp;alt=0&amp;tz=UCT" id="aspnetForm">
+<div>
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="36BEB127" />
+</div>
+	<input type="hidden" name="utcOffset" id="utcOffset" value="0" />
+	<table border="0" style="margin-left: auto; margin-right: auto; border-style: none">
+		<tr>
+			<td>
+				<a id="ctl00_hyperlinkLogo" href="./?lat=0&amp;lng=0&amp;loc=Unspecified&amp;alt=0&amp;tz=UCT" style="display:inline-block;border-style:None;"><img src="//www.heavens-above.com/images/LogoNew.png" alt="" style="border-width:0px;" /></a>
+			</td>
+			<td>
+				
+					<script type = "text/javascript" > <!--
+google_ad_client = "ca-pub-5668297076217155";
+google_ad_slot = "5479771053";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type = "text/javascript" src="//pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+
+				
+			</td>
+			<td>
+				<table class="userTable">
+					<tr>
+						<td>
+							Пользователь:
+						</td>
+						<td>
+							anonymous&nbsp;&nbsp;&nbsp;<a href="/login.aspx">Login</a>
+						</td>
+					</tr>
+					<tr class="lightrow">
+						<td>
+							Местоположение:
+						</td>
+						<td>
+							<a id="ctl00_linkObservationSite" href="SelectLocation.aspx?lat=0&amp;lng=0&amp;loc=Unspecified&amp;alt=0&amp;tz=UCT">Unspecified</a>
+							
+						</td>
+					</tr>
+					<tr class="lightrow">
+						<td colspan="2" align="center">
+							(<a id="ctl00_linkLatLong" href="SelectLocation.aspx?lat=0&amp;lng=0&amp;loc=Unspecified&amp;alt=0&amp;tz=UCT">0,0000°С, 0,0000°В</a>)
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Время:
+						</td>
+						<td>
+							<span id="spanTime">
+								03:48:43</span>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" align="center">
+							(UTC<span id="ctl00_lblTZ">+00:00</span>)
+						</td>
+					</tr>
+					<tr class="lightrow">
+						<td>
+							Язык:
+						</td>
+						<td>
+							<select name="ctl00$ddlCulture" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ddlCulture\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl00_ddlCulture">
+	<option value="ar">???????</option>
+	<option value="ca">Catal&#224;</option>
+	<option value="cs">Cestina</option>
+	<option value="da">Dansk</option>
+	<option value="de">Deutsch</option>
+	<option value="el">????????</option>
+	<option value="en">English</option>
+	<option value="eo">Esperanto</option>
+	<option value="es">Espa&#241;ol</option>
+	<option value="eu">Euskara</option>
+	<option value="fi">Suomi</option>
+	<option value="fr">Fran&#231;ais</option>
+	<option value="gl">Galego</option>
+	<option value="he">?????</option>
+	<option value="hr">Hrvatski</option>
+	<option value="hu">Magyar</option>
+	<option value="it">Italiano</option>
+	<option value="ja">???</option>
+	<option value="lt">Lietuviu</option>
+	<option value="nl">Nederlands</option>
+	<option value="pl">Polski</option>
+	<option value="pt">Portugu&#234;s brasileiro</option>
+	<option value="pt-PT">Portugu&#234;s de Portugal</option>
+	<option value="ro">Rom&#226;na</option>
+	<option selected="selected" value="ru">Русский</option>
+	<option value="sk">Slovencina</option>
+	<option value="sl">Slovenscina</option>
+	<option value="sv">Svenska</option>
+	<option value="ta">?????</option>
+	<option value="th">???</option>
+	<option value="tr">T&#252;rk&#231;e</option>
+	<option value="uk">Українська</option>
+	<option value="zh">????</option>
+	<option value="zh-CHT">????</option>
+
+</select>
+						</td>
+					</tr>
+					
+						<tr class="lightrow">
+							<td>
+							</td>
+							<td>
+								<a href="SetCulture.ashx?newcul=en">
+									<img src="//www.heavens-above.com/images/flags/gb.png" alt="Set language to English" />
+									English</a>
+							</td>
+						</tr>
+					
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<hr />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" valign="top">
+				<table width="100%">
+					<tr>
+						<td align="left">
+							<span id="ctl00_lblTitle" class="pagehead">Вспышки Иридиумов</span>
+						</td>
+						<td align="right" class="navbar">
+							
+							<span id="ctl00_lblNavBar"><a href="/?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT" title="Вернуться на домашнюю страницу">Домашняя страница</a></span>
+						</td>
+					</tr>
+				</table>
+				<p />
+				
+	<input type="hidden" name="ctl00$cph1$hidStartUtc" id="ctl00_cph1_hidStartUtc" value="636808708773458078" />
+	<table>
+		<tr>
+			<td class="userinfo">
+				Искать с:
+			</td>
+			<td class="userinfo">
+				<span id="ctl00_cph1_lblSearchStart">02:47 четверг, 20 декабря, 2018</span>
+			</td>
+			<td class="userinfo" rowspan="2">
+				&nbsp;
+			</td>
+			<td class="userinfo" rowspan="2">
+				<input type="submit" name="ctl00$cph1$btnPrev" value="&lt;" id="ctl00_cph1_btnPrev" />
+				<input type="submit" name="ctl00$cph1$btnNext" value=">" id="ctl00_cph1_btnNext" />
+			</td>
+			<td class="userinfo" rowspan="2">
+				&nbsp;&nbsp;&nbsp;
+			</td>
+			<td class="userinfo" rowspan="2">
+				<input id="ctl00_cph1_chkDaytime" type="checkbox" name="ctl00$cph1$chkDaytime" checked="checked" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$cph1$chkDaytime\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ctl00_cph1_chkDaytime">Включая дневные вспышки</label>
+			</td>
+		</tr>
+		<tr>
+			<td class="userinfo">
+				Искать по:
+			</td>
+			<td class="userinfo">
+				<span id="ctl00_cph1_lblSearchEnd">02:47 четверг, 27 декабря, 2018</span>
+			</td>
+		</tr>
+	</table>
+	<p>
+		
+		Нажатие на дату вспышки откроет страницу с деталями о вспышке и картой неба.</p>
+	<table class="standardTable">
+		<thead>
+			<tr>
+				<td align="center">
+					Время
+				</td>
+				<td align="center">
+					Яркость
+				</td>
+				<td align="center">
+					Высота
+				</td>
+				<td align="center">
+					Азимут
+				</td>
+				<td>
+					Спутник
+				</td>
+				<td>
+					До центра вспышки
+				</td>
+				<td>
+					Яркость в центре вспышки
+				</td>
+				<td>
+					Высота Солнца
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="clickableRow" onclick="window.location='flaredetails.aspx?fid=0&lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT'"><td><a href="flaredetails.aspx?fid=0&lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT">дек 21, 05:11:05</a></td><td align="center">-5,9</td><td align="center">18°</td><td align="center">153° (ЮЮВ)</td><td>Iridium 64</td><td align="center">7 км (В)</td><td align="center">-6,0</td><td align="right">-11° <img src="images/moon-icon.png" width="16" height="16" /></td></tr>
+		</tbody>
+	</table>
+
+				&nbsp;
+				<p />
+				<table style="border-top: 1px solid black;">
+					<tr>
+						<td valign="top" style="width: 100px">
+							<a id="ctl00_linkDonate" title="Make a donation to help with the running costs of Heavens-Above" href="Donate2.aspx"><img title="Make a donation to help with the running costs of Heavens-Above" src="//www.heavens-above.com/images/btn_donate_SM.gif" alt="" style="border-width:0px;" /></a>
+						</td>
+						<td valign="top">
+							<div class="footer">
+								Разработка и поддержка: <a href="mailto:Chris.Peat@heavens-above.com">Chris Peat</a>, Heavens-Above GmbH. Пожалуйста, прочтите <a href="faq.aspx">FAQ</a> перед тем, как написать мне. <a href="Imprint.aspx">Информация о сайте</a>.
+								Переводчики: 1valdis, mevamevo, bretonium, dvk, jentleman</div>
+						</td>
+						<td>
+							<a href="http://www.dlr.de/rb/en/" target="_blank">
+								<img src="//www.heavens-above.com/images/dlrhost.gif" align="left" border="0" alt="DLR" /></a>
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td rowspan="1" valign="top">
+				<p />
+				<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display: inline-block; width: 336px; height: 280px" data-ad-client="ca-pub-5668297076217155" data-ad-slot="7480853211"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+					<p />
+					<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display: inline-block; width: 336px; height: 280px" data-ad-client="ca-pub-5668297076217155" data-ad-slot="7480853211"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+			</td>
+		</tr>
+	</table>
+	</form>
+    <script src="//tags.onscroll.com/608ff96c-526d-43c0-92d3-5faa546bc80e/tag.min.js" async defer></script>
+</body>
+</html>

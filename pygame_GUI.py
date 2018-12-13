@@ -56,7 +56,7 @@ class PyGameApp:
 		btn_onclick_path = './buttons/template(onclick).png'
 		# self.up = ChangeVieweButton(btn_path, btn_onclick_path, 100, 10, self, 'up', 1, 1)
 		# self.down = ChangeVieweButton(btn_path, btn_onclick_path, 100, 50, self, 'down', 1, 1)
-		self.right = ChangeVieweButton(btn_path, btn_onclick_path, 120, 30, self, 1*60, 1)
+		self.right = ChangeVieweButton(btn_path, btn_onclick_path, 120, 30, self, 5*60, 1)
 		self.left = ChangeVieweButton(btn_path, btn_onclick_path, 80, 30, self, -5*60, 1)
 
 		self.zoom_plus = ChangeVieweButton(btn_path, btn_onclick_path, 170, 20, self, 0, 1.01)
@@ -102,7 +102,10 @@ class PyGameApp:
 				# self.screen.blit(b.get_img(), (b.x, b.y))
 				# update вызывает turn и возвращает картинку кнопки
 				self.screen.blit(b.update(), (b.x, b.y))
+
+			self.datePanel.seconds += 1
 			self.datePanel.draw_on_screen(self.screen, self.indent, self.window_size+self.indent-150, False)
+
 
 			for event in pygame.event.get():
 					if event.type == QUIT:
@@ -301,6 +304,7 @@ class DatePanel:
 		self._day = 1
 		self._hour = 0
 		self._minute = 0
+		self._seconds = 0
 
 		self.create_buttons()
 
@@ -334,9 +338,12 @@ class DatePanel:
 		screen.blit(font.render(str(self.minute), True, Color.white), [x+360, y_text])
 		screen.blit(self.btn_minute.update([x+380, y], mouse_pressed), [x+380, y])
 
+		screen.blit(font.render('seconds: ', True, Color.white), [x+410, y_text])
+		screen.blit(font.render(str(self.seconds), True, Color.white), [x+470, y_text])
+
 		# screen.blit(b.update(), (b.x, b.y))
 
-# !! all setters works only for add 1
+	# !! all setters works only for add 1
 	@property
 	def month(self):
 		return self._month
@@ -382,14 +389,31 @@ class DatePanel:
 		return self._minute
 	@minute.setter
 	def minute(self, value):
+		# self.parent.turn(value - self._minute, self.parent.view_coef)
 		if value < 0:
-			self.day -= 1
+			self.hour -= 1
 			self._minute = 59
 		elif value < 60:
 			self._minute = value
 		else:
 			self.hour += value // 60
 			self._minute = value % 60
+	@property
+	def seconds(self):
+		return self._seconds
+	@seconds.setter
+	def seconds(self, value):
+		# !!! для вычитания/прибавления значений < 60 (?)
+		self.parent.turn(1, self.parent.view_coef)
+		if value < 0:
+			self.minute -= 1
+			self._seconds = 60 + value
+		elif value < 60:
+			self._seconds = value
+		else:
+			self.minute += value // 60
+			self._seconds = value % 60
+
 
 class ChangeTimeButton:
 	def __init__(self, x1, y1, panel, delta_sec, fieldname_to_change):
@@ -430,11 +454,17 @@ class ChangeTimeButton:
 		return (mouse_pos[0] > x and mouse_pos[0] < x+self.width
 			and mouse_pos[1] > y+self.heigh/2 and mouse_pos[1] < y+self.heigh)
 
-	def on_enter00(self):
+	def on_plus_enter(self, btn_pos):
 		mouse_pos = pygame.mouse.get_pos()
-		return (mouse_pos[0] > self.x and mouse_pos[0] < self.x2
-			and mouse_pos[1] > self.y and mouse_pos[1] < self.y2)
+		x, y = btn_pos
+		return (mouse_pos[0] > x and mouse_pos[0] < x+self.width
+			and mouse_pos[1] > y and mouse_pos[1] < y+self.heigh/2)
 
+	def on_minus_enter(self, btn_pos):
+		mouse_pos = pygame.mouse.get_pos()
+		x, y = btn_pos
+		return (mouse_pos[0] > x and mouse_pos[0] < x+self.width
+			and mouse_pos[1] > y+self.heigh/2 and mouse_pos[1] < y+self.heigh)
 
 	def get_img(self):
 		if self.on_enter():
@@ -452,6 +482,10 @@ class ChangeTimeButton:
 				setattr(self.panel, self.field, was-1)
 				self.panel.parent.turn(self.delta_sec, 1)
 				return pygame.image.load(self.img_minus_onclick)
+		if self.on_plus_enter(btn_pos):
+			return pygame.image.load(self.img_plus_onclick)
+		if self.on_minus_enter(btn_pos):
+			return pygame.image.load(self.img_minus_onclick)
 		return pygame.image.load(self.img)
 
 	def draw(self):
