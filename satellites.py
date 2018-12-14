@@ -5,7 +5,7 @@ import math
 class Satellite:
 	def __init__(self, info):
 		if not isinstance(info, list) or len(info) != 11:
-			raise Exception('! info is list of 11 elements')
+			raise Exception('! info should be list of 11 elements')
 		self.name = info[0]
 		# self.mag = float(info[1])
 		self.mag = float('.'.join(info[1].split(',')))
@@ -13,12 +13,11 @@ class Satellite:
 		self.highest_info = Satellite_info(info[5], info[6], info[7])
 		self.end_info = Satellite_info(info[8], info[9], info[10])
 
-	def get_current_pos(self, time, size):
-		# возвр (x, y)
-		alt, azim = self.get_alt_and_azimith(time)
-
 
 	def get_alt_and_azimith(self, time):
+		return self.end_info.alt, self.end_info.azim
+
+
 		# возвр предположительные выс и азим в момент времени
 		if time < self.start_info.time or time > self.end_info.time:
 			return
@@ -49,41 +48,58 @@ class Satellite:
 
 		return (alt, azim)
 
-
-
 	def get_pos_on_standart_coords(self, time):
-		# возвр координаты на единичном круге с центром в 0, 0
-		pass
-
-	def get_start_pos_on_standart_coords(self):
-		x = math.cos(self.start_info.azim)
-		x = math.cos(self.start_info.azim)
-		v = v # посчитать длину вектора (в завис от высоты)
+		if time < self.start_info.time or time > self.end_info.time:
+			return
+		alt, azim = self.get_alt_and_azimith(time)
+		angle = (azim + 90) % 360
+		x = math.cos(math.radians(angle))
+		y = math.sin(math.radians(angle))
+		v = (90 - alt)/90 # посчитать длину вектора (в завис от высоты)
 		x, y = x * v, y * v
+		# print(x, y)
 		return (x, y)
 
-	def get_image_coords(self, sky_coords, size):
-		alt, azim = sky_coords
-		# координаты для системы от -1 до 1
-		x = 0 # cos(azim ) * alt * (1/90) ? -- см знаки азимута и коэф для высоты (длины вектора)
+	def get_image_coords(self, time, im_size, x_shift, y_shift):
+		if time < self.start_info.time or time > self.end_info.time:
+			return
+		x, y = self.get_pos_on_standart_coords(time)
+		x += 1
+		y += 1
+		return im_size - x * im_size / 2 + x_shift, im_size - y * im_size / 2 + y_shift
 
-	def get_int_image_coords(self, time, size, x_shift=0, y_shift=0):
+	def get_start_pos_on_standart_coords000(self):
+		angle = (self.start_info.azim + 90) % 360
+		x = math.cos(math.radians(angle))
+		y = math.sin(math.radians(angle))
+		v = (90-self.start_info.alt)/90 # посчитать длину вектора (в завис от высоты)
+		x, y = x * v, y * v
+		print(x, y)
+		return (x, y)
+
+	def get_start_image_coords000(self, im_size, x_shift, y_shift):
+		x, y = self.get_start_pos_on_standart_coords()
+		x += 1
+		y += 1
+		# if x>2 or y>2:
+		# 	print(im_size - x * im_size / 2 + x_shift, im_size - y * im_size / 2 + y_shift)
+		# # return abs(im_size - x * im_size / 2 + x_shift), abs(im_size - y * im_size / 2 + y_shift)
+		return im_size - x * im_size / 2 + x_shift, im_size - y * im_size / 2 + y_shift
+
+	def get_int_image_coords(self, time, im_size, x_shift=0, y_shift=0):
 		# основной метод, который вызывается извне
 		if time < self.start_info.time or time > self.end_info.time:
 			print(self.start_info.time, time, self.end_info.time)
 			return
-		return (100, 200)
-
-
-	# def get_all():
-	# 	import parser
-	# 	return parser.Parser.get_satellites()
+		coords = self.get_image_coords(time, im_size, x_shift, y_shift)
+		return int(coords[0]), int(coords[1])
 
 
 class Satellite_info:
-	rus_azimuths = {'С':0, 'Ю':180, 'З':270, 'В':90,
-										'С':0, 'Ю':180, 'З':270, 'В':90,
-										'С':0, 'Ю':180, 'З':270, 'В':90 }
+	rus_azimuths = {'С':0, 'ССЗ':22.5, 'СЗ':45, 'ЗСЗ':67.5,
+										'З':90, 'ЗЮЗ':112.5, 'ЮЗ':135, 'ЮЮЗ':157.5,
+										'Ю':180, 'ЮЮВ':202.5, 'ЮВ':225, 'ВЮВ':247.5,
+										'В':270, 'ВСВ':292.5, 'СВ':315, 'ССВ':337.5 }
 		# смотри вики стороны света
 
 	def __init__(self, time, altitude, azimuth):
@@ -91,9 +107,8 @@ class Satellite_info:
 		time_str = '2018-14-12 ' + time
 		self.time = datetime.strptime(time_str, '%Y-%d-%m %H:%M:%S')
 		self.alt = int(altitude[:-1])
-		# self.azim = Satellite_info.rus_azimuths[azimuth]
-		# !!!!!!!!!!!!!!!!!!!!!!!11
-		self.azim = 0
+		self.azim = Satellite_info.rus_azimuths[azimuth]
+
 
 
 # мб прописать соответствия рус-англ азимут 

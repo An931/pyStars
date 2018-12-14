@@ -23,6 +23,7 @@ class PyGameApp:
 
 		self.stars = self.get_stars()
 		self.satellites = Parser.get_satellites()
+		# self.satellites = Parser.get_satellites()[:1]
 		self.create_buttons()
 		self.datePanel = DatePanel(self)
 
