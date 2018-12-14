@@ -3,6 +3,8 @@ from pygame.locals import *
 from drawer import *
 from stars import *
 from iridium_flare import *
+from datetime import time, datetime, timedelta
+
 
 
 class PyGameApp:
@@ -108,7 +110,7 @@ class PyGameApp:
 				# update вызывает turn и возвращает картинку кнопки
 				self.screen.blit(b.update(), (b.x, b.y))
 
-			self.datePanel.seconds += 1
+			self.datePanel.second += 9
 			self.datePanel.draw_on_screen(self.screen, self.indent, self.window_size+self.indent-150, False)
 
 
@@ -298,8 +300,93 @@ class MainStarsButton:
 			return pygame.image.load(self.img_onclick)
 		return pygame.image.load(self.img)
 
-
 class DatePanel:
+	def __init__(self, parent):
+		self.heigh = 40
+		self.width = parent.window_size
+		self.parent = parent
+
+		self.time = datetime.now()
+
+		# self._month = 1
+		# self._day = 1
+		# self._hour = 0
+		# self._minute = 0
+		# self._seconds = 0
+
+		self.create_buttons()
+
+	def create_buttons(self):
+		full_round = 60*60*24
+		self.btn_month = ChangeTimeButton(100, 100, self, full_round/12, 'month')
+		self.btn_day = ChangeTimeButton(150, 100, self, full_round//365, 'day')
+		self.btn_hour = ChangeTimeButton(200, 100, self, full_round/24, 'hour')
+		self.btn_minute = ChangeTimeButton(250, 100, self, full_round/(24*60), 'minute')
+
+		self.buttons = [self.btn_month, self.btn_day, self.btn_hour, self.btn_minute]
+
+	def draw_on_screen(self, screen, x, y, mouse_pressed):
+		font = pygame.font.SysFont('Georgia', 15)
+
+		pygame.draw.rect(screen, Color.black, [x, y, self.width, self.heigh])
+		y_text = y + self.heigh/2 - 10
+		screen.blit(font.render('month: ', True, Color.white), [x+4, y_text])
+		screen.blit(font.render(str(self.month), True, Color.white), [x+60, y_text])
+		screen.blit(self.btn_month.update([x+80, y], mouse_pressed), [x+80, y])
+
+		screen.blit(font.render('day: ', True, Color.white), [x+120, y_text])
+		screen.blit(font.render(str(self.day), True, Color.white), [x+160, y_text])
+		screen.blit(self.btn_day.update([x+180, y], mouse_pressed), [x+180, y])
+
+		screen.blit(font.render('hour: ', True, Color.white), [x+210, y_text])
+		screen.blit(font.render(str(self.hour), True, Color.white), [x+250, y_text])
+		screen.blit(self.btn_hour.update([x+270, y], mouse_pressed), [x+270, y])
+
+		screen.blit(font.render('minute: ', True, Color.white), [x+300, y_text])
+		screen.blit(font.render(str(self.minute), True, Color.white), [x+360, y_text])
+		screen.blit(self.btn_minute.update([x+380, y], mouse_pressed), [x+380, y])
+
+		screen.blit(font.render('second: ', True, Color.white), [x+410, y_text])
+		screen.blit(font.render(str(self.second), True, Color.white), [x+470, y_text])
+
+		# screen.blit(b.update(), (b.x, b.y))
+
+	# !! all setters works only for add 1
+	@property
+	def month(self):
+		return self.time.month
+	@month.setter
+	def month(self, value):
+		self.time = self.time + timedelta(months = value - self.month)
+	@property
+	def day(self):
+		return self.time.day
+	@day.setter
+	def day(self, value):
+		self.time = self.time + timedelta(days = value - self.day)
+	@property
+	def hour(self):
+		return self.time.hour
+	@hour.setter
+	def hour(self, value):
+		self.time = self.time + timedelta(hours = value - self.hour)
+	@property
+	def minute(self):
+		return self.time.minute
+	@minute.setter
+	def minute(self, value):
+		self.time = self.time + timedelta(minutes = value - self.minute)
+	@property
+	def second(self):
+		return self.time.second
+	@second.setter
+	def second(self, value):
+		self.parent.turn(-(value - self.second))
+		self.time = self.time + timedelta(seconds = value - self.second)
+
+
+
+class DatePanel_OLD:
 	def __init__(self, parent):
 		self.heigh = 40
 		self.width = parent.window_size

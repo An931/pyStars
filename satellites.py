@@ -66,7 +66,11 @@ class Satellite():
 		# координаты для системы от -1 до 1
 		x = 0 # cos(azim ) * alt * (1/90) ? -- см знаки азимута и коэф для высоты (длины вектора)
 
-
+	def get_current_image_coords(self, time, size):
+		# основной метод, который вызывается извне
+		if time < self.start_info.time or time > self.end_info.time:
+			return
+		return (100, 200)
 
 
 
