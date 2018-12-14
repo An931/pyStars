@@ -2,7 +2,10 @@ import pygame, sys
 from pygame.locals import *
 from drawer import *
 from stars import *
-from iridium_flare import *
+# from iridium_flare import *
+# from satellites import *
+# from parser import *
+from h_a_site_parser import *
 from datetime import time, datetime, timedelta
 
 
@@ -19,7 +22,7 @@ class PyGameApp:
 		self.indent = 30 # отступ сверху и слева
 
 		self.stars = self.get_stars()
-		self.flares = IridiumFlare.get_flares()
+		self.satellites = Parser.get_satellites()
 		self.create_buttons()
 		self.datePanel = DatePanel(self)
 
@@ -102,15 +105,15 @@ class PyGameApp:
 				if highlight_cons and s.const_name == highlight_cons:
 					self.draw_star(s, s.color)
 
-			# for f in self.flares:
-			# 	if f.
+			for sat in self.satellites:
+				self.draw_satellite(sat)
 
 			for b in self.buttons:
 				# self.screen.blit(b.get_img(), (b.x, b.y))
 				# update вызывает turn и возвращает картинку кнопки
 				self.screen.blit(b.update(), (b.x, b.y))
 
-			self.datePanel.second += 9
+			self.datePanel.second += 1
 			self.datePanel.draw_on_screen(self.screen, self.indent, self.window_size+self.indent-150, False)
 
 
@@ -129,6 +132,14 @@ class PyGameApp:
 			self.screen.blit(self.main_stars_button.get_img(), (self.main_stars_button.x, self.main_stars_button.y))
 			pygame.display.update()
 			self.fpsClock.tick(self.FPS)
+
+	def draw_satellite(self, satellite):
+		coords = satellite.get_int_image_coords(self.datePanel.time, self.window_size, self.indent, self.indent)
+		if coords:
+
+			pygame.draw.circle(self.screen, Color.red, coords, 5)
+			font = pygame.font.SysFont('Georgia', 15)
+			self.screen.blit(font.render(satellite.name, True, Color.red), coords)
 
 	def draw_star(self, star, color):
 		# print(star.x, star.y)
@@ -306,7 +317,7 @@ class DatePanel:
 		self.width = parent.window_size
 		self.parent = parent
 
-		self.time = datetime.now()
+		self.time = datetime.now() - timedelta(hours=5)
 
 		# self._month = 1
 		# self._day = 1
@@ -588,6 +599,7 @@ class Color:
 	white = (255, 255, 255)
 	black = (0, 0, 0)
 	grey = (70, 70, 70)
+	red = (130, 0, 0)
 
 
 if __name__ == '__main__':

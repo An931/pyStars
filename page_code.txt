@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="ru" dir="ltr">
 <head><title>
-	Вспышки Иридиумов
+	Предстоящие пролеты ярких спутников
 </title><meta http-equiv="X-UA-Compatible" content="IE=edge" /><meta name="description" content="Satellite predictions and other astronomical data customised for your location." /><link href="css/ha.css" rel="stylesheet" type="text/css" /><link rel="shortcut icon" href="/favicon.ico" type="image/vnd.microsoft.icon" /><link rel="icon" href="/favicon.ico" type="image/vnd.microsoft.icon" />
 	<script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
     <script type="text/javascript" src="//www.heavens-above.com/scripts/standard.min.js"></script>
@@ -22,12 +22,12 @@
 	
 	</head>
 <body>
-	<form name="aspnetForm" method="post" action="/IridiumFlares.aspx?lat=0&amp;lng=0&amp;loc=Unspecified&amp;alt=0&amp;tz=UCT" id="aspnetForm">
+	<form name="aspnetForm" method="post" action="/AllSats.aspx?lat=0&amp;lng=0&amp;loc=Unspecified&amp;alt=0&amp;tz=UCT" id="aspnetForm">
 <div>
 <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
 <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
 <input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="" />
-<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
 </div>
 
 <script type="text/javascript">
@@ -49,7 +49,7 @@ function __doPostBack(eventTarget, eventArgument) {
 
 <div>
 
-	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="36BEB127" />
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="F35EBD1D" />
 </div>
 	<input type="hidden" name="utcOffset" id="utcOffset" value="0" />
 	<table border="0" style="margin-left: auto; margin-right: auto; border-style: none">
@@ -100,7 +100,7 @@ google_ad_height = 90;
 						</td>
 						<td>
 							<span id="spanTime">
-								03:48:43</span>
+								01:56:11</span>
 						</td>
 					</tr>
 					<tr>
@@ -176,7 +176,7 @@ google_ad_height = 90;
 				<table width="100%">
 					<tr>
 						<td align="left">
-							<span id="ctl00_lblTitle" class="pagehead">Вспышки Иридиумов</span>
+							<span id="ctl00_lblTitle" class="pagehead">Предстоящие пролеты ярких спутников</span>
 						</td>
 						<td align="right" class="navbar">
 							
@@ -186,74 +186,102 @@ google_ad_height = 90;
 				</table>
 				<p />
 				
-	<input type="hidden" name="ctl00$cph1$hidStartUtc" id="ctl00_cph1_hidStartUtc" value="636808708773458078" />
-	<table>
-		<tr>
-			<td class="userinfo">
-				Искать с:
-			</td>
-			<td class="userinfo">
-				<span id="ctl00_cph1_lblSearchStart">02:47 четверг, 20 декабря, 2018</span>
-			</td>
-			<td class="userinfo" rowspan="2">
-				&nbsp;
-			</td>
-			<td class="userinfo" rowspan="2">
-				<input type="submit" name="ctl00$cph1$btnPrev" value="&lt;" id="ctl00_cph1_btnPrev" />
-				<input type="submit" name="ctl00$cph1$btnNext" value=">" id="ctl00_cph1_btnNext" />
-			</td>
-			<td class="userinfo" rowspan="2">
-				&nbsp;&nbsp;&nbsp;
-			</td>
-			<td class="userinfo" rowspan="2">
-				<input id="ctl00_cph1_chkDaytime" type="checkbox" name="ctl00$cph1$chkDaytime" checked="checked" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$cph1$chkDaytime\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ctl00_cph1_chkDaytime">Включая дневные вспышки</label>
-			</td>
-		</tr>
-		<tr>
-			<td class="userinfo">
-				Искать по:
-			</td>
-			<td class="userinfo">
-				<span id="ctl00_cph1_lblSearchEnd">02:47 четверг, 27 декабря, 2018</span>
-			</td>
-		</tr>
-	</table>
-	<p>
-		
-		Нажатие на дату вспышки откроет страницу с деталями о вспышке и картой неба.</p>
-	<table class="standardTable">
-		<thead>
-			<tr>
-				<td align="center">
-					Время
-				</td>
-				<td align="center">
-					Яркость
-				</td>
-				<td align="center">
-					Высота
-				</td>
-				<td align="center">
-					Азимут
-				</td>
-				<td>
-					Спутник
-				</td>
-				<td>
-					До центра вспышки
-				</td>
-				<td>
-					Яркость в центре вспышки
-				</td>
-				<td>
-					Высота Солнца
-				</td>
-			</tr>
-		</thead>
-		<tbody>
-			<tr class="clickableRow" onclick="window.location='flaredetails.aspx?fid=0&lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT'"><td><a href="flaredetails.aspx?fid=0&lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT">дек 21, 05:11:05</a></td><td align="center">-5,9</td><td align="center">18°</td><td align="center">153° (ЮЮВ)</td><td>Iridium 64</td><td align="center">7 км (В)</td><td align="center">-6,0</td><td align="right">-11° <img src="images/moon-icon.png" width="16" height="16" /></td></tr>
-		</tbody>
-	</table>
+	
+	<table><tr><td>
+Месяц
+<select name="ctl00$cph1$TimeSelectionControl1$comboMonth" id="ctl00_cph1_TimeSelectionControl1_comboMonth">
+	<option value="24224">Сентябрь 2018</option>
+	<option value="24225">Октябрь 2018</option>
+	<option value="24226">Ноябрь 2018</option>
+	<option selected="selected" value="24227">Декабрь 2018</option>
+	<option value="24228">Январь 2019</option>
+	<option value="24229">Февраль 2019</option>
+	<option value="24230">Март 2019</option>
+
+</select>
+День
+<select name="ctl00$cph1$TimeSelectionControl1$comboDay" id="ctl00_cph1_TimeSelectionControl1_comboDay">
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+	<option value="8">8</option>
+	<option value="9">9</option>
+	<option value="10">10</option>
+	<option value="11">11</option>
+	<option value="12">12</option>
+	<option value="13">13</option>
+	<option selected="selected" value="14">14</option>
+	<option value="15">15</option>
+	<option value="16">16</option>
+	<option value="17">17</option>
+	<option value="18">18</option>
+	<option value="19">19</option>
+	<option value="20">20</option>
+	<option value="21">21</option>
+	<option value="22">22</option>
+	<option value="23">23</option>
+	<option value="24">24</option>
+	<option value="25">25</option>
+	<option value="26">26</option>
+	<option value="27">27</option>
+	<option value="28">28</option>
+	<option value="29">29</option>
+	<option value="30">30</option>
+	<option value="31">31</option>
+
+</select>&nbsp;&nbsp;
+</td><td>
+<table id="ctl00_cph1_TimeSelectionControl1_radioAMPM" border="0" style="width:122px;">
+	<tr>
+		<td><input id="ctl00_cph1_TimeSelectionControl1_radioAMPM_0" type="radio" name="ctl00$cph1$TimeSelectionControl1$radioAMPM" value="AM" checked="checked" /><label for="ctl00_cph1_TimeSelectionControl1_radioAMPM_0">Утро</label></td>
+	</tr><tr>
+		<td><input id="ctl00_cph1_TimeSelectionControl1_radioAMPM_1" type="radio" name="ctl00$cph1$TimeSelectionControl1$radioAMPM" value="PM" /><label for="ctl00_cph1_TimeSelectionControl1_radioAMPM_1">Вечер</label></td>
+	</tr>
+</table>
+</td><td>
+&nbsp;&nbsp;<input type="submit" name="ctl00$cph1$TimeSelectionControl1$btnSubmit" value="Применить" id="ctl00_cph1_TimeSelectionControl1_btnSubmit" style="color:Black;" />
+&nbsp;&nbsp;<input type="submit" name="ctl00$cph1$TimeSelectionControl1$btnNow" value="Текущее время" id="ctl00_cph1_TimeSelectionControl1_btnNow" style="color:Black;" />
+</td></tr></table>
+<p />
+	Минимальная яркость: 
+	<span id="ctl00_cph1_radioButtonsMag" style="display:inline-block;border-style:None;"><input id="ctl00_cph1_radioButtonsMag_0" type="radio" name="ctl00$cph1$radioButtonsMag" value="3.0" /><label for="ctl00_cph1_radioButtonsMag_0">3,0&nbsp;&nbsp;&nbsp;</label><input id="ctl00_cph1_radioButtonsMag_1" type="radio" name="ctl00$cph1$radioButtonsMag" value="3.5" checked="checked" /><label for="ctl00_cph1_radioButtonsMag_1">3,5&nbsp;&nbsp;&nbsp;</label><input id="ctl00_cph1_radioButtonsMag_2" type="radio" name="ctl00$cph1$radioButtonsMag" value="4.0" /><label for="ctl00_cph1_radioButtonsMag_2">4,0&nbsp;&nbsp;&nbsp;</label><input id="ctl00_cph1_radioButtonsMag_3" type="radio" name="ctl00$cph1$radioButtonsMag" value="4.5" /><label for="ctl00_cph1_radioButtonsMag_3">4,5&nbsp;&nbsp;&nbsp;</label><input id="ctl00_cph1_radioButtonsMag_4" type="radio" name="ctl00$cph1$radioButtonsMag" value="5.0" /><label for="ctl00_cph1_radioButtonsMag_4">5,0&nbsp;&nbsp;&nbsp;</label></span>
+<p />
+	
+	<table class="standardTable"><thead><tr><td>Спутник</td><td align="center">Яркость</td><td colspan="3" align="center">Начало</td><td colspan="3" align="center">Наибольшая высота</td><td colspan="3" align="center">Конец</td></tr><tr><td></td><td align="center">(зв. вел.)</td><td align="center">Время</td><td align="center">Высота</td><td align="center">Азимут</td><td align="center">Время</td><td align="center">Высота</td><td align="center">Азимут</td><td align="center">Время</td><td align="center">Высота</td><td align="center">Азимут</td></tr></thead><tbody><tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=28647&mjd=58466.1607011975'"><td>Lacrosse 5 rocket</td><td align="center">3,0</td><td align="center">3:51:24</td><td align="center">27°</td><td align="center">ЮВ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=28647&mjd=58466.1607011975">3:51:24</a></td><td align="center">27°</td><td align="center">ЮВ</td><td>3:53:12</td><td align="center">10°</td><td align="center">ЮВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=31793&mjd=58466.1664216246'"><td>SL-16 R/B</td><td align="center">2,2</td><td align="center">3:58:24</td><td align="center">55°</td><td align="center">С</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=31793&mjd=58466.1664216246">3:59:38</a></td><td align="center">76°</td><td align="center">ВСВ</td><td>4:05:18</td><td align="center">10°</td><td align="center">ЮЮВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=23405&mjd=58466.1675407498'"><td>Cosmos 2297 Rocket</td><td align="center">3,2</td><td align="center">3:55:51</td><td align="center">10°</td><td align="center">Ю</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=23405&mjd=58466.1675407498">4:01:15</a></td><td align="center">46°</td><td align="center">ВЮВ</td><td>4:06:38</td><td align="center">10°</td><td align="center">ССВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=18187&mjd=58466.167951772'"><td>Cosmos 1867</td><td align="center">3,4</td><td align="center">3:56:27</td><td align="center">10°</td><td align="center">ЮЮЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=18187&mjd=58466.167951772">4:01:51</a></td><td align="center">87°</td><td align="center">ВЮВ</td><td>4:07:15</td><td align="center">10°</td><td align="center">ССВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=23317&mjd=58466.1689814767'"><td>Okean 1-7</td><td align="center">3,2</td><td align="center">4:02:59</td><td align="center">64°</td><td align="center">СВ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=23317&mjd=58466.1689814767">4:03:19</a></td><td align="center">67°</td><td align="center">В</td><td>4:07:41</td><td align="center">10°</td><td align="center">Ю</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=21891&mjd=58466.1718054528'"><td>GPS 2-12 Rocket1</td><td align="center">2,9</td><td align="center">4:07:23</td><td align="center">77°</td><td align="center">ВСВ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=21891&mjd=58466.1718054528">4:07:23</a></td><td align="center">77°</td><td align="center">ВСВ</td><td>4:11:34</td><td align="center">10°</td><td align="center">ВСВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=24809&mjd=58466.1717765767'"><td>Delta 7925 Rocket</td><td align="center">3,3</td><td align="center">4:06:25</td><td align="center">57°</td><td align="center">ЮЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=24809&mjd=58466.1717765767">4:07:21</a></td><td align="center">77°</td><td align="center">ЮЮВ</td><td>4:11:58</td><td align="center">10°</td><td align="center">ВСВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=3598&mjd=58466.176443281'"><td>OAO 2 Rocket</td><td align="center">3,4</td><td align="center">4:14:04</td><td align="center">51°</td><td align="center">С</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=3598&mjd=58466.176443281">4:14:04</a></td><td align="center">51°</td><td align="center">С</td><td>4:18:23</td><td align="center">10°</td><td align="center">СВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=29164&mjd=58466.1853587181'"><td>ARIANE 5 DEB (SYLDA)</td><td align="center">2,6</td><td align="center">4:26:54</td><td align="center">49°</td><td align="center">В</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=29164&mjd=58466.1853587181">4:26:54</a></td><td align="center">49°</td><td align="center">В</td><td>4:28:23</td><td align="center">10°</td><td align="center">В</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=27422&mjd=58466.1950759383'"><td>IDEFIX/ARIANE 42P</td><td align="center">3,1</td><td align="center">4:38:28</td><td align="center">23°</td><td align="center">ССЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=27422&mjd=58466.1950759383">4:40:54</a></td><td align="center">35°</td><td align="center">ЗСЗ</td><td>4:45:38</td><td align="center">10°</td><td align="center">ЮЗ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=22285&mjd=58466.1961656586'"><td>Cosmos 2227 Rocket</td><td align="center">2,2</td><td align="center">4:36:57</td><td align="center">10°</td><td align="center">ЮЮЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=22285&mjd=58466.1961656586">4:42:28</a></td><td align="center">57°</td><td align="center">ЗСЗ</td><td>4:47:58</td><td align="center">10°</td><td align="center">С</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=24797&mjd=58466.1987853366'"><td>Iridium 4 Rocket</td><td align="center">3,1</td><td align="center">4:41:50</td><td align="center">10°</td><td align="center">Ю</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=24797&mjd=58466.1987853366">4:46:15</a></td><td align="center">84°</td><td align="center">З</td><td>4:51:01</td><td align="center">10°</td><td align="center">С</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=23705&mjd=58466.2008128262'"><td>Cosmos 2322 Rocket</td><td align="center">2,9</td><td align="center">4:46:44</td><td align="center">23°</td><td align="center">ЗСЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=23705&mjd=58466.2008128262">4:49:10</a></td><td align="center">33°</td><td align="center">ЗЮЗ</td><td>4:54:09</td><td align="center">10°</td><td align="center">ЮЮЗ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=37235&mjd=58466.2015311078'"><td>CZ-3A R/B</td><td align="center">3,3</td><td align="center">4:35:04</td><td align="center">10°</td><td align="center">ЗЮЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=37235&mjd=58466.2015311078">4:50:12</a></td><td align="center">36°</td><td align="center">СЗ</td><td>4:54:03</td><td align="center">10°</td><td align="center">ССВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=33462&mjd=58466.205552966'"><td>ARIANE 5 R/B</td><td align="center">1,2</td><td align="center">4:54:49</td><td align="center">26°</td><td align="center">ЗСЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=33462&mjd=58466.205552966">4:55:59</a></td><td align="center">47°</td><td align="center">С</td><td>4:57:58</td><td align="center">10°</td><td align="center">ВСВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=13154&mjd=58466.2067746773'"><td>Cosmos 1356 Rocket</td><td align="center">3,4</td><td align="center">4:53:31</td><td align="center">10°</td><td align="center">ССЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=13154&mjd=58466.2067746773">4:57:45</a></td><td align="center">65°</td><td align="center">З</td><td>5:01:57</td><td align="center">10°</td><td align="center">Ю</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=14051&mjd=58466.2079788413'"><td>Delta 168</td><td align="center">3,5</td><td align="center">4:57:01</td><td align="center">19°</td><td align="center">З</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=14051&mjd=58466.2079788413">4:59:29</a></td><td align="center">33°</td><td align="center">ССЗ</td><td>5:02:41</td><td align="center">10°</td><td align="center">СВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=25861&mjd=58466.2096246498'"><td>Okean O Rocket</td><td align="center">2,3</td><td align="center">4:58:01</td><td align="center">10°</td><td align="center">ССЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=25861&mjd=58466.2096246498">5:01:51</a></td><td align="center">31°</td><td align="center">ЗСЗ</td><td>5:05:44</td><td align="center">10°</td><td align="center">ЮЗ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=25407&mjd=58466.2108677727'"><td>Cosmos 2360 Rocket</td><td align="center">2,2</td><td align="center">4:58:04</td><td align="center">10°</td><td align="center">ССЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=25407&mjd=58466.2108677727">5:03:38</a></td><td align="center">69°</td><td align="center">ЗЮЗ</td><td>5:09:15</td><td align="center">10°</td><td align="center">Ю</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=20580&mjd=58466.2118590705'"><td>Hubble</td><td align="center">3,1</td><td align="center">5:02:39</td><td align="center">10°</td><td align="center">С</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=20580&mjd=58466.2118590705">5:05:04</a></td><td align="center">15°</td><td align="center">ССВ</td><td>5:07:29</td><td align="center">10°</td><td align="center">ВСВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=19274&mjd=58466.2158553342'"><td>Okean 1</td><td align="center">3,3</td><td align="center">5:06:50</td><td align="center">10°</td><td align="center">С</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=19274&mjd=58466.2158553342">5:10:49</a></td><td align="center">87°</td><td align="center">В</td><td>5:14:50</td><td align="center">10°</td><td align="center">Ю</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=20559&mjd=58466.2167346281'"><td>CZ-3 Stage 3</td><td align="center">-0,2</td><td align="center">5:09:55</td><td align="center">10°</td><td align="center">ЮЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=20559&mjd=58466.2167346281">5:12:05</a></td><td align="center">74°</td><td align="center">ЮЮВ</td><td>5:13:57</td><td align="center">10°</td><td align="center">ВСВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=26474&mjd=58466.2197204573'"><td>Lacrosse 4 Rocket</td><td align="center">2,4</td><td align="center">5:12:49</td><td align="center">10°</td><td align="center">ЮЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=26474&mjd=58466.2197204573">5:16:23</a></td><td align="center">26°</td><td align="center">ЗСЗ</td><td>5:19:53</td><td align="center">10°</td><td align="center">ССЗ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=14208&mjd=58466.2222951409'"><td>Cosmos 1484 Rocket</td><td align="center">2,7</td><td align="center">5:16:11</td><td align="center">10°</td><td align="center">С</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=14208&mjd=58466.2222951409">5:20:06</a></td><td align="center">77°</td><td align="center">З</td><td>5:24:05</td><td align="center">10°</td><td align="center">ЮЮЗ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=41765&mjd=58466.2228338286'"><td>Тяньгун-2</td><td align="center">2,4</td><td align="center">5:17:55</td><td align="center">10°</td><td align="center">ССЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=41765&mjd=58466.2228338286">5:20:52</a></td><td align="center">36°</td><td align="center">СВ</td><td>5:23:51</td><td align="center">10°</td><td align="center">ВЮВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=15874&mjd=58466.2251440333'"><td>Centaur AC-64</td><td align="center">3,5</td><td align="center">5:23:02</td><td align="center">10°</td><td align="center">ЗСЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=15874&mjd=58466.2251440333">5:24:12</a></td><td align="center">12°</td><td align="center">ССЗ</td><td>5:25:15</td><td align="center">10°</td><td align="center">С</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=25860&mjd=58466.2261398548'"><td>Okean-O</td><td align="center">3,3</td><td align="center">5:21:16</td><td align="center">10°</td><td align="center">ССВ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=25860&mjd=58466.2261398548">5:25:38</a></td><td align="center">62°</td><td align="center">ВЮВ</td><td>5:30:01</td><td align="center">10°</td><td align="center">Ю</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=20571&mjd=58466.2288988956'"><td>Palapa 6 Rocket</td><td align="center">2,9</td><td align="center">5:24:58</td><td align="center">10°</td><td align="center">ЗЮЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=20571&mjd=58466.2288988956">5:29:36</a></td><td align="center">86°</td><td align="center">ЮЮВ</td><td>5:33:33</td><td align="center">10°</td><td align="center">ВСВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=29517&mjd=58466.2405982714'"><td>CZ-3 R/B</td><td align="center">3,4</td><td align="center">5:34:00</td><td align="center">10°</td><td align="center">СЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=29517&mjd=58466.2405982714">5:46:27</a></td><td align="center">28°</td><td align="center">С</td><td>5:51:15</td><td align="center">10°</td><td align="center">ВСВ</td></tr>
+</tbody></table>
+
 
 				&nbsp;
 				<p />
