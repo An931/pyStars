@@ -2,7 +2,7 @@ import re
 import os
 from stars import *
 from geometry import *
-from GUI import *
+# from GUI import *
 
 
 class Drawer:

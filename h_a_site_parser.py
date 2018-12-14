@@ -36,7 +36,7 @@ if __name__ == '__main__':
 	# print(page_code)
 	blocks = Parser.get_rows(page_code)
 	for b in blocks:
-		c = Parser.get_flares_info(b)
+		c = Parser.get_satellite_info(b)
 		print(c)
 
 		# print(c)

@@ -15,36 +15,40 @@ class Satellite:
 
 
 	def get_alt_and_azimith(self, time):
-		return self.end_info.alt, self.end_info.azim
-
-
+		# return self.highest_info.alt, self.highest_info.azim
 		# возвр предположительные выс и азим в момент времени
-		if time < self.start_info.time or time > self.end_info.time:
+		if time <= self.start_info.time or time >= self.end_info.time:
 			return
-		if time < self.highest_info:
+		if time < self.highest_info.time:
 			# можно (нужно) считать в ините. дельта времени старт-выс, дельта высоты, дельта азимута
-			half_delta_time = (self.highest_info.time - self.start_info.time).seconds
-			half_delta_alt = math.abs(self.highest_info.alt - self.start_info.alt)
-			half_delta_azim = math.abs(self.highest_info.azim - self.start_info.azim)
+			# промежутки мезду началом и высшей точкой
+			part_timedelta = (self.highest_info.time - self.start_info.time).seconds
+			part_delta_alt = self.highest_info.alt - self.start_info.alt
+			part_delta_azim = self.highest_info.azim - self.start_info.azim
 			# !!! смотреть что там по знакам!
-			time_delta = (self.start_info.time - time).seconds
-			coef = half_delta_time / time_delta
-			delta_alt = coef * half_delta_alt
-			delta_azim = coef * half_delta_azim
+			# 
+			current_time_delta = (time - self.start_info.time).seconds
+			if current_time_delta == 0:
+				return
+			coef = current_time_delta / part_timedelta
+			delta_alt = coef * part_delta_alt
+			delta_azim = coef * part_delta_azim
 			alt = self.start_info.alt + delta_alt
 			azim = self.start_info.azim + delta_azim
 		else:
+			# дописать по аналогии!!!
 			# можно (нужно) считать в ините. дельта времени старт-выс, дельта высоты, дельта азимута
-			half_delta_time = (self.end_info.time - self.highest_info.time).seconds
-			half_delta_alt = math.abs(self.end_info.alt - self.highest_info.alt)
-			half_delta_azim = math.abs(self.end_info.azim - self.highest_info.azim)
+			part_timedelta = (self.end_info.time - self.highest_info.time).seconds
+			part_delta_alt = self.end_info.alt - self.highest_info.alt
+			part_delta_azim = self.end_info.azim - self.highest_info.azim
 			# !!! смотреть что там по знакам!
-			time_delta = (self.end_info.time - time).seconds
-			coef = half_delta_time / time_delta
-			delta_alt = coef * half_delta_alt
-			delta_azim = coef * half_delta_azim
-			alt = self.highest_info.alt + delta_alt
-			azim = self.highest_info.azim + delta_azim
+			# 
+			current_time_delta = (self.end_info.time - time).seconds
+			coef = part_timedelta / current_time_delta
+			delta_alt = coef * part_delta_alt
+			delta_azim = coef * part_delta_azim
+			alt = self.start_info.alt + delta_alt
+			azim = self.start_info.azim + delta_azim
 
 		return (alt, azim)
 
@@ -88,8 +92,10 @@ class Satellite:
 
 	def get_int_image_coords(self, time, im_size, x_shift=0, y_shift=0):
 		# основной метод, который вызывается извне
-		if time < self.start_info.time or time > self.end_info.time:
+		if time <= self.start_info.time or time >= self.end_info.time:
 			print(self.start_info.time, time, self.end_info.time)
+			return
+		if (time - self.start_info.time).seconds == 0 or (self.end_info.time - time).seconds == 0:
 			return
 		coords = self.get_image_coords(time, im_size, x_shift, y_shift)
 		return int(coords[0]), int(coords[1])

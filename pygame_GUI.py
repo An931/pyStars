@@ -22,7 +22,9 @@ class PyGameApp:
 		self.indent = 30 # отступ сверху и слева
 
 		self.stars = self.get_stars()
-		self.satellites = Parser.get_satellites()
+		info = ['ATLAS 3B R/B', '2,9', '18:15:06', '10°', 'ЮЮЗ', '18:22:26', '76°', 'ВЮВ', '18:29:31', '10°', 'ССВ']
+		self.satellites = [Satellite(info)]
+		# self.satellites = Parser.get_satellites()
 		# self.satellites = Parser.get_satellites()[:1]
 		self.create_buttons()
 		self.datePanel = DatePanel(self)
@@ -208,7 +210,7 @@ class PyGameApp:
 			# s.dec.full_sec += delta_dec
 			coords = Geom.get_int_image_coords(s, delta_time, self.window_size, self.indent, self.indent)
 			s.x, s.y = coords[0], coords[1]
-			new_coords = Geom.get_resize_int_image_coords((s.x, s.y), SIZE, view_coef)
+			new_coords = Geom.get_resize_int_image_coords((s.x, s.y), self.window_size, view_coef)
 			s.x, s.y = new_coords[0], new_coords[1]
 			# s.move(*new_coords)
 
