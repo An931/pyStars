@@ -25,8 +25,8 @@ class Geom:
 			return im_size, im_size
 		x += 1
 		y += 1
-		if x>2 or y>2:
-			print(im_size - x * im_size / 2 + x_shift, im_size - y * im_size / 2 + y_shift)
+		# if x>2 or y>2:
+		# 	print(im_size - x * im_size / 2 + x_shift, im_size - y * im_size / 2 + y_shift)
 		# return abs(im_size - x * im_size / 2 + x_shift), abs(im_size - y * im_size / 2 + y_shift)
 		return im_size - x * im_size / 2 + x_shift, im_size - y * im_size / 2 + y_shift
 

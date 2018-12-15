@@ -16,7 +16,7 @@ class Parser:
 		# with urlopen(link) as page:
 		# 	return page.read()
 		# 	FROM FILE: !!!!!
-		with open('page_code.txt') as file:
+		with open('page_code1.txt') as file:
 			return file.read()
 
 	def get_rows(page_code):
@@ -32,7 +32,7 @@ class Parser:
 
 
 if __name__ == '__main__':
-	page_code = Parser.get_page_code('https://heavens-above.com/IridiumFlares.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT')
+	page_code = Parser.get_page_code('https://heavens-above.com/AllSats.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT')
 	# print(page_code)
 	blocks = Parser.get_rows(page_code)
 	for b in blocks:

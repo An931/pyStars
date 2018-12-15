@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head><title>
+	Предстоящие пролеты ярких спутников
+</title><meta http-equiv="X-UA-Compatible" content="IE=edge" /><meta name="description" content="Satellite predictions and other astronomical data customised for your location." /><link href="css/ha.css" rel="stylesheet" type="text/css" /><link rel="shortcut icon" href="/favicon.ico" type="image/vnd.microsoft.icon" /><link rel="icon" href="/favicon.ico" type="image/vnd.microsoft.icon" />
+	<script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script type="text/javascript" src="//www.heavens-above.com/scripts/standard.min.js"></script>
+	<script type="text/javascript">
+		function updateLocalTime(utc) {
+			var localdiff = parseInt($('#utcOffset').val());
+			var local_now = new Date(utc.getTime() + localdiff);
+			$('#spanTime').text(formatTime(local_now));
+		}
+
+		$(function () {
+			onClockTick = updateLocalTime;
+			startClock();
+		});
+	</script>
+	
+	</head>
+<body>
+	<form name="aspnetForm" method="post" action="/AllSats.aspx?lat=0&amp;lng=0&amp;loc=Unspecified&amp;alt=0&amp;tz=UCT" id="aspnetForm">
+<div>
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="F35EBD1D" />
+</div>
+	<input type="hidden" name="utcOffset" id="utcOffset" value="0" />
+	<table border="0" style="margin-left: auto; margin-right: auto; border-style: none">
+		<tr>
+			<td>
+				<a id="ctl00_hyperlinkLogo" href="./?lat=0&amp;lng=0&amp;loc=Unspecified&amp;alt=0&amp;tz=UCT" style="display:inline-block;border-style:None;"><img src="//www.heavens-above.com/images/LogoNew.png" alt="" style="border-width:0px;" /></a>
+			</td>
+			<td>
+				
+					<script type = "text/javascript" > <!--
+google_ad_client = "ca-pub-5668297076217155";
+google_ad_slot = "5479771053";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type = "text/javascript" src="//pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+
+				
+			</td>
+			<td>
+				<table class="userTable">
+					<tr>
+						<td>
+							Пользователь:
+						</td>
+						<td>
+							anonymous&nbsp;&nbsp;&nbsp;<a href="/login.aspx">Login</a>
+						</td>
+					</tr>
+					<tr class="lightrow">
+						<td>
+							Местоположение:
+						</td>
+						<td>
+							<a id="ctl00_linkObservationSite" href="SelectLocation.aspx?lat=0&amp;lng=0&amp;loc=Unspecified&amp;alt=0&amp;tz=UCT">Unspecified</a>
+							
+						</td>
+					</tr>
+					<tr class="lightrow">
+						<td colspan="2" align="center">
+							(<a id="ctl00_linkLatLong" href="SelectLocation.aspx?lat=0&amp;lng=0&amp;loc=Unspecified&amp;alt=0&amp;tz=UCT">0,0000°С, 0,0000°В</a>)
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Время:
+						</td>
+						<td>
+							<span id="spanTime">
+								08:27:12</span>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" align="center">
+							(UTC<span id="ctl00_lblTZ">+00:00</span>)
+						</td>
+					</tr>
+					<tr class="lightrow">
+						<td>
+							Язык:
+						</td>
+						<td>
+							<select name="ctl00$ddlCulture" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ddlCulture\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl00_ddlCulture">
+	<option value="ar">???????</option>
+	<option value="ca">Catal&#224;</option>
+	<option value="cs">Cestina</option>
+	<option value="da">Dansk</option>
+	<option value="de">Deutsch</option>
+	<option value="el">????????</option>
+	<option value="en">English</option>
+	<option value="eo">Esperanto</option>
+	<option value="es">Espa&#241;ol</option>
+	<option value="eu">Euskara</option>
+	<option value="fi">Suomi</option>
+	<option value="fr">Fran&#231;ais</option>
+	<option value="gl">Galego</option>
+	<option value="he">?????</option>
+	<option value="hr">Hrvatski</option>
+	<option value="hu">Magyar</option>
+	<option value="it">Italiano</option>
+	<option value="ja">???</option>
+	<option value="lt">Lietuviu</option>
+	<option value="nl">Nederlands</option>
+	<option value="pl">Polski</option>
+	<option value="pt">Portugu&#234;s brasileiro</option>
+	<option value="pt-PT">Portugu&#234;s de Portugal</option>
+	<option value="ro">Rom&#226;na</option>
+	<option selected="selected" value="ru">Русский</option>
+	<option value="sk">Slovencina</option>
+	<option value="sl">Slovenscina</option>
+	<option value="sv">Svenska</option>
+	<option value="ta">?????</option>
+	<option value="th">???</option>
+	<option value="tr">T&#252;rk&#231;e</option>
+	<option value="uk">Українська</option>
+	<option value="zh">????</option>
+	<option value="zh-CHT">????</option>
+
+</select>
+						</td>
+					</tr>
+					
+						<tr class="lightrow">
+							<td>
+							</td>
+							<td>
+								<a href="SetCulture.ashx?newcul=en">
+									<img src="//www.heavens-above.com/images/flags/gb.png" alt="Set language to English" />
+									English</a>
+							</td>
+						</tr>
+					
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<hr />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" valign="top">
+				<table width="100%">
+					<tr>
+						<td align="left">
+							<span id="ctl00_lblTitle" class="pagehead">Предстоящие пролеты ярких спутников</span>
+						</td>
+						<td align="right" class="navbar">
+							
+							<span id="ctl00_lblNavBar"><a href="/?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT" title="Вернуться на домашнюю страницу">Домашняя страница</a></span>
+						</td>
+					</tr>
+				</table>
+				<p />
+				
+	
+	<table><tr><td>
+Месяц
+<select name="ctl00$cph1$TimeSelectionControl1$comboMonth" id="ctl00_cph1_TimeSelectionControl1_comboMonth">
+	<option value="24224">Сентябрь 2018</option>
+	<option value="24225">Октябрь 2018</option>
+	<option value="24226">Ноябрь 2018</option>
+	<option selected="selected" value="24227">Декабрь 2018</option>
+	<option value="24228">Январь 2019</option>
+	<option value="24229">Февраль 2019</option>
+	<option value="24230">Март 2019</option>
+
+</select>
+День
+<select name="ctl00$cph1$TimeSelectionControl1$comboDay" id="ctl00_cph1_TimeSelectionControl1_comboDay">
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+	<option value="8">8</option>
+	<option value="9">9</option>
+	<option value="10">10</option>
+	<option value="11">11</option>
+	<option value="12">12</option>
+	<option value="13">13</option>
+	<option value="14">14</option>
+	<option selected="selected" value="15">15</option>
+	<option value="16">16</option>
+	<option value="17">17</option>
+	<option value="18">18</option>
+	<option value="19">19</option>
+	<option value="20">20</option>
+	<option value="21">21</option>
+	<option value="22">22</option>
+	<option value="23">23</option>
+	<option value="24">24</option>
+	<option value="25">25</option>
+	<option value="26">26</option>
+	<option value="27">27</option>
+	<option value="28">28</option>
+	<option value="29">29</option>
+	<option value="30">30</option>
+	<option value="31">31</option>
+
+</select>&nbsp;&nbsp;
+</td><td>
+<table id="ctl00_cph1_TimeSelectionControl1_radioAMPM" border="0" style="width:122px;">
+	<tr>
+		<td><input id="ctl00_cph1_TimeSelectionControl1_radioAMPM_0" type="radio" name="ctl00$cph1$TimeSelectionControl1$radioAMPM" value="AM" /><label for="ctl00_cph1_TimeSelectionControl1_radioAMPM_0">Утро</label></td>
+	</tr><tr>
+		<td><input id="ctl00_cph1_TimeSelectionControl1_radioAMPM_1" type="radio" name="ctl00$cph1$TimeSelectionControl1$radioAMPM" value="PM" checked="checked" /><label for="ctl00_cph1_TimeSelectionControl1_radioAMPM_1">Вечер</label></td>
+	</tr>
+</table>
+</td><td>
+&nbsp;&nbsp;<input type="submit" name="ctl00$cph1$TimeSelectionControl1$btnSubmit" value="Применить" id="ctl00_cph1_TimeSelectionControl1_btnSubmit" style="color:Black;" />
+&nbsp;&nbsp;<input type="submit" name="ctl00$cph1$TimeSelectionControl1$btnNow" value="Текущее время" id="ctl00_cph1_TimeSelectionControl1_btnNow" style="color:Black;" />
+</td></tr></table>
+<p />
+	Минимальная яркость: 
+	<span id="ctl00_cph1_radioButtonsMag" style="display:inline-block;border-style:None;"><input id="ctl00_cph1_radioButtonsMag_0" type="radio" name="ctl00$cph1$radioButtonsMag" value="3.0" /><label for="ctl00_cph1_radioButtonsMag_0">3,0&nbsp;&nbsp;&nbsp;</label><input id="ctl00_cph1_radioButtonsMag_1" type="radio" name="ctl00$cph1$radioButtonsMag" value="3.5" checked="checked" /><label for="ctl00_cph1_radioButtonsMag_1">3,5&nbsp;&nbsp;&nbsp;</label><input id="ctl00_cph1_radioButtonsMag_2" type="radio" name="ctl00$cph1$radioButtonsMag" value="4.0" /><label for="ctl00_cph1_radioButtonsMag_2">4,0&nbsp;&nbsp;&nbsp;</label><input id="ctl00_cph1_radioButtonsMag_3" type="radio" name="ctl00$cph1$radioButtonsMag" value="4.5" /><label for="ctl00_cph1_radioButtonsMag_3">4,5&nbsp;&nbsp;&nbsp;</label><input id="ctl00_cph1_radioButtonsMag_4" type="radio" name="ctl00$cph1$radioButtonsMag" value="5.0" /><label for="ctl00_cph1_radioButtonsMag_4">5,0&nbsp;&nbsp;&nbsp;</label></span>
+<p />
+	
+	<table class="standardTable"><thead><tr><td>Спутник</td><td align="center">Яркость</td><td colspan="3" align="center">Начало</td><td colspan="3" align="center">Наибольшая высота</td><td colspan="3" align="center">Конец</td></tr><tr><td></td><td align="center">(зв. вел.)</td><td align="center">Время</td><td align="center">Высота</td><td align="center">Азимут</td><td align="center">Время</td><td align="center">Высота</td><td align="center">Азимут</td><td align="center">Время</td><td align="center">Высота</td><td align="center">Азимут</td></tr></thead><tbody><tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=28353&mjd=58467.76570102'"><td>SL-16 R/B</td><td align="center">3,3</td><td align="center">18:17:57</td><td align="center">10°</td><td align="center">ЮЮВ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=28353&mjd=58467.76570102">18:22:36</a></td><td align="center">26°</td><td align="center">ВЮВ</td><td>18:27:12</td><td align="center">10°</td><td align="center">СВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=24892&mjd=58467.7664244088'"><td>Ariane V96 H10-3</td><td align="center">2,9</td><td align="center">18:21:05</td><td align="center">10°</td><td align="center">З</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=24892&mjd=58467.7664244088">18:23:39</a></td><td align="center">83°</td><td align="center">ССВ</td><td>18:30:57</td><td align="center">10°</td><td align="center">В</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=29274&mjd=58467.7684950253'"><td>ARIANE 5 DEB (SYLDA)</td><td align="center">3,2</td><td align="center">18:23:53</td><td align="center">10°</td><td align="center">ЗЮЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=29274&mjd=58467.7684950253">18:26:37</a></td><td align="center">53°</td><td align="center">ЮЮВ</td><td>18:35:07</td><td align="center">10°</td><td align="center">В</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=28097&mjd=58467.7697763155'"><td>NOSS 3-2 (C)</td><td align="center">3,2</td><td align="center">18:22:47</td><td align="center">10°</td><td align="center">ЮЮЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=28097&mjd=58467.7697763155">18:28:28</a></td><td align="center">86°</td><td align="center">ВЮВ</td><td>18:34:09</td><td align="center">10°</td><td align="center">ССВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=20580&mjd=58467.7713034485'"><td>Hubble</td><td align="center">1,3</td><td align="center">18:26:39</td><td align="center">10°</td><td align="center">ЗЮЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=20580&mjd=58467.7713034485">18:30:40</a></td><td align="center">51°</td><td align="center">ССЗ</td><td>18:34:40</td><td align="center">10°</td><td align="center">СВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=25544&mjd=58467.7814863413'"><td>МКС</td><td align="center">-2,8</td><td align="center">18:42:34</td><td align="center">10°</td><td align="center">С</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=25544&mjd=58467.7814863413">18:45:20</a></td><td align="center">26°</td><td align="center">СВ</td><td>18:47:44</td><td align="center">12°</td><td align="center">ВЮВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=29507&mjd=58467.790293714'"><td>CZ-4 R/B</td><td align="center">3,2</td><td align="center">18:54:11</td><td align="center">10°</td><td align="center">ЮЮЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=29507&mjd=58467.790293714">18:58:01</a></td><td align="center">36°</td><td align="center">ЗЮЗ</td><td>19:01:53</td><td align="center">10°</td><td align="center">СЗ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=12904&mjd=58467.7913575343'"><td>Cosmos 1315 Rocket</td><td align="center">2,7</td><td align="center">18:55:34</td><td align="center">10°</td><td align="center">Ю</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=12904&mjd=58467.7913575343">18:59:33</a></td><td align="center">68°</td><td align="center">В</td><td>19:02:48</td><td align="center">14°</td><td align="center">ССВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=26488&mjd=58467.7918470973'"><td>ARIANE 44P R/B</td><td align="center">1,5</td><td align="center">18:57:29</td><td align="center">10°</td><td align="center">З</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=26488&mjd=58467.7918470973">19:00:15</a></td><td align="center">73°</td><td align="center">С</td><td>19:01:09</td><td align="center">35°</td><td align="center">ВСВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=25667&mjd=58467.7949070408'"><td>Ariane 42P Rocket</td><td align="center">3,0</td><td align="center">19:02:13</td><td align="center">10°</td><td align="center">ЗЮЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=25667&mjd=58467.7949070408">19:04:39</a></td><td align="center">44°</td><td align="center">Ю</td><td>19:08:19</td><td align="center">17°</td><td align="center">ВЮВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=17974&mjd=58467.7951162526'"><td>Cosmos 1844 Rocket</td><td align="center">3,0</td><td align="center">18:59:42</td><td align="center">10°</td><td align="center">С</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=17974&mjd=58467.7951162526">19:04:58</a></td><td align="center">41°</td><td align="center">ВСВ</td><td>19:10:12</td><td align="center">10°</td><td align="center">ЮВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=29275&mjd=58467.7970774615'"><td>ARIANE 5 R/B</td><td align="center">3,5</td><td align="center">18:38:18</td><td align="center">10°</td><td align="center">З</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=29275&mjd=58467.7970774615">19:07:47</a></td><td align="center">61°</td><td align="center">ССЗ</td><td>19:10:28</td><td align="center">28°</td><td align="center">ВСВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=23561&mjd=58467.7979942198'"><td>Ariane Rocket</td><td align="center">3,5</td><td align="center">19:04:05</td><td align="center">10°</td><td align="center">Ю</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=23561&mjd=58467.7979942198">19:09:06</a></td><td align="center">63°</td><td align="center">ЗЮЗ</td><td>19:14:06</td><td align="center">10°</td><td align="center">ССЗ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=23732&mjd=58467.7989035191'"><td>Ariane H10-3</td><td align="center">1,9</td><td align="center">19:07:44</td><td align="center">10°</td><td align="center">З</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=23732&mjd=58467.7989035191">19:10:25</a></td><td align="center">41°</td><td align="center">Ю</td><td>19:11:01</td><td align="center">32°</td><td align="center">ЮВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=29649&mjd=58467.7992973619'"><td>BREEZE-M DEB (TANK)</td><td align="center">3,0</td><td align="center">19:07:51</td><td align="center">10°</td><td align="center">СЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=29649&mjd=58467.7992973619">19:10:59</a></td><td align="center">87°</td><td align="center">ЮЗ</td><td>19:21:13</td><td align="center">10°</td><td align="center">ЮВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=6155&mjd=58467.8023963003'"><td>OAO 3 Rocket</td><td align="center">3,2</td><td align="center">19:10:38</td><td align="center">10°</td><td align="center">ЗСЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=6155&mjd=58467.8023963003">19:15:27</a></td><td align="center">78°</td><td align="center">ЮЗ</td><td>19:19:46</td><td align="center">12°</td><td align="center">ЮВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=21941&mjd=58467.8030403665'"><td>Ariane H10+</td><td align="center">3,4</td><td align="center">19:05:53</td><td align="center">10°</td><td align="center">З</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=21941&mjd=58467.8030403665">19:16:22</a></td><td align="center">72°</td><td align="center">Ю</td><td>19:18:33</td><td align="center">32°</td><td align="center">ВЮВ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=10974&mjd=58467.8040894552'"><td>Cosmos 1025 Rocket</td><td align="center">3,3</td><td align="center">19:13:39</td><td align="center">10°</td><td align="center">ЮЮЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=10974&mjd=58467.8040894552">19:17:53</a></td><td align="center">64°</td><td align="center">З</td><td>19:21:43</td><td align="center">12°</td><td align="center">С</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=26906&mjd=58467.8080627143'"><td>CENTAUR R/B</td><td align="center">2,5</td><td align="center">19:18:18</td><td align="center">10°</td><td align="center">ЮЮЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=26906&mjd=58467.8080627143">19:23:36</a></td><td align="center">62°</td><td align="center">ЗСЗ</td><td>19:27:18</td><td align="center">21°</td><td align="center">С</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=22830&mjd=58467.8235180826'"><td>SPOT 3 Rocket</td><td align="center">3,4</td><td align="center">19:40:38</td><td align="center">10°</td><td align="center">ЮЮВ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=22830&mjd=58467.8235180826">19:45:51</a></td><td align="center">84°</td><td align="center">ВСВ</td><td>19:47:15</td><td align="center">50°</td><td align="center">С</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=22015&mjd=58467.8241849169'"><td>GPS 2-14 Rocket1</td><td align="center">3,3</td><td align="center">19:43:25</td><td align="center">10°</td><td align="center">ЗЮЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=22015&mjd=58467.8241849169">19:46:49</a></td><td align="center">58°</td><td align="center">ЗЮЗ</td><td>19:46:49</td><td align="center">58°</td><td align="center">ЗЮЗ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=41634&mjd=58467.826508587'"><td>SJ 16-02</td><td align="center">1,5</td><td align="center">19:45:58</td><td align="center">10°</td><td align="center">ЮЮЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=41634&mjd=58467.826508587">19:50:10</a></td><td align="center">69°</td><td align="center">ЗЮЗ</td><td>19:50:10</td><td align="center">69°</td><td align="center">ЗЮЗ</td></tr>
+<tr class="clickableRow" onclick="window.location='passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=694&mjd=58467.8376301752'"><td>Atlas Centaur 2</td><td align="center">2,8</td><td align="center">19:59:02</td><td align="center">10°</td><td align="center">ЮЗ</td><td align="center"><a href="passdetails.aspx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&satid=694&mjd=58467.8376301752">20:06:11</a></td><td align="center">54°</td><td align="center">ЮЮВ</td><td>20:06:11</td><td align="center">54°</td><td align="center">ЮЮВ</td></tr>
+</tbody></table>
+
+
+				&nbsp;
+				<p />
+				<table style="border-top: 1px solid black;">
+					<tr>
+						<td valign="top" style="width: 100px">
+							<a id="ctl00_linkDonate" title="Make a donation to help with the running costs of Heavens-Above" href="Donate2.aspx"><img title="Make a donation to help with the running costs of Heavens-Above" src="//www.heavens-above.com/images/btn_donate_SM.gif" alt="" style="border-width:0px;" /></a>
+						</td>
+						<td valign="top">
+							<div class="footer">
+								Разработка и поддержка: <a href="mailto:Chris.Peat@heavens-above.com">Chris Peat</a>, Heavens-Above GmbH. Пожалуйста, прочтите <a href="faq.aspx">FAQ</a> перед тем, как написать мне. <a href="Imprint.aspx">Информация о сайте</a>.
+								Переводчики: 1valdis, mevamevo, bretonium, dvk, jentleman</div>
+						</td>
+						<td>
+							<a href="http://www.dlr.de/rb/en/" target="_blank">
+								<img src="//www.heavens-above.com/images/dlrhost.gif" align="left" border="0" alt="DLR" /></a>
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td rowspan="1" valign="top">
+				<p />
+				<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display: inline-block; width: 336px; height: 280px" data-ad-client="ca-pub-5668297076217155" data-ad-slot="7480853211"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+					<p />
+					<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display: inline-block; width: 336px; height: 280px" data-ad-client="ca-pub-5668297076217155" data-ad-slot="7480853211"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+			</td>
+		</tr>
+	</table>
+	</form>
+    <script src="//tags.onscroll.com/608ff96c-526d-43c0-92d3-5faa546bc80e/tag.min.js" async defer></script>
+</body>
+</html>

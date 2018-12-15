@@ -22,7 +22,9 @@ class PyGameApp:
 		self.indent = 30 # отступ сверху и слева
 
 		self.stars = self.get_stars()
-		info = ['ATLAS 3B R/B', '2,9', '18:15:06', '10°', 'ЮЮЗ', '18:22:26', '76°', 'ВЮВ', '18:29:31', '10°', 'ССВ']
+		# info = ['ATLAS 3B R/B', '2,9', '18:15:06', '10°', 'ЮЮЗ', '18:22:26', '76°', 'ВЮВ', '18:29:31', '10°', 'ССВ']
+		info = ['OAO 3 Rocket', '3,2', '19:10:38', '10°', 'ЗСЗ', '19:15:27', '78°', 'ЮЗ', '19:19:46', '12°', 'ЮВ']
+
 		self.satellites = [Satellite(info)]
 		# self.satellites = Parser.get_satellites()
 		# self.satellites = Parser.get_satellites()[:1]
