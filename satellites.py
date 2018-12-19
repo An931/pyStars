@@ -49,7 +49,6 @@ class Satellite:
 			part_delta_alt = self.second_part_delta_alt
 			part_delta_azim = self.second_part_delta_azim
 			current_time_delta = (time - self.highest_info.time).seconds
-
 			coef = current_time_delta / part_timedelta
 			delta_alt =  coef * part_delta_alt
 			delta_azim = coef * part_delta_azim
