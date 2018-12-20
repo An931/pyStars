@@ -24,10 +24,11 @@ class PyGameApp:
 		self.stars = self.get_stars()
 		# info = ['ATLAS 3B R/B', '2,9', '18:15:06', '10°', 'ЮЮЗ', '18:22:26', '76°', 'ВЮВ', '18:29:31', '10°', 'ССВ']
 		# info = ['OAO 3 Rocket', '3,2', '19:10:38', '10°', 'ЗСЗ', '19:15:27', '78°', 'ЮЗ', '19:19:46', '12°', 'ЮВ']
-		info = ['Ariane V96 H10-3', '3,1', '18:27:08', '10°', 'З', '18:29:49', '85°', 'Ю', '18:38:15', '10°', 'В']
+		# info = ['Ariane V96 H10-3', '3,1', '18:27:08', '10°', 'З', '18:29:49', '85°', 'Ю', '18:38:15', '10°', 'В']
+		# info = ['GPS 2-04 Rocket1', '3,2', '18:26:42', '10°', 'ССЗ', '18:30:40', '41°', 'СВ', '18:34:41', '10°', 'ВЮВ']
 
-		self.satellites = [Satellite(info)]
-		# self.satellites = Parser.get_satellites()
+		# self.satellites = [Satellite(info)]
+		self.satellites = Parser.get_satellites()
 		# self.satellites = Parser.get_satellites()[:1]
 		self.create_buttons()
 		self.datePanel = DatePanel(self)

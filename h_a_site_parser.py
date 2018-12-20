@@ -16,7 +16,7 @@ class Parser:
 		# with urlopen(link) as page:
 		# 	return page.read()
 		# 	FROM FILE: !!!!!
-		with open('page_code1.txt') as file:
+		with open('page_code.txt') as file:
 			return file.read()
 
 	def get_rows(page_code):

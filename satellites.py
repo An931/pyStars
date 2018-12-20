@@ -14,13 +14,21 @@ class Satellite:
 		self.end_info = Satellite_info(info[8], info[9], info[10])
 
 		# to compute coef
-		# промежутки мезду началом и высшей точкой
+		# # промежутки между началом и высшей точкой
+		self.start_coords = self.get_pos_on_standart_coords_depends_on_altazim(self.start_info.time)
+		self.height_coords = self.get_pos_on_standart_coords_depends_on_altazim(self.highest_info.time)
+		self.end_coords = self.get_pos_on_standart_coords_depends_on_altazim(self.end_info.time)
+		print('coords ', self.start_coords, self.height_coords, self.end_coords)
+
+
 		self.first_part_timedelta = (self.highest_info.time - self.start_info.time).seconds
-		self.first_part_delta_alt = self.highest_info.alt - self.start_info.alt
-		self.first_part_delta_azim = self.highest_info.azim - self.start_info.azim
+		self.first_part_delta_x = self.height_coords[0] - self.start_coords[0]
+		self.first_part_delta_y = self.height_coords[1] - self.start_coords[1]
 		self.second_part_timedelta = (self.end_info.time - self.highest_info.time).seconds
-		self.second_part_delta_alt = self.end_info.alt - self.highest_info.alt
-		self.second_part_delta_azim = self.end_info.azim - self.highest_info.azim
+		self.second_part_delta_x = self.end_coords[0] - self.height_coords[0]
+		self.second_part_delta_y = self.end_coords[1] - self.height_coords[1]
+		print('first part ', self.first_part_delta_x, self.first_part_delta_y )
+		print('sec part ', self.second_part_delta_x, self.second_part_delta_y )
 
 
 	def get_alt_and_azimith(self, time):
@@ -40,9 +48,15 @@ class Satellite:
 			current_time_delta = (time - self.start_info.time).seconds
 			coef = current_time_delta / part_timedelta
 			delta_alt = coef * part_delta_alt
-			delta_azim = coef * part_delta_azim
+			delta_azim = coef * part_delta_azim 
 			alt = self.start_info.alt + delta_alt
+			# azim =  delta_azim
 			azim = self.start_info.azim + delta_azim
+			# print('timedelta ', current_time_delta)
+			# print('coef ', coef)
+			# print('delta_alt ', delta_alt)
+			# print('delta_azim ', delta_azim)
+			# print(alt, azim)
 
 		else:
 			part_timedelta = self.second_part_timedelta
@@ -50,44 +64,34 @@ class Satellite:
 			part_delta_azim = self.second_part_delta_azim
 			current_time_delta = (time - self.highest_info.time).seconds
 			coef = current_time_delta / part_timedelta
-			delta_alt =  coef * part_delta_alt
+			delta_alt =  coef * part_delta_alt 
 			delta_azim = coef * part_delta_azim
 			alt = self.highest_info.alt + delta_alt
 			azim = self.highest_info.azim + delta_azim
+			# azim = self.end_info.azim #+ delta_azim
 
+		# print(self.start_info. alt, azim)
 		return (alt, azim)
 
+	def get_pos_on_standart_coords_depends_on_altazim(self, time):
 
-	def get_alt_and_azimith000(self, time):
-		# return self.highest_info.alt, self.highest_info.azim
-		# возвр предположительные выс и азим в момент времени
-		# if time <= self.start_info.time or time >= self.end_info.time:
+		# if time < self.start_info.time or time > self.end_info.time:
 		# 	return
-		if time < self.highest_info.time:
-			part_timedelta = self.first_part_timedelta
-			part_delta_alt = self.first_part_delta_alt
-			part_delta_azim = self.first_part_delta_azim
-			current_time_delta = (time - self.start_info.time).seconds
-			alt_to_add = self.start_info.alt
-			azim_to_add = self.start_info.azim
-		else:
-			part_timedelta = self.second_part_timedelta
-			part_delta_alt = self.second_part_delta_alt
-			part_delta_azim = self.second_part_delta_azim
-			current_time_delta = (self.end_info.time - time).seconds
-			alt_to_add = self.highest_info.alt
-			azim_to_add = self.highest_info.azim
+		if time == self.start_info.time:
+			alt, azim = self.start_info.alt, self.start_info.azim
+		elif time == self.highest_info.time:
+			alt, azim = self.highest_info.alt, self.highest_info.azim
+		elif time == self.end_info.time:
+			alt, azim = self.end_info.alt, self.end_info.azim
+		angle = (azim + 90)
+		x = math.cos(math.radians(angle))
+		y = math.sin(math.radians(angle))
+		v = (90 - alt)/90 # посчитать длину вектора (в завис от высоты)
+		x, y = x * v, y * v
+		# print(x, y)
+		return (x, y)
 
-
-		coef = current_time_delta / part_timedelta
-		delta_alt = coef * part_delta_alt
-		delta_azim = coef * part_delta_azim
-		alt = alt_to_add + delta_alt
-		azim = azim_to_add + delta_azim
-
-		return (alt, azim)
-
-	def get_pos_on_standart_coords(self, time):
+	def get_pos_on_standart_coords_OLD(self, time):
 		# if time < self.start_info.time or time > self.end_info.time:
 		# 	return
 		alt, azim = self.get_alt_and_azimith(time)
@@ -98,6 +102,52 @@ class Satellite:
 		x, y = x * v, y * v
 		# print(x, y)
 		return (x, y)
+
+	def get_pos_on_standart_coords(self, time):
+
+		# if time < self.start_info.time or time > self.end_info.time:
+		# 	return
+
+		if time < self.highest_info.time:
+			part_timedelta = self.first_part_timedelta
+			part_delta_x = self.first_part_delta_x
+			part_delta_y = self.first_part_delta_y
+			current_time_delta = (time - self.start_info.time).seconds
+			coef = current_time_delta / part_timedelta
+			delta_x = coef * part_delta_x
+			delta_y = coef * part_delta_y
+			x = self.start_coords[0] + delta_x
+			# azim =  delta_azim
+			y = self.start_coords[1] + delta_y
+			# print('timedelta ', current_time_delta)
+			# print('coef ', coef)
+			# print('delta_alt ', delta_alt)
+			# print('delta_azim ', delta_azim)
+			# print(alt, azim)
+
+		else:
+			part_timedelta = self.second_part_timedelta
+			part_delta_x = self.second_part_delta_x
+			part_delta_y = self.second_part_delta_y
+			current_time_delta = (time - self.highest_info.time).seconds
+			coef = current_time_delta / part_timedelta
+			delta_x =  coef * part_delta_x
+			delta_y = coef * part_delta_y
+			x = self.height_coords[0] + delta_x
+			y = self.height_coords[1] + delta_y
+			# azim = self.end_info.azim #+ delta_azim
+
+		# print(self.start_info. alt, azim)
+		# return (alt, azim)
+		# alt, azim = self.get_alt_and_azimith(time)
+		# angle = (azim + 90)
+		# x = math.cos(math.radians(angle))
+		# y = math.sin(math.radians(angle))
+		# v = (90 - alt)/90 # посчитать длину вектора (в завис от высоты)
+		# x, y = x * v, y * v
+		# print(x, y)
+		return (x, y)
+
 
 	def get_image_coords(self, time, im_size, x_shift, y_shift):
 		# if time < self.start_info.time or time > self.end_info.time:
@@ -130,12 +180,14 @@ class Satellite:
 		return im_size - x * im_size / 2 + x_shift, im_size - y * im_size / 2 + y_shift
 
 	def get_int_image_coords(self, time, im_size, x_shift=0, y_shift=0):
+		
 		# основной метод, который вызывается извне
 		if time <= self.start_info.time or time >= self.end_info.time:
 			# print(self.start_info.time, time, self.end_info.time)
 			return
 		if (time - self.start_info.time).seconds == 0 or (self.end_info.time - time).seconds == 0:
 			return
+		print(self.name)
 		coords = self.get_image_coords(time, im_size, x_shift, y_shift)
 		return int(coords[0]), int(coords[1])
 
@@ -149,7 +201,7 @@ class Satellite_info:
 
 	def __init__(self, time, altitude, azimuth):
 		# !!!!! works only with current day (later get day from page code)
-		time_str = '2018-14-12 ' + time
+		time_str = '2018-20-12 ' + time
 		self.time = datetime.strptime(time_str, '%Y-%d-%m %H:%M:%S')
 		self.alt = int(altitude[:-1])
 		self.azim = Satellite_info.rus_azimuths[azimuth]
