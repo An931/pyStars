@@ -39,11 +39,6 @@ if __name__ == '__main__':
 		c = Parser.get_satellite_info(b)
 		print(c)
 
-		# print(c)
-		# print(b.attr)
-		# print(type(b))
-		# print(b)
-
 
 
 

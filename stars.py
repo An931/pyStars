@@ -1,7 +1,7 @@
 
 import re
 import os
-
+# print(__name__)
 class Star:
 	def __init__(self, str='', const_name=''):
 		if str == '': 

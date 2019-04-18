@@ -30,23 +30,6 @@ class Geom:
 		# return abs(im_size - x * im_size / 2 + x_shift), abs(im_size - y * im_size / 2 + y_shift)
 		return im_size - x * im_size / 2 + x_shift, im_size - y * im_size / 2 + y_shift
 
-	def get_coords00(star):
-		def get_half_chord(dec):
-			return sqrt(abs(1 - dec * dec))
-		ra = Geom.get_ra_coords(star.ra)
-		dec = Geom.get_dec_coords(star.dec)
-		if not ra: # invisible stars on other halph sphere (6-18 hours)
-			return None, None
-		def get_dec_coef(ra):
-			return sqrt(ra**2 + 1)
-		dec_coef = get_dec_coef(ra)
-		if dec*dec_coef > 1:
-			# it means that star is out of picture bounds
-			print(star.ra, star.dec, dec*dec_coef)
-		# return (ra * get_half_chord(dec), dec)
-		return (ra * get_half_chord(dec*dec_coef), dec * dec_coef)
-		# return (ra * get_half_chord(dec*dec_coef), min(1, dec * dec_coef))
-
 	def get_ra_coords(ra, delta):
 		all_sec = 12*60*60/2
 		# delta = delta % (60*60*24)

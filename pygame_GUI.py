@@ -87,9 +87,6 @@ class PyGameApp:
 	def create_datePanel(self):
 		pass
 
-	# def change_time_info(self):
-		pass
-
 	def Start(self):
 		while True:
 			self.screen.fill(Color.black)
@@ -183,31 +180,6 @@ class PyGameApp:
 		# 	raise Exception()
 		self.change_view(self.delta_sec, self.view_coef)
 
-	def turnOLD(self, side, angle=1, view_coef=1):
-		self.view_coef *= view_coef
-		ra_angle = (24*60*60)/360
-		dec_angle = (60*60*180)/360
-		if side == 'right':
-				delta = (angle*ra_angle, 0)
-		elif side == 'left':
-				delta = (-angle*ra_angle, 0)
-		elif side == 'up':
-				delta = (0, -angle*dec_angle)
-		elif side == 'down':
-				delta = (0, angle*dec_angle)
-		else:
-			raise Exception()
-		self.change_view(*delta, self.view_coef)
-
-	def change_view_WRONG(self, delta_ra, delta_dec, view_coef=1):
-		for s in self.stars:
-			s.ra.full_sec += delta_ra
-			s.dec.full_sec += delta_dec
-			coords = Geom.get_int_image_coords(s, 0, self.window_size, self.indent, self.indent)
-			s.x, s.y = coords[0], coords[1]
-			# new_coords = Geom.get_resize_int_image_coords((s.x, s.y), SIZE, view_coef)
-			# s.x, s.y = new_coords[0], new_coords[1]
-
 	def change_view(self, delta_time, view_coef=1):
 		for s in self.stars:
 			# s.ra.full_sec += delta_ra
@@ -217,20 +189,6 @@ class PyGameApp:
 			new_coords = Geom.get_resize_int_image_coords((s.x, s.y), self.window_size, view_coef)
 			s.x, s.y = new_coords[0], new_coords[1]
 			# s.move(*new_coords)
-
-	def init_time00(self):
-		self.month = 0
-		self.day = 0
-		self.hour = 0
-		self.minute = 0
-
-	def draw_time_info00(self):
-		font = pygame.font.SysFont('Georgia', 15)
-		# self.screen.blit(font.render(text, True, Color.white), (750, 100)) # в одном и том же углу 
-		pos = pygame.mouse.get_pos()
-		pygame.draw.rect(self.screen, Color.white, [pos[0], pos[1], 20, 10])
-		self.screen.blit(font.render(text, True, Color.white), [pos[0]+5, pos[1]+5])
-
 
 class ChangeVieweButton:
 	def __init__(self, img, img_light, x1, y1, parent, delta_sec, view_coef):
@@ -248,12 +206,6 @@ class ChangeVieweButton:
 		self.view_coef = view_coef
 
 		self.click_count = 0
-
-	def check_on_click000(self, mouse_pos, mouse_pressed):
-		if not mouse_pressed[0]:
-			return False
-		return (mouse_pos[0] > self.x1 and mouse_pos[0] < self.x2
-			and mouse_pos[1] > self.y1 and mouse_pos[1] < self.y2)
 
 	def on_click(self):
 		mouse_pos = pygame.mouse.get_pos()
@@ -325,13 +277,11 @@ class DatePanel:
 		self.parent = parent
 
 		self.time = datetime.now() - timedelta(hours=5)
-
 		# self._month = 1
 		# self._day = 1
 		# self._hour = 0
 		# self._minute = 0
 		# self._seconds = 0
-
 		self.create_buttons()
 
 	def create_buttons(self):
@@ -403,128 +353,6 @@ class DatePanel:
 		self.time = self.time + timedelta(seconds = value - self.second)
 
 
-
-class DatePanel_OLD:
-	def __init__(self, parent):
-		self.heigh = 40
-		self.width = parent.window_size
-		self.parent = parent
-
-		self._month = 1
-		self._day = 1
-		self._hour = 0
-		self._minute = 0
-		self._seconds = 0
-
-		self.create_buttons()
-
-	def create_buttons(self):
-		full_round = 60*60*24
-		self.btn_month = ChangeTimeButton(100, 100, self, full_round/12, 'month')
-		self.btn_day = ChangeTimeButton(150, 100, self, full_round//365, 'day')
-		self.btn_hour = ChangeTimeButton(200, 100, self, full_round/24, 'hour')
-		self.btn_minute = ChangeTimeButton(250, 100, self, full_round/(24*60), 'minute')
-
-		self.buttons = [self.btn_month, self.btn_day, self.btn_hour, self.btn_minute]
-
-	def draw_on_screen(self, screen, x, y, mouse_pressed):
-		font = pygame.font.SysFont('Georgia', 15)
-
-		pygame.draw.rect(screen, Color.black, [x, y, self.width, self.heigh])
-		y_text = y + self.heigh/2 - 10
-		screen.blit(font.render('month: ', True, Color.white), [x+4, y_text])
-		screen.blit(font.render(str(self.month), True, Color.white), [x+60, y_text])
-		screen.blit(self.btn_month.update([x+80, y], mouse_pressed), [x+80, y])
-
-		screen.blit(font.render('day: ', True, Color.white), [x+120, y_text])
-		screen.blit(font.render(str(self.day), True, Color.white), [x+160, y_text])
-		screen.blit(self.btn_day.update([x+180, y], mouse_pressed), [x+180, y])
-
-		screen.blit(font.render('hour: ', True, Color.white), [x+210, y_text])
-		screen.blit(font.render(str(self.hour), True, Color.white), [x+250, y_text])
-		screen.blit(self.btn_hour.update([x+270, y], mouse_pressed), [x+270, y])
-
-		screen.blit(font.render('minute: ', True, Color.white), [x+300, y_text])
-		screen.blit(font.render(str(self.minute), True, Color.white), [x+360, y_text])
-		screen.blit(self.btn_minute.update([x+380, y], mouse_pressed), [x+380, y])
-
-		screen.blit(font.render('seconds: ', True, Color.white), [x+410, y_text])
-		screen.blit(font.render(str(self.seconds), True, Color.white), [x+470, y_text])
-
-		# screen.blit(b.update(), (b.x, b.y))
-
-	# !! all setters works only for add 1
-	@property
-	def month(self):
-		return self._month
-	@month.setter
-	def month(self, value):
-		# работает только для пошагового прибавления 1
-		if value == 13:
-			self._month = 1
-		elif value == 0:
-			self._month = 12
-		else:
-			self._month = value
-	@property
-	def day(self):
-		return self._day
-	@day.setter
-	def day(self, value):
-		# работает только для пошагового прибавления 1
-		# !! пока так будто в месяце 30 дней
-		if value == 31:
-			self.month += 1
-			self._day = 1
-		elif value == 0:
-			self.month -= 1
-			self._day = 30
-		else:
-			self._day = value
-	@property
-	def hour(self):
-		return self._hour
-	@hour.setter
-	def hour(self, value):
-		if value < 0:
-			self.day-=1
-			self._hour = 23
-		elif value < 24:
-			self._hour = value
-		else:
-			self.day += value // 24
-			self._hour = value % 24
-	@property
-	def minute(self):
-		return self._minute
-	@minute.setter
-	def minute(self, value):
-		# self.parent.turn(value - self._minute, self.parent.view_coef)
-		if value < 0:
-			self.hour -= 1
-			self._minute = 59
-		elif value < 60:
-			self._minute = value
-		else:
-			self.hour += value // 60
-			self._minute = value % 60
-	@property
-	def seconds(self):
-		return self._seconds
-	@seconds.setter
-	def seconds(self, value):
-		# !!! для вычитания/прибавления значений < 60 (?)
-		self.parent.turn(self._seconds-value, self.parent.view_coef)
-		if value < 0:
-			self.minute -= 1
-			self._seconds = 60 + value
-		elif value < 60:
-			self._seconds = value
-		else:
-			self.minute += value // 60
-			self._seconds = value % 60
-
-
 class ChangeTimeButton:
 	def __init__(self, x1, y1, panel, delta_sec, fieldname_to_change):
 		self.img = './buttons/plus-minus.png'
@@ -539,12 +367,6 @@ class ChangeTimeButton:
 		self.panel = panel
 		self.delta_sec = delta_sec
 		self.field = fieldname_to_change
-
-	def check_on_click000(self, mouse_pos, mouse_pressed):
-		if not mouse_pressed[0]:
-			return False
-		return (mouse_pos[0] > self.x1 and mouse_pos[0] < self.x2
-			and mouse_pos[1] > self.y1 and mouse_pos[1] < self.y2)
 
 	def on_plus_click(self, btn_pos):
 		mouse_pos = pygame.mouse.get_pos()

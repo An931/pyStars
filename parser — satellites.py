@@ -34,7 +34,6 @@ if __name__ == '__main__':
 	blocks = Parser.get_rows(page_code)
 	for b in blocks:
 		c = Parser.get_satellites_info(b)
-
 		# print(c)
 		# print(b.attr)
 		# print(type(b))

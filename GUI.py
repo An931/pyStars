@@ -133,17 +133,6 @@ class StarsViewer(QFrame):
             s.move(*new_coords)
 
 
-    def get_dist00(coords, other_point):
-        x_dist = abs(other_point[0] - coords[0])
-        y_dist = abs(other_point[1] - coords[1])
-        # square view
-        # return max(x_dist, y_dist)
-
-        # round view
-        dist = sqrt(x_dist ** 2 + y_dist ** 2)
-        return dist
-
-
 class Window(QtWidgets.QWidget):
     def __init__(self):
         super(Window, self).__init__()
